@@ -1,4 +1,4 @@
-import { Comment, Reply } from "@/types";
+import { Comment, Reply, User } from "@/types";
 
 export async function fetchCommentsPage(
   postId: string,
@@ -76,5 +76,32 @@ export async function toggleLikeReply(
     method: "POST",
   });
   if (!res.ok) throw new Error("Failed to toggle reply like");
+  return res.json();
+}
+
+export async function fetchCommentLikers(
+  postId: string,
+  commentId: string,
+  cursor?: string,
+  limit = 10
+): Promise<{ likers: User[]; nextCursor: string | null }> {
+  let url = `/api/posts/${postId}/comments/${commentId}/likes?limit=${limit}`;
+  if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch comment likers");
+  return res.json();
+}
+
+export async function fetchReplyLikers(
+  postId: string,
+  commentId: string,
+  replyId: string,
+  cursor?: string,
+  limit = 10
+): Promise<{ likers: User[]; nextCursor: string | null }> {
+  let url = `/api/posts/${postId}/comments/${commentId}/replies/${replyId}/likes?limit=${limit}`;
+  if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch reply likers");
   return res.json();
 }

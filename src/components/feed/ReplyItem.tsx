@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Reply } from "@/types";
 import { formatRelativeTime } from "./PostCard";
 import LikeButton from "./LikeButton";
+import ReactorsPopup from "./ReactorsPopup";
 
 interface ReplyItemProps {
   reply: Reply;
@@ -10,6 +12,8 @@ interface ReplyItemProps {
 }
 
 export default function ReplyItem({ reply, postId }: ReplyItemProps) {
+  const [likersOpen, setLikersOpen] = useState(false);
+
   return (
     <div className="flex items-start gap-2 mb-2 transition-colors duration-300">
       {/* Avatar */}
@@ -30,11 +34,26 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
           </h4>
           <p className="text-[12px] text-text-dark whitespace-pre-wrap break-words">{reply.text}</p>
 
-          {/* Like count overlay */}
+          {/* Clickable like badge — opens likers popup */}
           {reply.likeCount > 0 && (
-            <div className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none">
-              <span className="text-[11px] leading-none">👍</span>
-              <span className="text-[10px] text-primary font-bold">{reply.likeCount}</span>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setLikersOpen(!likersOpen)}
+                className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
+              >
+                <span className="text-[11px] leading-none">👍</span>
+                <span className="text-[10px] text-primary font-bold">{reply.likeCount}</span>
+              </button>
+              {likersOpen && (
+                <ReactorsPopup
+                  targetType="reply"
+                  postId={postId}
+                  commentId={reply.commentId}
+                  replyId={reply.id}
+                  onClose={() => setLikersOpen(false)}
+                />
+              )}
             </div>
           )}
         </div>

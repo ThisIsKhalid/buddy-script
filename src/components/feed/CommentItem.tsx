@@ -5,6 +5,7 @@ import { Comment } from "@/types";
 import { formatRelativeTime } from "./PostCard";
 import LikeButton from "./LikeButton";
 import ReplyList from "./ReplyList";
+import ReactorsPopup from "./ReactorsPopup";
 
 interface CommentItemProps {
   comment: Comment;
@@ -12,6 +13,7 @@ interface CommentItemProps {
 
 export default function CommentItem({ comment }: CommentItemProps) {
   const [repliesOpen, setRepliesOpen] = useState(false);
+  const [likersOpen, setLikersOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-1 transition-colors duration-300">
@@ -34,11 +36,25 @@ export default function CommentItem({ comment }: CommentItemProps) {
             </h4>
             <p className="text-[13px] text-text-dark whitespace-pre-wrap break-words">{comment.text}</p>
 
-            {/* Reaction indicator as absolute overlay */}
+            {/* Clickable like badge — opens likers popup */}
             {comment.likeCount > 0 && (
-              <div className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none">
-                <span className="text-[11px] leading-none">👍</span>
-                <span className="text-[10px] text-primary font-bold">{comment.likeCount}</span>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setLikersOpen(!likersOpen)}
+                  className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
+                >
+                  <span className="text-[11px] leading-none">👍</span>
+                  <span className="text-[10px] text-primary font-bold">{comment.likeCount}</span>
+                </button>
+                {likersOpen && (
+                  <ReactorsPopup
+                    targetType="comment"
+                    postId={comment.postId}
+                    commentId={comment.id}
+                    onClose={() => setLikersOpen(false)}
+                  />
+                )}
               </div>
             )}
           </div>
@@ -61,6 +77,11 @@ export default function CommentItem({ comment }: CommentItemProps) {
                 className="text-[12px] text-text-muted dark:text-text-dark/70 hover:text-primary dark:hover:text-primary transition-colors cursor-pointer font-semibold"
               >
                 Reply
+                {comment.replyCount > 0 && (
+                  <span className="ml-1 text-[11px] font-normal text-primary/80">
+                    ({comment.replyCount})
+                  </span>
+                )}
               </button>
             </li>
             <li>.</li>
