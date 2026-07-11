@@ -1,20 +1,33 @@
 import LoginForm from "@/components/auth/LoginForm";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 export default function LoginPage() {
   return (
-    <section className="relative min-h-screen bg-[#F0F2F5] flex items-center overflow-hidden py-24">
-      {/* Decorative background shapes */}
-      <div className="absolute top-0 left-0 z-[-1]">
+    <section className="relative min-h-screen bg-bg-page flex items-center overflow-hidden py-[100px] z-10 transition-colors duration-300">
+      <ThemeToggle />
+
+      {/* Shape One */}
+      <div className="absolute top-0 left-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape1.svg" alt="" className="block" />
+        <img src="/assets/images/shape1.svg" alt="" className="block dark:hidden w-full h-full" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/images/dark_shape.svg" alt="" className="hidden dark:block w-full h-full" />
       </div>
-      <div className="absolute bottom-0 right-0 z-[-1]">
+
+      {/* Shape Two */}
+      <div className="absolute top-0 right-[20px] -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape2.svg" alt="" className="block" />
+        <img src="/assets/images/shape2.svg" alt="" className="block dark:hidden w-full h-full" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/images/dark_shape1.svg" alt="" className="hidden dark:block opacity-5 w-full h-full" />
       </div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[-1]">
+
+      {/* Shape Three */}
+      <div className="absolute bottom-0 right-[327px] -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape3.svg" alt="" className="block" />
+        <img src="/assets/images/shape3.svg" alt="" className="block dark:hidden w-full h-full" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/images/dark_shape2.svg" alt="" className="hidden dark:block opacity-5 w-full h-full" />
       </div>
 
       <div className="w-full max-w-[1140px] mx-auto px-4">
@@ -26,7 +39,7 @@ export default function LoginPage() {
               <img
                 src="/assets/images/login.png"
                 alt="Login illustration"
-                className="max-w-full"
+                className="max-w-[633px] w-full"
               />
             </div>
           </div>

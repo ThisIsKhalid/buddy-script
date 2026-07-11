@@ -54,7 +54,7 @@ export class PostRepository {
     // 1. Filter posts by visibility
     // Public posts: visible to everyone
     // Private posts: only visible to the author
-    let filteredPosts = db.posts.filter((post) => {
+    const filteredPosts = db.posts.filter((post) => {
       if (post.visibility === "public") return true;
       return currentUserId ? post.authorId === currentUserId : false;
     });

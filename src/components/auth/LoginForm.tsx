@@ -24,9 +24,8 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginInput) => {
     setError(null);
-    setLoading(false);
+    setLoading(true);
     try {
-      setLoading(true);
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,38 +49,38 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="bg-white rounded-[6px] p-8 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+    <div className="bg-card p-8 md:p-12 rounded-[6px] shadow-card transition-colors duration-300">
       {/* Logo */}
-      <div className="mb-7">
+      <div className="mb-7 flex justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-10 w-auto" />
+        <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-[30px] w-auto max-w-[161px]" />
       </div>
 
-      <p className="text-[#1890FF] text-sm font-medium mb-2">Welcome back</p>
-      <h4 className="text-[#112032] text-[1.4rem] font-semibold mb-12 leading-tight">
+      <p className="text-text-body text-[16px] text-center mb-2">Welcome back</p>
+      <h4 className="text-text-dark text-[28px] font-semibold text-center mb-[50px] leading-tight">
         Login to your account
       </h4>
 
       {/* Google sign-in button (decorative) */}
       <button
         type="button"
-        className="w-full flex items-center justify-center gap-3 border border-[#DFDFDF] rounded-[6px] py-3 px-4 mb-10 text-sm text-[#112032] font-medium hover:bg-[#f5f5f5] transition-colors"
+        className="w-full flex items-center justify-center gap-2 border border-border bg-card rounded-[6px] py-3 px-4 mb-10 text-[16px] text-text-dark font-medium hover:bg-bg-page transition-colors cursor-pointer"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/google.svg" alt="Google" className="w-5 h-5 flex-shrink-0" />
+        <img src="/assets/images/google.svg" alt="Google" className="w-5 h-5 flex-shrink-0 mr-2" />
         <span>Or sign-in with google</span>
       </button>
 
       {/* Or divider */}
-      <div className="relative flex items-center mb-10">
-        <div className="flex-grow border-t border-[#DFDFDF]" />
-        <span className="mx-4 text-sm text-[#666666]">Or</span>
-        <div className="flex-grow border-t border-[#DFDFDF]" />
+      <div className="relative flex items-center justify-center mb-10">
+        <div className="absolute left-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
+        <span className="bg-card px-4 text-[14px] text-[#C4C4C4] z-10">Or</span>
+        <div className="absolute right-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
       </div>
 
       {/* Error alert */}
       {error && (
-        <div className="bg-red-50 border border-red-300 text-red-700 text-xs rounded-[6px] p-3 mb-4">
+        <div className="bg-red-50 dark:bg-red-950/20 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 text-xs rounded-[6px] p-3 mb-4">
           {error}
         </div>
       )}
@@ -89,11 +88,11 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Email */}
         <div className="mb-[14px]">
-          <label className="block text-[#112032] text-sm font-medium mb-2">Email</label>
+          <label className="block text-text-muted text-[16px] font-medium mb-2">Email</label>
           <input
             type="email"
-            className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#112032] placeholder-[#C4C4C4] bg-white focus:border-[#1890FF] focus:ring-0 focus:outline-none transition-colors ${
-              errors.email ? "border-red-400" : "border-[#DFDFDF]"
+            className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
+              errors.email ? "border-red-400" : "border-border"
             }`}
             placeholder="Enter email address"
             {...register("email")}
@@ -105,11 +104,11 @@ export default function LoginForm() {
 
         {/* Password */}
         <div className="mb-[14px]">
-          <label className="block text-[#112032] text-sm font-medium mb-2">Password</label>
+          <label className="block text-text-muted text-[16px] font-medium mb-2">Password</label>
           <input
             type="password"
-            className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#112032] placeholder-[#C4C4C4] bg-white focus:border-[#1890FF] focus:ring-0 focus:outline-none transition-colors ${
-              errors.password ? "border-red-400" : "border-[#DFDFDF]"
+            className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
+              errors.password ? "border-red-400" : "border-border"
             }`}
             placeholder="Enter password"
             {...register("password")}
@@ -121,15 +120,15 @@ export default function LoginForm() {
 
         {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between mb-10 mt-6">
-          <label className="flex items-center gap-2 text-sm text-[#666666] cursor-pointer">
+          <label className="flex items-center gap-2 text-[14px] text-text-body cursor-pointer">
             <input
               type="checkbox"
               defaultChecked
-              className="w-4 h-4 accent-[#1890FF]"
+              className="w-4 h-4 accent-primary cursor-pointer"
             />
             Remember me
           </label>
-          <p className="text-sm text-[#1890FF] cursor-pointer font-medium">
+          <p className="text-[14px] text-primary cursor-pointer font-medium hover:underline">
             Forgot password?
           </p>
         </div>
@@ -139,7 +138,7 @@ export default function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1890FF] hover:bg-[#0e7fe6] text-white font-semibold py-3 rounded-[6px] text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-[#1890FF] hover:bg-primary-dark text-white font-semibold py-[12px] rounded-[6px] text-[16px] transition-colors leading-[1.4] border border-[#1890FF] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "Logging in..." : "Login now"}
           </button>
@@ -147,9 +146,9 @@ export default function LoginForm() {
       </form>
 
       {/* Register link */}
-      <p className="text-sm text-[#666666] text-center mt-6">
-        Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-[#1890FF] font-medium hover:underline">
+      <p className="text-[14px] text-text-muted text-center mt-6">
+        Dont have an account?{" "}
+        <Link href="/register" className="text-primary font-medium hover:underline">
           Create New Account
         </Link>
       </p>

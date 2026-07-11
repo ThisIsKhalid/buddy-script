@@ -79,7 +79,6 @@ export function seedDatabase() {
   const replies: ReplyRow[] = [];
   const likes: LikeRow[] = [];
 
-  let postCount = 0;
   let commentCount = 0;
   let replyCount = 0;
   let likeCount = 0;

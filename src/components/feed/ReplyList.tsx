@@ -38,12 +38,12 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
   const replies = data?.pages.flatMap((page) => page.replies) || [];
 
   return (
-    <div className="border-l-2 border-[#DFDFDF] pl-3">
+    <div className="border-l-2 border-border pl-3 transition-colors duration-300">
       {/* Replies list */}
       {isLoading ? (
-        <div className="text-[11px] text-[#666]">Loading replies...</div>
+        <div className="text-[11px] text-text-muted">Loading replies...</div>
       ) : (
-        <div>
+        <div className="space-y-2">
           {replies.map((reply) => (
             <ReplyItem key={reply.id} reply={reply} postId={postId} />
           ))}
@@ -52,12 +52,12 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
 
       {/* Load more replies */}
       {hasNextPage && (
-        <div className="mb-2">
+        <div className="mb-2 mt-2">
           <button
             type="button"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="text-[11px] text-[#1890FF] hover:underline disabled:opacity-60"
+            className="text-[11px] text-primary hover:underline disabled:opacity-60 cursor-pointer"
           >
             {isFetchingNextPage ? "Loading..." : "View previous replies"}
           </button>
@@ -67,7 +67,7 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
       {/* Reply input */}
       {user && (
         <form onSubmit={handleSubmit} className="flex items-center gap-2 mt-2">
-          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.avatarUrl || "/assets/images/comment_img.png"}
@@ -78,7 +78,7 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
           <div className="flex-1 flex items-center gap-2">
             <input
               type="text"
-              className="flex-1 border border-[#DFDFDF] rounded-[12px] px-3 py-1 text-xs text-[#112032] placeholder-[#C4C4C4] bg-[#F0F2F5] focus:outline-none focus:border-[#1890FF] transition-colors h-7"
+              className="flex-1 border border-border rounded-[12px] px-3 py-1 text-xs text-text-dark placeholder-[#C4C4C4] bg-bg-page focus:outline-none focus:border-primary transition-colors h-7 duration-300"
               placeholder="Write a reply..."
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -86,7 +86,7 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
             <button
               type="submit"
               disabled={createReplyMutation.isPending || !text.trim()}
-              className="text-xs text-[#1890FF] font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+              className="text-xs text-primary font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 cursor-pointer"
             >
               Reply
             </button>

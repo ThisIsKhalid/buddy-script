@@ -67,13 +67,13 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-[6px] mb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] overflow-hidden">
+    <div className="bg-card rounded-[6px] mb-4 shadow-card overflow-hidden transition-colors duration-300 border border-border">
       {/* ── Post header ── */}
       <div className="px-6 pt-6 pb-3">
         <div className="flex items-start justify-between">
           {/* Author info */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.author.avatarUrl || "/assets/images/post_img.png"}
@@ -82,12 +82,12 @@ export default function PostCard({ post }: PostCardProps) {
               />
             </div>
             <div>
-              <h4 className="text-[14px] font-semibold text-[#112032] leading-tight">
+              <h4 className="text-[14px] font-semibold text-text-dark leading-tight">
                 {post.author.firstName} {post.author.lastName}
               </h4>
-              <p className="text-[12px] text-[#666666]">
+              <p className="text-[12px] text-text-muted">
                 {formatRelativeTime(post.createdAt)} ·{" "}
-                <span className="capitalize">
+                <span className="capitalize text-[11px] font-medium bg-accent-bg text-primary px-2 py-0.5 rounded-full">
                   {post.visibility === "public" ? "🌐 Public" : "🔒 Private"}
                 </span>
               </p>
@@ -99,21 +99,21 @@ export default function PostCard({ post }: PostCardProps) {
             <button
               type="button"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F0F2F5] transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-page transition-colors cursor-pointer text-[#C4C4C4]"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
-                <circle cx="2" cy="2" r="2" fill="#C4C4C4" />
-                <circle cx="2" cy="8" r="2" fill="#C4C4C4" />
-                <circle cx="2" cy="15" r="2" fill="#C4C4C4" />
+                <circle cx="2" cy="2" r="2" fill="currentColor" />
+                <circle cx="2" cy="8" r="2" fill="currentColor" />
+                <circle cx="2" cy="15" r="2" fill="currentColor" />
               </svg>
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 top-9 w-44 bg-white border border-[#DFDFDF] rounded-[6px] shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1">
+              <div className="absolute right-0 top-9 w-44 bg-card border border-border rounded-[6px] shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1 transition-colors duration-300">
                 <button
                   type="button"
                   onClick={() => { alert("Post saved (mock action)"); setDropdownOpen(false); }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#112032] hover:bg-[#F0F2F5] transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-dark hover:bg-bg-page transition-colors text-left cursor-pointer"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
                     <path stroke="#1890FF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z" />
@@ -125,7 +125,7 @@ export default function PostCard({ post }: PostCardProps) {
                     type="button"
                     onClick={handleDelete}
                     disabled={deleteMutation.isPending}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-[#F0F2F5] transition-colors text-left disabled:opacity-50"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-bg-page transition-colors text-left disabled:opacity-50 cursor-pointer"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
                       <path stroke="#DC3545" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5z" />
@@ -141,9 +141,9 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* ── Post body ── */}
       <div className="px-6 pb-3">
-        <p className="text-sm text-[#112032] whitespace-pre-wrap leading-relaxed">{post.text}</p>
+        <p className="text-sm text-text-dark whitespace-pre-wrap leading-relaxed">{post.text}</p>
         {post.imageUrl && (
-          <div className="mt-3 rounded-[6px] overflow-hidden">
+          <div className="mt-3 rounded-[6px] overflow-hidden border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.imageUrl}
@@ -155,17 +155,17 @@ export default function PostCard({ post }: PostCardProps) {
       </div>
 
       {/* ── Like count + comment count row ── */}
-      <div className="relative px-6 py-3 flex items-center justify-between border-t border-b border-[#F0F2F5]">
+      <div className="relative px-6 py-3 flex items-center justify-between border-t border-b border-border transition-colors duration-300">
         {/* Likers stack */}
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => setLikersOpen(true)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img1.png" alt="" className="w-5 h-5 rounded-full -mr-1 border border-white" />
+          <img src="/assets/images/react_img1.png" alt="" className="w-5 h-5 rounded-full -mr-1 border border-card" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img2.png" alt="" className="w-5 h-5 rounded-full border border-white" />
-          <span className="text-[13px] text-[#666666] ml-1">
+          <img src="/assets/images/react_img2.png" alt="" className="w-5 h-5 rounded-full border border-card" />
+          <span className="text-[13px] text-text-muted ml-1 font-medium hover:text-primary transition-colors duration-200">
             {post.likeCount > 0 ? post.likeCount : "0"}
           </span>
         </div>
@@ -173,7 +173,7 @@ export default function PostCard({ post }: PostCardProps) {
         <button
           type="button"
           onClick={() => setCommentsOpen(!commentsOpen)}
-          className="text-[13px] text-[#666666] hover:text-[#1890FF] transition-colors"
+          className="text-[13px] text-text-muted hover:text-primary transition-colors cursor-pointer font-medium"
         >
           {post.commentCount} Comment{post.commentCount !== 1 ? "s" : ""}
         </button>
@@ -185,15 +185,15 @@ export default function PostCard({ post }: PostCardProps) {
       </div>
 
       {/* ── Reaction bar: Like / Comment / Share ── */}
-      <div className="flex items-center divide-x divide-[#F0F2F5]">
+      <div className="flex items-center divide-x divide-border transition-colors duration-300">
         <div className="flex-1">
           <LikeButton targetType="post" postId={post.id} isLikedByMe={post.isLikedByMe} />
         </div>
         <button
           type="button"
           onClick={() => setCommentsOpen(!commentsOpen)}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
-            commentsOpen ? "text-[#1890FF]" : "text-[#666666] hover:text-[#1890FF]"
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors cursor-pointer ${
+            commentsOpen ? "text-primary" : "text-text-muted hover:text-primary dark:text-text-dark"
           }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 21 21">
@@ -205,7 +205,7 @@ export default function PostCard({ post }: PostCardProps) {
         <button
           type="button"
           onClick={() => alert("Post shared (mock action)")}
-          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-[#666666] hover:text-[#1890FF] transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-text-muted hover:text-primary dark:text-text-dark transition-colors cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" fill="none" viewBox="0 0 24 21">
             <path stroke="currentColor" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z" />
@@ -216,7 +216,7 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* ── Comments section ── */}
       {commentsOpen && (
-        <div className="px-6 pb-4 pt-2 border-t border-[#F0F2F5]">
+        <div className="px-6 pb-4 pt-2 border-t border-border transition-colors duration-300">
           <CommentList postId={post.id} />
         </div>
       )}

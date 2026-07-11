@@ -45,7 +45,7 @@ export default function CommentList({ postId }: CommentListProps) {
             type="button"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="text-[13px] text-[#1890FF] font-medium hover:underline disabled:opacity-60"
+            className="text-[13px] text-primary font-medium hover:underline disabled:opacity-60 cursor-pointer"
           >
             {isFetchingNextPage ? "Loading comments..." : "View previous comments"}
           </button>
@@ -54,7 +54,7 @@ export default function CommentList({ postId }: CommentListProps) {
 
       {/* Comments list */}
       {isLoading ? (
-        <div className="text-center py-2 text-xs text-[#666]">Loading comments...</div>
+        <div className="text-center py-2 text-xs text-text-muted">Loading comments...</div>
       ) : (
         <div className="space-y-3">
           {comments.map((comment) => (
@@ -66,7 +66,7 @@ export default function CommentList({ postId }: CommentListProps) {
       {/* Comment input box */}
       {user && (
         <form onSubmit={handleSubmit} className="flex items-start gap-2 mt-4">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.avatarUrl || "/assets/images/comment_img.png"}
@@ -76,7 +76,7 @@ export default function CommentList({ postId }: CommentListProps) {
           </div>
           <div className="flex-1 flex items-center gap-2">
             <textarea
-              className="flex-1 border border-[#DFDFDF] rounded-[20px] px-4 py-2 text-sm text-[#112032] placeholder-[#C4C4C4] bg-[#F0F2F5] focus:outline-none focus:border-[#1890FF] resize-none h-9 overflow-hidden transition-colors"
+              className="flex-1 border border-border rounded-[20px] px-4 py-2 text-sm text-text-dark placeholder-[#C4C4C4] bg-bg-page focus:outline-none focus:border-primary resize-none h-9 overflow-hidden transition-colors"
               placeholder="Write a comment..."
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -90,7 +90,7 @@ export default function CommentList({ postId }: CommentListProps) {
             <button
               type="submit"
               disabled={createCommentMutation.isPending || !text.trim()}
-              className="bg-[#1890FF] hover:bg-[#0e7fe6] text-white text-xs font-semibold px-4 py-2 rounded-[6px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+              className="bg-[#1890FF] hover:bg-primary-dark text-white text-xs font-semibold px-4 py-2 rounded-[6px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 cursor-pointer"
             >
               {createCommentMutation.isPending ? "..." : "Send"}
             </button>

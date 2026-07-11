@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
-@theme {
-  /* Color palette from reference/assets/css/common.css */
+:root {
   --color-primary: #1890ff;
   --color-primary-dark: #0e7fe6;
   --color-bg-page: #f0f2f5;
@@ -15,13 +14,47 @@
   --color-online: #0acf83;
   --color-accent-bg: #e8f4ff;
   --color-sidebar-bg: #232e42;
+  
+  --shadow-card: 7.5px 20px 7.5px 20px rgba(108, 126, 147, 0.15);
+  --shadow-sm-card: 0px 2px 0px 2px rgba(108, 126, 147, 0.15);
+}
+
+.dark {
+  --color-bg-page: #112032;      /* --bg5: #112032 */
+  --color-card: #232e42;         /* --bg6: #232e42 */
+  --color-text-dark: #ffffff;    /* text white in dark mode */
+  --color-text-body: #e2e8f0;    /* light body text */
+  --color-text-muted: #a0aec0;   /* light muted text */
+  --color-border: rgba(255, 255, 255, 0.1);       /* transparent white border */
+  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-accent-bg: rgba(24, 144, 255, 0.15);
+  --color-sidebar-bg: #112032;
+  
+  --shadow-card: 0px 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-sm-card: 0px 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-bg-page: var(--color-bg-page);
+  --color-card: var(--color-card);
+  --color-text-dark: var(--color-text-dark);
+  --color-text-body: var(--color-text-body);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-light: var(--color-text-light);
+  --color-border: var(--color-border);
+  --color-border-light: var(--color-border-light);
+  --color-online: var(--color-online);
+  --color-accent-bg: var(--color-accent-bg);
+  --color-sidebar-bg: var(--color-sidebar-bg);
 
   /* Font */
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 
   /* Shadows */
-  --shadow-card: 7.5px 20px 7.5px 20px rgba(108, 126, 147, 0.15);
-  --shadow-sm-card: 0px 2px 0px 2px rgba(108, 126, 147, 0.15);
+  --shadow-card: var(--shadow-card);
+  --shadow-sm-card: var(--shadow-sm-card);
 }
 
 /* ─── Base reset (mirrors common.css behaviour) ─── */
@@ -43,6 +76,7 @@
     background-color: var(--color-bg-page);
     color: var(--color-text-body);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   img {
@@ -87,7 +121,7 @@
   h4 { font-size: 1.0625rem; }
 
   p {
-    color: #767676;
+    color: var(--color-text-muted);
     font-size: 1rem;
     margin: 0;
   }
