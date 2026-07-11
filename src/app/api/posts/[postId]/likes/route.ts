@@ -11,8 +11,11 @@ export async function GET(
     const cursor = searchParams.get("cursor") || undefined;
     const limitParam = searchParams.get("limit");
     const limit = limitParam ? parseInt(limitParam, 10) : 10;
+    const reactionParam = searchParams.get("reaction");
+    const reaction: "like" | "dislike" | undefined =
+      reactionParam === "dislike" ? "dislike" : reactionParam === "like" ? "like" : undefined;
 
-    const result = await LikeRepository.findLikersPage("post", postId, cursor, limit);
+    const result = await LikeRepository.findReactorsPage("post", postId, reaction, cursor, limit);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Error in GET post likers:", error);

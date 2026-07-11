@@ -24,35 +24,23 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
 
       <div className="flex-1 min-w-0">
         {/* Bubble */}
-        <div className="bg-[#f0f2f5] dark:bg-bg-page rounded-[10px] px-3 py-2 transition-colors duration-300 w-full max-w-fit border border-transparent dark:border-border">
+        <div className="relative bg-[#F8FAFD] dark:bg-[#112032]/45 border border-transparent dark:border-border rounded-[6px] px-3.5 py-2.5 transition-colors duration-300 w-full max-w-fit pr-10">
           <h4 className="text-[12px] font-semibold text-text-dark mb-0.5 truncate">
             {reply.author.firstName} {reply.author.lastName}
           </h4>
           <p className="text-[12px] text-text-dark whitespace-pre-wrap break-words">{reply.text}</p>
 
-          {/* Like count */}
+          {/* Like count overlay */}
           {reply.likeCount > 0 && (
-            <div className="flex items-center gap-1 mt-1 bg-card dark:bg-[#112032] px-1.5 py-0.5 rounded-full w-fit border border-border">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#1890FF"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-              </svg>
-              <span className="text-[9px] text-primary font-semibold">{reply.likeCount}</span>
+            <div className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none">
+              <span className="text-[11px] leading-none">👍</span>
+              <span className="text-[10px] text-primary font-bold">{reply.likeCount}</span>
             </div>
           )}
         </div>
 
         {/* Action footer */}
-        <ul className="flex items-center gap-2 mt-1 text-[11px] text-text-muted dark:text-text-dark/70 flex-wrap">
+        <ul className="flex items-center gap-1.5 mt-2.5 text-[11px] text-text-muted dark:text-text-dark/70 flex-wrap">
           <li>
             <LikeButton
               targetType="reply"
@@ -62,10 +50,10 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
               isLikedByMe={reply.isLikedByMe}
             />
           </li>
-          <li className="text-text-muted/40 dark:text-text-dark/30">·</li>
+          <li>.</li>
           <li>
             <span className="text-[11px] text-text-muted/80 dark:text-text-dark/60">
-              {formatRelativeTime(reply.createdAt)}
+              {formatRelativeTime(reply.createdAt).replace(" minutes", "m").replace(" minute", "m").replace(" ago", "")}
             </span>
           </li>
         </ul>

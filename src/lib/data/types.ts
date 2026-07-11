@@ -40,5 +40,6 @@ export interface LikeRow {
   userId: string;
   targetType: "post" | "comment" | "reply";
   targetId: string;
+  reaction: "like" | "dislike";
   createdAt: string;
 }

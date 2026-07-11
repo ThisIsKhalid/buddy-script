@@ -92,8 +92,12 @@ export function seedDatabase() {
     // 25% chance of post having an image
     let imageUrl: string | null = null;
     if (Math.random() < 0.25) {
-      const imgNum = (i % 9) + 1;
-      imageUrl = `/assets/images/photos${imgNum}.png`;
+      const imgNum = (i % 10) + 1;
+      if (imgNum === 10) {
+        imageUrl = "/assets/images/timeline_img.png";
+      } else {
+        imageUrl = `/assets/images/photos${imgNum}.png`;
+      }
     }
 
     // 80% public, 20% private visibility
@@ -158,6 +162,7 @@ export function seedDatabase() {
               userId: user.id,
               targetType: "reply",
               targetId: replyId,
+              reaction: Math.random() < 0.2 ? "dislike" : "like",
               createdAt: new Date(replyTime + (l + 1) * 60 * 1000).toISOString(),
             });
           }
@@ -176,13 +181,14 @@ export function seedDatabase() {
             userId: user.id,
             targetType: "comment",
             targetId: commentId,
+            reaction: Math.random() < 0.2 ? "dislike" : "like",
             createdAt: new Date(commentTime + (l + 1) * 60 * 1000).toISOString(),
           });
         }
       }
     }
 
-    // Likes on post (randomly 0 to 8 likes)
+    // Likes/Dislikes on post (randomly 0 to 8 reactions)
     const numPostLikes = Math.floor(Math.random() * 9);
     const likedUsers = new Set<string>();
     for (let l = 0; l < numPostLikes; l++) {
@@ -194,6 +200,7 @@ export function seedDatabase() {
           userId: user.id,
           targetType: "post",
           targetId: id,
+          reaction: Math.random() < 0.25 ? "dislike" : "like",
           createdAt: new Date(postTime + (l + 1) * 5 * 60 * 1000).toISOString(),
         });
       }

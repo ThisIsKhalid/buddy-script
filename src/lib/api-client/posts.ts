@@ -38,10 +38,13 @@ export async function deletePost(postId: string): Promise<void> {
 }
 
 export async function toggleLikePost(
-  postId: string
-): Promise<{ isLiked: boolean; likeCount: number }> {
+  postId: string,
+  reaction: "like" | "dislike" = "like"
+): Promise<{ isLiked: boolean; isDisliked: boolean; likeCount: number; dislikeCount: number }> {
   const res = await fetch(`/api/posts/${postId}/like`, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reaction }),
   });
   if (!res.ok) throw new Error("Failed to toggle post like");
   return res.json();
@@ -50,11 +53,15 @@ export async function toggleLikePost(
 export async function fetchPostLikers(
   postId: string,
   cursor?: string,
-  limit = 10
+  limit = 10,
+  reaction?: "like" | "dislike"
 ): Promise<{ likers: User[]; nextCursor: string | null }> {
   let url = `/api/posts/${postId}/likes?limit=${limit}`;
   if (cursor) {
     url += `&cursor=${encodeURIComponent(cursor)}`;
+  }
+  if (reaction) {
+    url += `&reaction=${reaction}`;
   }
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch post likers");
