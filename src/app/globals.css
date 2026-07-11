@@ -1,43 +1,10 @@
+@import "../../public/assets/css/bootstrap.min.css";
+@import "../../public/assets/css/common.css";
+@import "../../public/assets/css/main.css";
+@import "../../public/assets/css/responsive.css";
 @import "tailwindcss";
 
-@theme {
-  --font-sans: 'Poppins', 'Inter', sans-serif;
-  --color-primary: #1890FF;
-  --color-primary-hover: #40a9ff;
-  --color-navy: #112032;
-  --color-body-bg: #F0F2F5;
-  --color-muted: #666666;
-  --color-light-gray: #F5F5F5;
-  --color-border-color: #E8E8E8;
-  --color-green-success: #0ACF83;
-  --color-light-blue-bg: #e8f4ff;
-  --color-navy-dark: #232E42;
-  --shadow-custom1: 7.5px 20px 20px rgba(108, 126, 147, 0.08);
-}
-
-/* Hide scrollbars globally to match the design */
-::-webkit-scrollbar {
-  display: none;
-}
-
-body {
-  background-color: var(--color-body-bg);
-  color: #2D3748;
-  font-family: var(--font-sans);
-}
-
-textarea {
-  resize: none !important;
-}
-
-a {
-  transition: all 0.3s ease;
-}
-
-button {
-  transition: all 0.3s ease;
-}
-
+/* Extra classes for net-new elements, dialog backdrops, etc. */
 .modal-backdrop-custom {
   position: fixed;
   top: 0;

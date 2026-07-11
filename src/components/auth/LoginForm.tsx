@@ -24,8 +24,9 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginInput) => {
     setError(null);
-    setLoading(true);
+    setLoading(false);
     try {
+      setLoading(true);
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -49,119 +50,110 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="bg-white p-8 md:p-12 rounded-[6px] shadow-sm w-full font-sans border border-[#E8E8E8]">
-      <div className="mb-7 flex justify-center lg:justify-start">
+    <div className="_social_login_content">
+      <div className="_social_login_left_logo _mar_b28">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/logo.svg" alt="Image" className="max-w-[161px] h-auto" />
+        <img src="/assets/images/logo.svg" alt="Image" className="_left_logo" />
       </div>
-      <p className="text-[#2D3748] text-sm md:text-base leading-normal text-center lg:text-left mb-2">
-        Welcome back
-      </p>
-      <h4 className="text-xl md:text-2xl font-semibold text-[#1A202C] text-center lg:text-left mb-8">
-        Login to your account
-      </h4>
+      <p className="_social_login_content_para _mar_b8">Welcome back</p>
+      <h4 className="_social_login_content_title _titl4 _mar_b50">Login to your account</h4>
       
-      <button
-        type="button"
-        className="w-full py-3 px-6 border border-[#F0F2F5] bg-white rounded-[6px] flex items-center justify-center gap-2 hover:bg-gray-50 hover:shadow-md transition-all mb-8"
-        onClick={() => alert("Google Login is simulated.")}
-      >
+      <button type="button" className="_social_login_content_btn _mar_b40">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/google.svg" alt="Image" className="max-w-[20px]" />{" "}
-        <span className="font-medium text-base text-[#312000]">Or sign-in with google</span>
+        <img src="/assets/images/google.svg" alt="Image" className="_google_img" />{" "}
+        <span>Or sign-in with google</span>
       </button>
 
-      {/* Or Divider */}
-      <div className="flex items-center my-8">
-        <div className="flex-grow border-t border-[#DFDFDF] h-[1px]"></div>
-        <span className="mx-4 text-sm text-[#C4C4C4]">Or</span>
-        <div className="flex-grow border-t border-[#DFDFDF] h-[1px]"></div>
+      <div className="_social_login_content_bottom_txt _mar_b40">
+        <span>Or</span>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-md mb-4 text-xs">
+        <div className="alert alert-danger p-2 mb-3" style={{ fontSize: "13px" }}>
           {error}
         </div>
       )}
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
-            Email
-          </label>
-          <input
-            type="email"
-            className={`w-full h-12 bg-white border ${
-              errors.email ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
-            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
-            {...register("email")}
-            placeholder="Enter email address"
-          />
-          {errors.email && (
-            <div className="text-red-500 mt-1 text-xs text-left">
-              {errors.email.message}
+      <form className="_social_login_form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div className="_social_login_form_input _mar_b14">
+              <label className="_social_login_label _mar_b8">Email</label>
+              <input
+                type="email"
+                className={`form-control _social_login_input ${errors.email ? "is-invalid" : ""}`}
+                {...register("email")}
+                placeholder="Enter email address"
+              />
+              {errors.email && (
+                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                  {errors.email.message}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-
-        <div>
-          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
-            Password
-          </label>
-          <input
-            type="password"
-            className={`w-full h-12 bg-white border ${
-              errors.password ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
-            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
-            {...register("password")}
-            placeholder="Enter password"
-          />
-          {errors.password && (
-            <div className="text-red-500 mt-1 text-xs text-left">
-              {errors.password.message}
+          </div>
+          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div className="_social_login_form_input _mar_b14">
+              <label className="_social_login_label _mar_b8">Password</label>
+              <input
+                type="password"
+                className={`form-control _social_login_input ${errors.password ? "is-invalid" : ""}`}
+                {...register("password")}
+                placeholder="Enter password"
+              />
+              {errors.password && (
+                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
+                  {errors.password.message}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-
-        {/* Remember me & Forgot password */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 text-left">
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary"
-              type="checkbox"
-              id="rememberMe"
-              defaultChecked
-            />
-            <span className="text-sm text-[#4A5568]">Remember me</span>
-          </label>
-          <button
-            type="button"
-            className="text-sm text-primary hover:underline text-left"
-            onClick={() => alert("Forgot password is simulated.")}
-          >
-            Forgot password?
-          </button>
+        <div className="row">
+          <div className="col-lg-6 col-xl-6 col-md-6 col-sm-12">
+            <div className="form-check _social_login_form_check">
+              <input
+                className="form-check-input _social_login_form_check_input"
+                type="checkbox"
+                id="rememberMe"
+                defaultChecked
+              />
+              <label className="form-check-label _social_login_form_check_label" htmlFor="rememberMe">
+                Remember me
+              </label>
+            </div>
+          </div>
+          <div className="col-lg-6 col-xl-6 col-md-6 col-sm-12">
+            <div className="_social_login_form_left">
+              <p className="_social_login_form_left_para" style={{ cursor: "pointer" }}>
+                Forgot password?
+              </p>
+            </div>
+          </div>
         </div>
-
-        {/* Submit */}
-        <div className="pt-6">
-          <button
-            type="submit"
-            className="w-full py-3 bg-primary text-white rounded-[6px] font-medium text-base hover:bg-primary-hover hover:shadow-lg focus:outline-none transition-all disabled:opacity-50"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login now"}
-          </button>
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-xl-12 col-sm-12">
+            <div className="_social_login_form_btn _mar_t40 _mar_b60">
+              <button
+                type="submit"
+                className="_social_login_form_btn_link _btn1"
+                disabled={loading}
+                style={{ width: "100%", border: "none" }}
+              >
+                {loading ? "Logging in..." : "Login now"}
+              </button>
+            </div>
+          </div>
         </div>
       </form>
-
-      <div className="mt-8 text-center">
-        <p className="text-sm text-[#666666]">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary hover:underline font-semibold">
-            Create New Account
-          </Link>
-        </p>
+      <div className="row">
+        <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div className="_social_login_bottom_txt">
+            <p className="_social_login_bottom_txt_para">
+              Don&apos;t have an account? <Link href="/register">Create New Account</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

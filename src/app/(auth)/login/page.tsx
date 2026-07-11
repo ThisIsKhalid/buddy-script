@@ -2,40 +2,41 @@ import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <section className="relative w-full min-h-screen bg-body-bg flex items-center justify-center py-12 px-4 overflow-hidden font-sans">
+    <section className="_social_login_wrapper _layout_main_wrapper">
       {/* Decorative SVGs from design */}
-      <div className="absolute top-0 left-0 -z-10 w-[300px] md:w-[450px]">
+      <div className="_shape_one">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape1.svg" alt="" className="w-full h-auto block" />
+        <img src="/assets/images/shape1.svg" alt="" className="_shape_img" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape.svg" alt="" className="hidden w-full h-auto" />
+        <img src="/assets/images/dark_shape.svg" alt="" className="_dark_shape" />
       </div>
-      <div className="absolute top-0 right-[20px] -z-10 w-[300px] md:w-[450px]">
+      <div className="_shape_two">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape2.svg" alt="" className="w-full h-auto block" />
+        <img src="/assets/images/shape2.svg" alt="" className="_shape_img" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape1.svg" alt="" className="hidden w-full h-auto" />
+        <img src="/assets/images/dark_shape1.svg" alt="" className="_dark_shape _dark_shape_opacity" />
       </div>
-      <div className="absolute bottom-0 right-[327px] -z-10 w-[300px] md:w-[450px] hidden lg:block">
+      <div className="_shape_three">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape3.svg" alt="" className="w-full h-auto block" />
+        <img src="/assets/images/shape3.svg" alt="" className="_shape_img" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape2.svg" alt="" className="hidden w-full h-auto" />
+        <img src="/assets/images/dark_shape2.svg" alt="" className="_dark_shape _dark_shape_opacity" />
       </div>
 
-      <div className="w-full max-w-6xl mx-auto px-4 z-10 relative">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          {/* Left Column (Illustration) */}
-          <div className="hidden lg:flex w-full lg:w-7/12 justify-center">
-            <div className="max-w-[633px] w-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/images/login.png" alt="Image" className="w-full h-auto object-contain" />
+      <div className="_social_login_wrap">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+              <div className="_social_login_left">
+                <div className="_social_login_left_image">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/assets/images/login.png" alt="Image" className="_left_img" />
+                </div>
+              </div>
             </div>
-          </div>
-          
-          {/* Right Column (Form) */}
-          <div className="w-full lg:w-[400px] xl:w-[450px] shrink-0 mx-auto">
-            <LoginForm />
+            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+              <LoginForm />
+            </div>
           </div>
         </div>
       </div>

@@ -38,23 +38,24 @@ export default function CommentList({ postId }: CommentListProps) {
   const comments = data?.pages.flatMap((page) => page.comments) || [];
 
   return (
-    <div className="font-sans">
+    <div>
       {/* Comment Input Box */}
       {user && (
-        <div className="border border-border-color rounded-[6px] p-4 bg-white mb-4">
-          <form className="flex items-center justify-between gap-3 w-full" onSubmit={handleSubmit}>
-            <div className="flex items-center gap-3 flex-grow">
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-border-color shrink-0">
+        <div className="_feed_inner_comment_box">
+          <form className="_feed_inner_comment_box_form" onSubmit={handleSubmit}>
+            <div className="_feed_inner_comment_box_content d-flex align-items-center w-100">
+              <div className="_feed_inner_comment_box_content_image me-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={user.avatarUrl || "/assets/images/comment_img.png"}
                   alt=""
-                  className="w-full h-full object-cover"
+                  className="_comment_img"
+                  style={{ borderRadius: "50%", width: "32px", height: "32px" }}
                 />
               </div>
-              <div className="flex-grow">
+              <div className="_feed_inner_comment_box_content_txt flex-grow-1">
                 <textarea
-                  className="w-full h-10 border border-[#E8E8E8] rounded-[6px] py-2 px-3 text-xs text-[#2D3748] placeholder-muted focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all resize-none"
+                  className="form-control _comment_textarea"
                   placeholder="Write a comment..."
                   value={text}
                   onChange={(e) => setText(e.target.value)}
@@ -64,14 +65,21 @@ export default function CommentList({ postId }: CommentListProps) {
                       handleSubmit(e);
                     }
                   }}
+                  style={{ height: "40px", padding: "8px 12px", resize: "none" }}
                 ></textarea>
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="_feed_inner_comment_box_icon d-flex align-items-center">
               <button
-                className="py-1.5 px-3 bg-primary hover:bg-primary-hover hover:shadow-sm text-white rounded-[6px] text-xs font-semibold border-none disabled:opacity-50 disabled:cursor-not-allowed transition-all font-sans cursor-pointer"
+                className="_feed_inner_comment_box_icon_btn btn btn-sm btn-primary"
                 type="submit"
                 disabled={createCommentMutation.isPending || !text.trim()}
+                style={{
+                  fontSize: "12px",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  border: "none",
+                }}
               >
                 {createCommentMutation.isPending ? "..." : "Send"}
               </button>
@@ -82,12 +90,12 @@ export default function CommentList({ postId }: CommentListProps) {
 
       {/* Pagination trigger */}
       {hasNextPage && (
-        <div className="text-left pl-4 mb-3">
+        <div className="_previous_comment text-start ps-4 mb-3">
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="text-xs text-primary hover:underline bg-transparent border-none p-0 cursor-pointer outline-none font-sans"
-            type="button"
+            className="_previous_comment_link"
+            style={{ background: "none", border: "none", color: "#1890FF", fontSize: "13px", padding: 0 }}
           >
             {isFetchingNextPage ? "Loading comments..." : "View previous comments"}
           </button>
@@ -96,11 +104,11 @@ export default function CommentList({ postId }: CommentListProps) {
 
       {/* Comments List */}
       {isLoading ? (
-        <div className="text-center py-2 text-xs text-muted">
+        <div className="text-center py-2" style={{ fontSize: "12px", color: "#666" }}>
           Loading comments...
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="_timline_comment_main">
           {comments.map((comment) => (
             <CommentItem key={comment.id} comment={comment} />
           ))}
