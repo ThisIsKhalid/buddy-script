@@ -32,7 +32,7 @@ export default function LikeButton({
         disabled={isPending}
         className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-all duration-200 disabled:opacity-60 cursor-pointer ${
           isLikedByMe
-            ? "bg-[#E8F2FF] dark:bg-[#112032] text-[#1890FF]"
+            ? " text-[#1890FF]"
             : "bg-transparent hover:bg-[#E8F2FF]/70 dark:hover:bg-[#112032]/50 text-[#65676B] dark:text-text-dark"
         }`}
       >

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Post } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deletePost } from "@/lib/api-client/posts";
-import LikeButton from "./LikeButton";
+import { deletePost, fetchPostLikers } from "@/lib/api-client/posts";
+import { Post } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import CommentList from "./CommentList";
+import LikeButton from "./LikeButton";
 import LikersListModal from "./LikersListModal";
 
 interface PostCardProps {
@@ -30,7 +30,11 @@ export function formatRelativeTime(dateString: string): string {
   if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
   if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
 
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 export default function PostCard({ post }: PostCardProps) {
@@ -39,13 +43,26 @@ export default function PostCard({ post }: PostCardProps) {
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [likersOpen, setLikersOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const likersButtonRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
 
   const isAuthor = user?.id === post.authorId;
 
+  const { data: likersData } = useQuery({
+    queryKey: ["postLikersPreview", post.id],
+    queryFn: () => fetchPostLikers(post.id, undefined, 3, "like"),
+    enabled: post.likeCount > 0,
+  });
+
+  const previewLikers = likersData?.likers || [];
+  const remainingCount = post.likeCount - previewLikers.length;
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setDropdownOpen(false);
       }
     }
@@ -86,7 +103,8 @@ export default function PostCard({ post }: PostCardProps) {
                 {post.author.firstName} {post.author.lastName}
               </h4>
               <p className="text-[12px] text-text-muted">
-                {formatRelativeTime(post.createdAt)} . {post.visibility === "public" ? "Public" : "Private"}
+                {formatRelativeTime(post.createdAt)} .{" "}
+                {post.visibility === "public" ? "Public" : "Private"}
               </p>
             </div>
           </div>
@@ -98,7 +116,13 @@ export default function PostCard({ post }: PostCardProps) {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-page transition-colors cursor-pointer text-[#C4C4C4]"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="4"
+                height="17"
+                fill="none"
+                viewBox="0 0 4 17"
+              >
                 <circle cx="2" cy="2" r="2" fill="currentColor" />
                 <circle cx="2" cy="8" r="2" fill="currentColor" />
                 <circle cx="2" cy="15" r="2" fill="currentColor" />
@@ -109,11 +133,26 @@ export default function PostCard({ post }: PostCardProps) {
               <div className="absolute right-0 top-9 w-44 bg-card border border-border rounded-[6px] shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1 transition-colors duration-300">
                 <button
                   type="button"
-                  onClick={() => { alert("Post saved (mock action)"); setDropdownOpen(false); }}
+                  onClick={() => {
+                    alert("Post saved (mock action)");
+                    setDropdownOpen(false);
+                  }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-dark hover:bg-bg-page transition-colors text-left cursor-pointer"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
-                    <path stroke="#1890FF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="#1890FF"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.2"
+                      d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z"
+                    />
                   </svg>
                   Save Post
                 </button>
@@ -124,8 +163,20 @@ export default function PostCard({ post }: PostCardProps) {
                     disabled={deleteMutation.isPending}
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-bg-page transition-colors text-left disabled:opacity-50 cursor-pointer"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
-                      <path stroke="#DC3545" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      viewBox="0 0 18 18"
+                    >
+                      <path
+                        stroke="#DC3545"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.2"
+                        d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5z"
+                      />
                     </svg>
                     {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
                   </button>
@@ -138,7 +189,9 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* ── Post body ── */}
       <div className="px-6 pb-3">
-        <p className="text-sm text-text-dark whitespace-pre-wrap leading-relaxed">{post.text}</p>
+        <p className="text-sm text-text-dark whitespace-pre-wrap leading-relaxed">
+          {post.text}
+        </p>
         {post.imageUrl && (
           <div className="mt-3 rounded-[6px] overflow-hidden border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -152,29 +205,44 @@ export default function PostCard({ post }: PostCardProps) {
       </div>
 
       {/* ── Like count + comment count row ── */}
-      <div className="relative px-6 py-4 flex items-center justify-between border-t border-b border-border transition-colors duration-300">
+      <div className="relative px-6 py-4 flex items-center justify-between border-b border-border transition-colors duration-300">
         {/* Likers count — click to see who liked */}
         <button
           type="button"
+          ref={likersButtonRef}
           onClick={() => setLikersOpen(true)}
-          className="flex items-center gap-1.5 cursor-pointer select-none group"
+          className="flex items-center gap-2 cursor-pointer select-none group"
         >
-          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#E8F2FF] dark:bg-[#112032]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24">
-              <path
-                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
-                stroke="#1890FF"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="#1890FF"
-                fillOpacity="0.2"
-              />
-            </svg>
+          <div className="flex items-center">
+            {previewLikers.length > 0 && (
+              <div className="flex -space-x-1.5 items-center">
+                {previewLikers.map((liker, i) => (
+                  <div
+                    key={liker.id}
+                    className="w-[26px] h-[26px] rounded-full border-2 border-card overflow-hidden flex-shrink-0 relative z-[1]"
+                    style={{ zIndex: previewLikers.length - i }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={liker.avatarUrl || "/assets/images/post_img.png"}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+                {remainingCount > 0 && (
+                  <div className="w-[26px] h-[26px] rounded-full border-2 border-card bg-bg-page flex items-center justify-center text-[11px] font-semibold text-text-dark z-0">
+                    +{remainingCount}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
-            {post.likeCount}
-          </span>
+          {post.likeCount > 0 && (
+            <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
+              {post.likeCount}
+            </span>
+          )}
         </button>
 
         {/* Right side: comment + share counts */}
@@ -195,6 +263,7 @@ export default function PostCard({ post }: PostCardProps) {
             postId={post.id}
             reaction="like"
             onClose={() => setLikersOpen(false)}
+            anchorRef={likersButtonRef}
           />
         )}
       </div>
@@ -210,12 +279,30 @@ export default function PostCard({ post }: PostCardProps) {
           type="button"
           onClick={() => setCommentsOpen(!commentsOpen)}
           className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${
-            commentsOpen ? "bg-[#E8F2FF] text-[#1890FF]" : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
+            commentsOpen
+              ? " text-[#1890FF]"
+              : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
           }`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 21 21">
-            <path stroke="currentColor" strokeWidth="1.5" d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z" />
-            <path stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M6.938 9.313h7.125M10.5 14.063h3.563" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="19"
+            height="19"
+            fill="none"
+            viewBox="0 0 21 21"
+          >
+            <path
+              stroke="currentColor"
+              strokeWidth="1.5"
+              d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z"
+            />
+            <path
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6.938 9.313h7.125M10.5 14.063h3.563"
+            />
           </svg>
           Comment
         </button>
@@ -224,8 +311,19 @@ export default function PostCard({ post }: PostCardProps) {
           onClick={() => alert("Post shared (mock action)")}
           className="flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold text-[#65676B] hover:bg-bg-page dark:text-text-dark transition-colors cursor-pointer"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" fill="none" viewBox="0 0 24 21">
-            <path stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="19"
+            fill="none"
+            viewBox="0 0 24 21"
+          >
+            <path
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+              d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z"
+            />
           </svg>
           Share
         </button>

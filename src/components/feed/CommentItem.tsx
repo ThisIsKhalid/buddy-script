@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Comment } from "@/types";
-import { formatRelativeTime } from "./PostCard";
+import { useState } from "react";
 import LikeButton from "./LikeButton";
-import ReplyList from "./ReplyList";
+import { formatRelativeTime } from "./PostCard";
 import ReactorsPopup from "./ReactorsPopup";
+import ReplyList from "./ReplyList";
 
 interface CommentItemProps {
   comment: Comment;
@@ -34,7 +34,9 @@ export default function CommentItem({ comment }: CommentItemProps) {
             <h4 className="text-[13px] font-semibold text-text-dark mb-0.5 truncate">
               {comment.author.firstName} {comment.author.lastName}
             </h4>
-            <p className="text-[13px] text-text-dark whitespace-pre-wrap break-words">{comment.text}</p>
+            <p className="text-[13px] text-text-dark whitespace-pre-wrap break-words">
+              {comment.text}
+            </p>
 
             {/* Clickable like badge — opens likers popup */}
             {comment.likeCount > 0 && (
@@ -42,10 +44,12 @@ export default function CommentItem({ comment }: CommentItemProps) {
                 <button
                   type="button"
                   onClick={() => setLikersOpen(!likersOpen)}
-                  className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
+                  className="absolute -right-14 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
                 >
                   <span className="text-[11px] leading-none">👍</span>
-                  <span className="text-[10px] text-primary font-bold">{comment.likeCount}</span>
+                  <span className="text-[10px] text-primary font-bold">
+                    {comment.likeCount}
+                  </span>
                 </button>
                 {likersOpen && (
                   <ReactorsPopup
@@ -97,7 +101,10 @@ export default function CommentItem({ comment }: CommentItemProps) {
             <li>.</li>
             <li>
               <span className="text-[12px] text-text-muted/80 dark:text-text-dark/60">
-                {formatRelativeTime(comment.createdAt).replace(" minutes", "m").replace(" minute", "m").replace(" ago", "")}
+                {formatRelativeTime(comment.createdAt)
+                  .replace(" minutes", "m")
+                  .replace(" minute", "m")
+                  .replace(" ago", "")}
               </span>
             </li>
           </ul>

@@ -1,8 +1,11 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import {
+  fetchCommentLikers,
+  fetchReplyLikers,
+} from "@/lib/api-client/comments";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchCommentLikers, fetchReplyLikers } from "@/lib/api-client/comments";
+import { useEffect, useRef } from "react";
 
 interface ReactorsPopupProps {
   /** Context determining which API to call */
@@ -22,22 +25,26 @@ export default function ReactorsPopup({
 }: ReactorsPopupProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey:
-      targetType === "comment"
-        ? ["commentLikers", commentId]
-        : ["replyLikers", replyId],
-    queryFn: ({ pageParam }) =>
-      targetType === "comment"
-        ? fetchCommentLikers(postId, commentId, pageParam, 10)
-        : fetchReplyLikers(postId, commentId, replyId!, pageParam, 10),
-    initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey:
+        targetType === "comment"
+          ? ["commentLikers", commentId]
+          : ["replyLikers", replyId],
+      queryFn: ({ pageParam }) =>
+        targetType === "comment"
+          ? fetchCommentLikers(postId, commentId, pageParam, 10)
+          : fetchReplyLikers(postId, commentId, replyId!, pageParam, 10),
+      initialPageParam: undefined as string | undefined,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    });
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         onClose();
       }
     }
@@ -50,7 +57,7 @@ export default function ReactorsPopup({
   return (
     <div
       ref={containerRef}
-      className="absolute z-50 bottom-full mb-2 left-0 w-[200px] max-h-[240px] overflow-y-auto bg-card border border-border rounded-[8px] shadow-[0_4px_20px_rgba(0,0,0,0.18)] p-2.5 transition-colors duration-300"
+      className="absolute z-50 bottom-full mb-2 -right-14 w-[200px] max-h-[240px] overflow-y-auto bg-card border border-border rounded-[8px] shadow-[0_4px_20px_rgba(0,0,0,0.18)] p-2.5 transition-colors duration-300"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-border">
@@ -71,9 +78,13 @@ export default function ReactorsPopup({
 
       {/* List */}
       {isLoading ? (
-        <div className="text-[11px] text-text-muted text-center py-2">Loading...</div>
+        <div className="text-[11px] text-text-muted text-center py-2">
+          Loading...
+        </div>
       ) : likers.length === 0 ? (
-        <div className="text-[11px] text-text-muted text-center py-2">No likes yet.</div>
+        <div className="text-[11px] text-text-muted text-center py-2">
+          No likes yet.
+        </div>
       ) : (
         <div className="flex flex-col gap-1.5">
           {likers.map((user) => (

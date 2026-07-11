@@ -40,7 +40,7 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
               <button
                 type="button"
                 onClick={() => setLikersOpen(!likersOpen)}
-                className="absolute bottom-[-10px] right-2 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
+                className="absolute -right-14 bg-white dark:bg-card border border-border/80 rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm z-10 select-none hover:bg-bg-page transition-colors cursor-pointer"
               >
                 <span className="text-[11px] leading-none">👍</span>
                 <span className="text-[10px] text-primary font-bold">{reply.likeCount}</span>
