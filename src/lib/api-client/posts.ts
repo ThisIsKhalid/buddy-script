@@ -38,13 +38,10 @@ export async function deletePost(postId: string): Promise<void> {
 }
 
 export async function toggleLikePost(
-  postId: string,
-  reaction: "like" | "dislike" = "like"
-): Promise<{ isLiked: boolean; isDisliked: boolean; likeCount: number; dislikeCount: number }> {
+  postId: string
+): Promise<{ isLiked: boolean; likeCount: number }> {
   const res = await fetch(`/api/posts/${postId}/like`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reaction }),
   });
   if (!res.ok) throw new Error("Failed to toggle post like");
   return res.json();

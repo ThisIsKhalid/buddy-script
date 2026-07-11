@@ -17,10 +17,8 @@ export interface Post {
   imageUrl: string | null;
   visibility: Visibility;
   likeCount: number;
-  dislikeCount: number;
   commentCount: number;
   isLikedByMe: boolean;
-  isDislikedByMe: boolean;
   createdAt: string;
 }
 

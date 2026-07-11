@@ -13,10 +13,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json().catch(() => ({}));
-    const reaction: "like" | "dislike" = body.reaction === "dislike" ? "dislike" : "like";
-
-    const result = await LikeRepository.toggleReaction(currentUserId, "post", postId, reaction);
+    const result = await LikeRepository.toggleLike(currentUserId, "post", postId);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Error in POST post like:", error);

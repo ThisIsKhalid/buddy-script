@@ -5,7 +5,7 @@ import { Post } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deletePost } from "@/lib/api-client/posts";
-import ReactButtons from "./ReactButtons";
+import LikeButton from "./LikeButton";
 import CommentList from "./CommentList";
 import LikersListModal from "./LikersListModal";
 
@@ -37,7 +37,7 @@ export default function PostCard({ post }: PostCardProps) {
   const { user } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
-  const [likersOpen, setLikersOpen] = useState<"like" | "dislike" | null>(null);
+  const [likersOpen, setLikersOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
@@ -153,44 +153,29 @@ export default function PostCard({ post }: PostCardProps) {
 
       {/* ── Like count + comment count row ── */}
       <div className="relative px-6 py-4 flex items-center justify-between border-t border-b border-border transition-colors duration-300">
-        {/* Left side: like + dislike counts */}
-        <div className="flex items-center gap-3">
-          {/* Likers count */}
-          <button
-            type="button"
-            onClick={() => setLikersOpen("like")}
-            className="flex items-center gap-1.5 cursor-pointer select-none group"
-          >
-            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#E8F2FF] dark:bg-[#112032]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24">
-                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
-                  stroke="#1890FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#1890FF" fillOpacity="0.2" />
-              </svg>
-            </div>
-            <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
-              {post.likeCount}
-            </span>
-          </button>
-
-          {/* Dislikers count — show even if 0 so user sees the button is there */}
-          {(post.dislikeCount > 0 || post.isDislikedByMe) && (
-            <button
-              type="button"
-              onClick={() => setLikersOpen("dislike")}
-              className="flex items-center gap-1.5 cursor-pointer select-none group"
-            >
-              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#FFF0F0] dark:bg-[#2d1010]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" style={{ transform: "scaleY(-1)" }}>
-                  <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
-                    stroke="#dc3545" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="#dc3545" fillOpacity="0.2" />
-                </svg>
-              </div>
-              <span className="text-[13px] text-text-muted font-medium group-hover:text-red-500 transition-colors">
-                {post.dislikeCount}
-              </span>
-            </button>
-          )}
-        </div>
+        {/* Likers count — click to see who liked */}
+        <button
+          type="button"
+          onClick={() => setLikersOpen(true)}
+          className="flex items-center gap-1.5 cursor-pointer select-none group"
+        >
+          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#E8F2FF] dark:bg-[#112032]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
+                stroke="#1890FF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="#1890FF"
+                fillOpacity="0.2"
+              />
+            </svg>
+          </div>
+          <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
+            {post.likeCount}
+          </span>
+        </button>
 
         {/* Right side: comment + share counts */}
         <div className="flex items-center gap-3 text-[13px] text-text-muted font-medium">
@@ -204,22 +189,22 @@ export default function PostCard({ post }: PostCardProps) {
           <span>{Math.floor(post.likeCount * 1.5 + 5)} Share</span>
         </div>
 
-        {/* Likers/Dislikers modal */}
+        {/* Likers modal */}
         {likersOpen && (
           <LikersListModal
             postId={post.id}
-            reaction={likersOpen}
-            onClose={() => setLikersOpen(null)}
+            reaction="like"
+            onClose={() => setLikersOpen(false)}
           />
         )}
       </div>
 
-      {/* ── Reaction bar: Like / Dislike / Comment / Share ── */}
+      {/* ── Reaction bar: Like / Comment / Share ── */}
       <div className="flex items-center transition-colors duration-300 px-2 py-1 border-b border-border">
-        <ReactButtons
+        <LikeButton
+          targetType="post"
           postId={post.id}
           isLikedByMe={post.isLikedByMe}
-          isDislikedByMe={post.isDislikedByMe}
         />
         <button
           type="button"

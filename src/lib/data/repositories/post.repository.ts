@@ -21,20 +21,15 @@ export class PostRepository {
         };
 
     const postLikes = db.likes.filter(
-      (l) => l.targetType === "post" && l.targetId === row.id
+      (l) => l.targetType === "post" && l.targetId === row.id && l.reaction === "like"
     );
 
-    const likeCount = postLikes.filter((l) => l.reaction === "like").length;
-    const dislikeCount = postLikes.filter((l) => l.reaction === "dislike").length;
-
+    const likeCount = postLikes.length;
     const commentCount = db.comments.filter((c) => c.postId === row.id).length;
 
-    const myReaction = currentUserId
-      ? postLikes.find((l) => l.userId === currentUserId)
-      : undefined;
-
-    const isLikedByMe = myReaction?.reaction === "like";
-    const isDislikedByMe = myReaction?.reaction === "dislike";
+    const isLikedByMe = currentUserId
+      ? postLikes.some((l) => l.userId === currentUserId)
+      : false;
 
     return {
       id: row.id,
@@ -44,10 +39,8 @@ export class PostRepository {
       imageUrl: row.imageUrl,
       visibility: row.visibility,
       likeCount,
-      dislikeCount,
       commentCount,
       isLikedByMe,
-      isDislikedByMe,
       createdAt: row.createdAt,
     };
   }

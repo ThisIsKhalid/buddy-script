@@ -162,7 +162,7 @@ export function seedDatabase() {
               userId: user.id,
               targetType: "reply",
               targetId: replyId,
-              reaction: Math.random() < 0.2 ? "dislike" : "like",
+              reaction: "like",
               createdAt: new Date(replyTime + (l + 1) * 60 * 1000).toISOString(),
             });
           }
@@ -181,7 +181,7 @@ export function seedDatabase() {
             userId: user.id,
             targetType: "comment",
             targetId: commentId,
-            reaction: Math.random() < 0.2 ? "dislike" : "like",
+            reaction: "like",
             createdAt: new Date(commentTime + (l + 1) * 60 * 1000).toISOString(),
           });
         }
@@ -200,7 +200,7 @@ export function seedDatabase() {
           userId: user.id,
           targetType: "post",
           targetId: id,
-          reaction: Math.random() < 0.25 ? "dislike" : "like",
+          reaction: "like",
           createdAt: new Date(postTime + (l + 1) * 5 * 60 * 1000).toISOString(),
         });
       }
