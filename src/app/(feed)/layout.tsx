@@ -386,21 +386,22 @@ export default function FeedLayout({
           {/* Right Sidebar */}
           <aside className="hidden lg:flex flex-col w-[25%] flex-shrink-0 h-[calc(100vh-85px)] overflow-y-auto scrollbar-hide gap-4 pt-4">
             {/* You Might Like */}
-            <div className="bg-card rounded-[6px] px-6 pt-6 pb-4 shadow-card transition-colors duration-300">
+            <div className="bg-card rounded-[6px] px-6 pt-6 pb-6 shadow-card transition-colors duration-300">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-text-dark font-semibold text-[15px]">
                   You Might Like
                 </h4>
                 <a
                   href="#"
-                  className="text-primary text-xs font-medium hover:underline"
+                  className="text-primary text-[12px] font-medium hover:underline"
                 >
                   See All
                 </a>
               </div>
-              <hr className="border-border mb-4 transition-colors duration-300" />
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+              <hr className="border-t border-border/60 mb-6 transition-colors duration-300" />
+              
+              <div className="flex items-center gap-3 my-6">
+                <div className="w-[50px] h-[50px] rounded-full overflow-hidden flex-shrink-0 border border-border">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/assets/images/Avatar.png"
@@ -409,24 +410,25 @@ export default function FeedLayout({
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-[13px] font-semibold text-text-dark truncate">
+                  <h4 className="text-[16px] font-semibold text-text-dark leading-tight truncate mb-0.5">
                     Radovan SkillArena
                   </h4>
-                  <p className="text-[11px] text-text-muted truncate">
+                  <p className="text-[12px] text-text-muted dark:text-text-dark/75 truncate">
                     Founder &amp; CEO at Trophy
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2 mt-2">
+              
+              <div className="flex gap-2">
                 <button
                   type="button"
-                  className="flex-1 py-1.5 text-[12px] text-text-muted border border-border rounded-[6px] hover:bg-bg-page transition-all duration-200 font-medium cursor-pointer"
+                  className="flex-1 py-[9px] text-[14px] font-medium leading-[22px] text-[#959eae] border border-[#f1f1f1] rounded-[6px] hover:bg-[#377DFF] hover:border-[#377DFF] hover:text-white dark:border-primary dark:text-white dark:hover:bg-[#377DFF] dark:hover:border-[#377DFF] transition-all duration-200 cursor-pointer"
                 >
                   Ignore
                 </button>
                 <button
                   type="button"
-                  className="flex-1 py-1.5 text-[12px] text-white bg-primary rounded-[6px] hover:bg-primary-dark transition-colors duration-200 font-medium cursor-pointer"
+                  className="flex-1 py-[9px] text-[14px] font-medium leading-[22px] text-white bg-[#377DFF] border border-[#377DFF] rounded-[6px] hover:bg-[#1890FF] hover:border-[#1890FF] dark:bg-[#377DFF] dark:border-[#377DFF] dark:text-white dark:hover:bg-[#1890FF] dark:hover:border-[#1890FF] transition-all duration-200 cursor-pointer"
                 >
                   Follow
                 </button>
@@ -434,8 +436,8 @@ export default function FeedLayout({
             </div>
 
             {/* Your Friends */}
-            <div className="bg-card rounded-[6px] px-6 pt-4 pb-2 shadow-card transition-colors duration-300">
-              <div className="flex items-center justify-between mb-3">
+            <div className="bg-card rounded-[6px] px-6 pt-6 pb-4 shadow-card transition-colors duration-300">
+              <div className="flex items-center justify-between mb-4">
                 <h4 className="text-text-dark font-semibold text-[15px]">
                   Your Friends
                 </h4>
@@ -446,25 +448,27 @@ export default function FeedLayout({
                   See All
                 </a>
               </div>
+              
               {/* Friends search */}
-              <div className="relative mb-4">
+              <div className="relative mb-6">
                 <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+                  className="absolute left-[18px] top-1/2 -translate-y-1/2 text-text-muted dark:text-primary transition-colors duration-300"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
+                  width="17"
+                  height="17"
                   fill="none"
                   viewBox="0 0 17 17"
                 >
-                  <circle cx="7" cy="7" r="6" stroke="currentColor" />
-                  <path stroke="currentColor" strokeLinecap="round" d="M16 16l-3-3" />
+                  <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
+                  <path stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" d="M16 16l-3-3" />
                 </svg>
                 <input
-                  className="w-full pl-9 pr-3 py-1.5 rounded-full bg-bg-page border border-border text-xs text-text-dark placeholder-[#666] focus:outline-none focus:border-primary transition-colors duration-300"
+                  className="w-full h-10 pl-12 pr-6 py-1.5 rounded-full bg-bg-page border border-bg-page text-sm text-text-dark placeholder-[#8C8F95] focus:outline-none hover:border-primary focus:border-primary transition-all duration-200 dark:bg-card dark:border-card dark:hover:border-primary dark:focus:border-primary"
                   type="search"
-                  placeholder="Search friends..."
+                  placeholder="input search text"
                 />
               </div>
+
               {/* Friend items */}
               {[
                 {
@@ -472,7 +476,7 @@ export default function FeedLayout({
                   role: "CEO of Apple",
                   img: "/assets/images/people1.png",
                   online: false,
-                  time: "5 mins ago",
+                  time: "5 minute ago",
                 },
                 {
                   name: "Ryan Roslansky",
@@ -486,13 +490,45 @@ export default function FeedLayout({
                   img: "/assets/images/people3.png",
                   online: true,
                 },
-              ].map((friend) => (
+                {
+                  name: "Steve Jobs",
+                  role: "CEO of Apple",
+                  img: "/assets/images/people1.png",
+                  online: false,
+                  time: "5 minute ago",
+                },
+                {
+                  name: "Ryan Roslansky",
+                  role: "CEO of Linkedin",
+                  img: "/assets/images/people2.png",
+                  online: true,
+                },
+                {
+                  name: "Dylan Field",
+                  role: "CEO of Figma",
+                  img: "/assets/images/people3.png",
+                  online: true,
+                },
+                {
+                  name: "Dylan Field",
+                  role: "CEO of Figma",
+                  img: "/assets/images/people3.png",
+                  online: true,
+                },
+                {
+                  name: "Steve Jobs",
+                  role: "CEO of Apple",
+                  img: "/assets/images/people1.png",
+                  online: false,
+                  time: "5 minute ago",
+                },
+              ].map((friend, index) => (
                 <div
-                  key={friend.name}
-                  className="flex items-center justify-between py-3 border-t border-border first:border-t-0 transition-colors duration-300"
+                  key={index}
+                  className="flex items-center justify-between p-1.5 mb-6 last:mb-2 rounded-[8px] hover:bg-[#e4e6e9] dark:hover:bg-bg-page transition-all duration-200"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+                    <div className="w-[40px] h-[40px] rounded-full overflow-hidden flex-shrink-0 border border-border">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={friend.img}
@@ -501,10 +537,10 @@ export default function FeedLayout({
                       />
                     </div>
                     <div>
-                      <h4 className="text-[13px] font-semibold text-text-dark leading-tight">
+                      <h4 className="text-[14px] font-semibold text-text-dark leading-tight mb-0.5">
                         {friend.name}
                       </h4>
-                      <p className="text-[11px] text-text-muted">
+                      <p className="text-[12px] text-text-muted">
                         {friend.role}
                       </p>
                     </div>
@@ -513,8 +549,8 @@ export default function FeedLayout({
                     {friend.online ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
+                        width="14"
+                        height="14"
                         fill="none"
                         viewBox="0 0 14 14"
                       >
@@ -524,13 +560,14 @@ export default function FeedLayout({
                           x="1"
                           y="1"
                           fill="#0ACF83"
-                          stroke="var(--color-card)"
+                          stroke="currentColor"
                           strokeWidth="2"
+                          className="text-card dark:text-bg-page transition-colors duration-300"
                           rx="6"
                         />
                       </svg>
                     ) : (
-                      <span className="text-[10px] text-text-muted">
+                      <span className="text-[12px] text-text-muted">
                         {friend.time}
                       </span>
                     )}
