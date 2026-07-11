@@ -22,3 +22,8 @@ export const db = globalForDb.db ?? new InMemoryDatabase();
 if (process.env.NODE_ENV !== "production") {
   globalForDb.db = db;
 }
+
+// Automatically seed database asynchronously on startup
+import("./seed").then(({ seedDatabase }) => {
+  seedDatabase();
+});
