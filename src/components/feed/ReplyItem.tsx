@@ -11,30 +11,28 @@ interface ReplyItemProps {
 
 export default function ReplyItem({ reply, postId }: ReplyItemProps) {
   return (
-    <div className="d-flex align-items-start mb-2" style={{ fontFamily: "Poppins" }}>
-      <div className="me-2 mt-1">
+    <div className="flex items-start gap-2.5 mb-2 font-sans text-left">
+      <div className="w-6 h-6 rounded-full overflow-hidden border border-border-color shrink-0 mt-0.5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={reply.author.avatarUrl || "/assets/images/comment_img.png"}
           alt=""
-          style={{ borderRadius: "50%", width: "24px", height: "24px" }}
+          className="w-full h-full object-cover"
         />
       </div>
-      <div className="flex-grow-1">
-        <div className="p-2 px-3" style={{ backgroundColor: "#f0f2f5", borderRadius: "10px" }}>
-          <h4
-            style={{ fontSize: "12px", fontWeight: 600, margin: "0 0 2px 0", color: "#112032" }}
-          >
+      <div className="flex-grow">
+        <div className="bg-[#f0f2f5] p-2 px-3 rounded-[10px] inline-block max-w-full">
+          <h5 className="text-xs font-semibold text-[#112032] mb-0.5">
             {reply.author.firstName} {reply.author.lastName}
-          </h4>
-          <p style={{ fontSize: "12px", margin: 0, color: "#112032" }}>
+          </h5>
+          <p className="text-xs text-[#112032] leading-normal m-0 whitespace-pre-wrap">
             {reply.text}
           </p>
 
           {/* Reply Like counts */}
           {reply.likeCount > 0 && (
-            <div className="mt-1 d-flex align-items-center">
-              <span className="_reaction_like me-1">
+            <div className="mt-1 flex items-center gap-1">
+              <span className="text-primary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -49,25 +47,15 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
                   <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
                 </svg>
               </span>
-              <span style={{ fontSize: "10px", color: "#5f72a5" }}>{reply.likeCount}</span>
+              <span className="text-[10px] text-[#5f72a5] font-semibold">{reply.likeCount}</span>
             </div>
           )}
         </div>
 
         {/* Action footer for Reply */}
-        <div className="mt-1">
-          <ul
-            className="d-flex align-items-center"
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              gap: "8px",
-              fontSize: "11px",
-              color: "#5f72a5",
-            }}
-          >
-            <li>
+        <div className="mt-1 pl-1">
+          <ul className="flex items-center gap-2 list-none p-0 m-0 text-[11px] text-[#5f72a5] font-medium select-none">
+            <li className="flex items-center gap-1.5">
               <LikeButton
                 targetType="reply"
                 postId={postId}
@@ -75,10 +63,12 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
                 replyId={reply.id}
                 isLikedByMe={reply.isLikedByMe}
               />
-              {" ."}
+              <span className="text-gray-300">.</span>
             </li>
             <li>
-              <span className="_time_link">{formatRelativeTime(reply.createdAt)}</span>
+              <span className="text-[10px] text-gray-400 font-normal">
+                {formatRelativeTime(reply.createdAt)}
+              </span>
             </li>
           </ul>
         </div>
