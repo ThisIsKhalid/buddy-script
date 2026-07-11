@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-primary: #1890ff;
   --color-primary-dark: #0e7fe6;
@@ -15,8 +17,8 @@
   --color-accent-bg: #e8f4ff;
   --color-sidebar-bg: #232e42;
   
-  --shadow-card: 7.5px 20px 7.5px 20px rgba(108, 126, 147, 0.15);
-  --shadow-sm-card: 0px 2px 0px 2px rgba(108, 126, 147, 0.15);
+  --shadow-card: 0px 8px 24px rgba(108, 126, 147, 0.12);
+  --shadow-sm-card: 0px 2px 8px rgba(108, 126, 147, 0.08);
 }
 
 .dark {
