@@ -49,151 +49,169 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="_social_registration_content">
-      <div className="_social_registration_right_logo _mar_b28">
+    <div className="bg-white p-8 md:p-12 rounded-[6px] shadow-sm w-full font-sans border border-[#E8E8E8]">
+      <div className="mb-7 flex justify-center lg:justify-start">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/logo.svg" alt="Image" className="_right_logo" />
+        <img src="/assets/images/logo.svg" alt="Image" className="max-w-[161px] h-auto" />
       </div>
-      <p className="_social_registration_content_para _mar_b8">Get Started Now</p>
-      <h4 className="_social_registration_content_title _titl4 _mar_b50">Registration</h4>
+      <p className="text-[#2D3748] text-sm md:text-base leading-normal text-center lg:text-left mb-2">
+        Get Started Now
+      </p>
+      <h4 className="text-xl md:text-2xl font-semibold text-[#1A202C] text-center lg:text-left mb-8">
+        Registration
+      </h4>
       
-      <button type="button" className="_social_registration_content_btn _mar_b40">
+      <button
+        type="button"
+        className="w-full py-3 px-6 border border-[#F0F2F5] bg-white rounded-[6px] flex items-center justify-center gap-2 hover:bg-gray-50 hover:shadow-md transition-all mb-8"
+        onClick={() => alert("Google Login is simulated.")}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/google.svg" alt="Image" className="_google_img" />{" "}
-        <span>Register with google</span>
+        <img src="/assets/images/google.svg" alt="Image" className="max-w-[20px]" />{" "}
+        <span className="font-medium text-base text-[#312000]">Register with google</span>
       </button>
 
-      <div className="_social_registration_content_bottom_txt _mar_b40">
-        <span>Or</span>
+      {/* Or Divider */}
+      <div className="flex items-center my-8">
+        <div className="flex-grow border-t border-[#DFDFDF] h-[1px]"></div>
+        <span className="mx-4 text-sm text-[#C4C4C4]">Or</span>
+        <div className="flex-grow border-t border-[#DFDFDF] h-[1px]"></div>
       </div>
 
       {error && (
-        <div className="alert alert-danger p-2 mb-3" style={{ fontSize: "13px" }}>
+        <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-md mb-4 text-xs">
           {error}
         </div>
       )}
 
-      <form className="_social_registration_form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_registration_form_input _mar_b14">
-              <label className="_social_registration_label _mar_b8">First Name</label>
-              <input
-                type="text"
-                className={`form-control _social_registration_input ${errors.firstName ? "is-invalid" : ""}`}
-                {...register("firstName")}
-                placeholder="Enter first name"
-              />
-              {errors.firstName && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.firstName.message}
-                </div>
-              )}
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
+            First Name
+          </label>
+          <input
+            type="text"
+            className={`w-full h-12 bg-white border ${
+              errors.firstName ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
+            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
+            {...register("firstName")}
+            placeholder="Enter first name"
+          />
+          {errors.firstName && (
+            <div className="text-red-500 mt-1 text-xs text-left">
+              {errors.firstName.message}
             </div>
-          </div>
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_registration_form_input _mar_b14">
-              <label className="_social_registration_label _mar_b8">Last Name</label>
-              <input
-                type="text"
-                className={`form-control _social_registration_input ${errors.lastName ? "is-invalid" : ""}`}
-                {...register("lastName")}
-                placeholder="Enter last name"
-              />
-              {errors.lastName && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.lastName.message}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_registration_form_input _mar_b14">
-              <label className="_social_registration_label _mar_b8">Email</label>
-              <input
-                type="email"
-                className={`form-control _social_registration_input ${errors.email ? "is-invalid" : ""}`}
-                {...register("email")}
-                placeholder="Enter email address"
-              />
-              {errors.email && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.email.message}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_registration_form_input _mar_b14">
-              <label className="_social_registration_label _mar_b8">Password</label>
-              <input
-                type="password"
-                className={`form-control _social_registration_input ${errors.password ? "is-invalid" : ""}`}
-                {...register("password")}
-                placeholder="Enter password"
-              />
-              {errors.password && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.password.message}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_registration_form_input _mar_b14">
-              <label className="_social_registration_label _mar_b8">Repeat Password</label>
-              <input
-                type="password"
-                className={`form-control _social_registration_input ${errors.confirmPassword ? "is-invalid" : ""}`}
-                {...register("confirmPassword")}
-                placeholder="Repeat password"
-              />
-              {errors.confirmPassword && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.confirmPassword.message}
-                </div>
-              )}
-            </div>
-          </div>
+          )}
         </div>
-        <div className="row">
-          <div className="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-            <div className="form-check _social_registration_form_check">
-              <input
-                className="form-check-input _social_registration_form_check_input"
-                type="checkbox"
-                id="termsCheckbox"
-                defaultChecked
-              />
-              <label className="form-check-label _social_registration_form_check_label" htmlFor="termsCheckbox">
-                I agree to terms & conditions
-              </label>
+
+        <div>
+          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
+            Last Name
+          </label>
+          <input
+            type="text"
+            className={`w-full h-12 bg-white border ${
+              errors.lastName ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
+            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
+            {...register("lastName")}
+            placeholder="Enter last name"
+          />
+          {errors.lastName && (
+            <div className="text-red-500 mt-1 text-xs text-left">
+              {errors.lastName.message}
             </div>
-          </div>
+          )}
         </div>
-        <div className="row">
-          <div className="col-lg-12 col-md-12 col-xl-12 col-sm-12">
-            <div className="_social_registration_form_btn _mar_t40 _mar_b60">
-              <button
-                type="submit"
-                className="_social_registration_form_btn_link _btn1"
-                disabled={loading}
-                style={{ width: "100%", border: "none" }}
-              >
-                {loading ? "Registering..." : "Register now"}
-              </button>
+
+        <div>
+          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
+            Email
+          </label>
+          <input
+            type="email"
+            className={`w-full h-12 bg-white border ${
+              errors.email ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
+            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
+            {...register("email")}
+            placeholder="Enter email address"
+          />
+          {errors.email && (
+            <div className="text-red-500 mt-1 text-xs text-left">
+              {errors.email.message}
             </div>
-          </div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
+            Password
+          </label>
+          <input
+            type="password"
+            className={`w-full h-12 bg-white border ${
+              errors.password ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
+            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
+            {...register("password")}
+            placeholder="Enter password"
+          />
+          {errors.password && (
+            <div className="text-red-500 mt-1 text-xs text-left">
+              {errors.password.message}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-[#4A5568] mb-2 text-left">
+            Repeat Password
+          </label>
+          <input
+            type="password"
+            className={`w-full h-12 bg-white border ${
+              errors.confirmPassword ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-[#F5F5F5] focus:ring-primary focus:border-primary"
+            } rounded-[6px] px-4 text-sm text-[#2D3748] placeholder-[#C4C4C4] focus:outline-none focus:ring-1 focus:border-primary transition-all`}
+            {...register("confirmPassword")}
+            placeholder="Repeat password"
+          />
+          {errors.confirmPassword && (
+            <div className="text-red-500 mt-1 text-xs text-left">
+              {errors.confirmPassword.message}
+            </div>
+          )}
+        </div>
+
+        {/* Terms checkbox */}
+        <div className="pt-2 text-left">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary"
+              type="checkbox"
+              id="termsCheckbox"
+              defaultChecked
+            />
+            <span className="text-sm text-[#4A5568]">I agree to terms & conditions</span>
+          </label>
+        </div>
+
+        {/* Submit */}
+        <div className="pt-6">
+          <button
+            type="submit"
+            className="w-full py-3 bg-primary text-white rounded-[6px] font-medium text-base hover:bg-primary-hover hover:shadow-lg focus:outline-none transition-all disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? "Registering..." : "Register now"}
+          </button>
         </div>
       </form>
-      <div className="row">
-        <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-          <div className="_social_registration_bottom_txt">
-            <p className="_social_registration_bottom_txt_para">
-              Already have an account? <Link href="/login">Login</Link>
-            </p>
-          </div>
-        </div>
+
+      <div className="mt-8 text-center">
+        <p className="text-sm text-[#666666]">
+          Already have an account?{" "}
+          <Link href="/login" className="text-primary hover:underline font-semibold">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

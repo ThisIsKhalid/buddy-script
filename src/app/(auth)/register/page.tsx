@@ -2,45 +2,40 @@ import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function RegisterPage() {
   return (
-    <section className="_social_registration_wrapper _layout_main_wrapper">
+    <section className="relative w-full min-h-screen bg-body-bg flex items-center justify-center py-12 px-4 overflow-hidden font-sans">
       {/* Decorative SVGs from design */}
-      <div className="_shape_one">
+      <div className="absolute top-0 left-0 -z-10 w-[300px] md:w-[450px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape1.svg" alt="" className="_shape_img" />
+        <img src="/assets/images/shape1.svg" alt="" className="w-full h-auto block" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape.svg" alt="" className="_dark_shape" />
+        <img src="/assets/images/dark_shape.svg" alt="" className="hidden w-full h-auto" />
       </div>
-      <div className="_shape_two">
+      <div className="absolute top-0 right-[20px] -z-10 w-[300px] md:w-[450px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape2.svg" alt="" className="_shape_img" />
+        <img src="/assets/images/shape2.svg" alt="" className="w-full h-auto block" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape1.svg" alt="" className="_dark_shape _dark_shape_opacity" />
+        <img src="/assets/images/dark_shape1.svg" alt="" className="hidden w-full h-auto" />
       </div>
-      <div className="_shape_three">
+      <div className="absolute bottom-0 right-[327px] -z-10 w-[300px] md:w-[450px] hidden lg:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape3.svg" alt="" className="_shape_img" />
+        <img src="/assets/images/shape3.svg" alt="" className="w-full h-auto block" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape2.svg" alt="" className="_dark_shape _dark_shape_opacity" />
+        <img src="/assets/images/dark_shape2.svg" alt="" className="hidden w-full h-auto" />
       </div>
 
-      <div className="_social_registration_wrap">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12">
-              <div className="_social_registration_right">
-                <div className="_social_registration_right_image">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/registration.png" alt="Image" />
-                </div>
-                <div className="_social_registration_right_image_dark">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/registration1.png" alt="Image" />
-                </div>
-              </div>
+      <div className="w-full max-w-6xl mx-auto px-4 z-10 relative">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          {/* Left Column (Illustration) */}
+          <div className="hidden lg:flex w-full lg:w-7/12 justify-center">
+            <div className="max-w-[633px] w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/images/registration.png" alt="Image" className="w-full h-auto object-contain" />
             </div>
-            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
-              <RegisterForm />
-            </div>
+          </div>
+          
+          {/* Right Column (Form) */}
+          <div className="w-full lg:w-[400px] xl:w-[450px] shrink-0 mx-auto">
+            <RegisterForm />
           </div>
         </div>
       </div>
