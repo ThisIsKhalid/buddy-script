@@ -101,6 +101,43 @@ export default function UserMenu() {
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
+                    height="18"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="#377DFF"
+                      d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                    />
+                  </svg>
+                  Profile
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="6"
+                  height="10"
+                  fill="none"
+                  viewBox="0 0 6 10"
+                >
+                  <path
+                    fill="currentColor"
+                    className="text-text-muted"
+                    d="M5 5l.354.354L5.707 5l-.353-.354L5 5zM1.354 9.354l4-4-.708-.708-4 4 .708.708zm4-4.708l-4-4-.708.708 4 4 .708-.708z"
+                    opacity=".5"
+                  />
+                </svg>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/feed"
+                className="flex items-center justify-between px-4 py-3 text-sm text-text-dark hover:bg-bg-page transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="flex items-center gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
                     height="19"
                     fill="none"
                     viewBox="0 0 18 19"

@@ -13,9 +13,15 @@ export function useAuth() {
         setUser(currentUser);
       } else {
         setUser(null);
+        if (typeof window !== "undefined" && window.location.pathname.startsWith("/feed")) {
+          router.push("/login");
+        }
       }
     } catch (err) {
       setUser(null);
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/feed")) {
+        router.push("/login");
+      }
     } finally {
       setInitialized(true);
     }
