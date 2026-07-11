@@ -19,16 +19,16 @@ export function formatRelativeTime(dateString: string): string {
   const diffMs = now.getTime() - date.getTime();
   
   if (isNaN(date.getTime())) return "recently";
-  if (diffMs < 0) return "Just now"; // Handle clock drift
+  if (diffMs < 0) return "Just now";
 
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
   const diffDays = Math.floor(diffHours / 24);
 
   if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
   
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -71,172 +71,152 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <div className="_feed_inner_timeline_post_area _b_radious6 _padd_b24 _padd_t24 _mar_b16">
+    <div className="bg-white py-6 rounded-[6px] border border-border-color shadow-sm mb-4 text-left font-sans relative">
       {/* Top section: Author and options */}
-      <div className="_feed_inner_timeline_content _padd_r24 _padd_l24">
-        <div className="_feed_inner_timeline_post_top">
-          <div className="_feed_inner_timeline_post_box">
-            <div className="_feed_inner_timeline_post_box_image">
+      <div className="px-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-border-color shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.author.avatarUrl || "/assets/images/post_img.png"}
                 alt=""
-                className="_post_img"
-                style={{ borderRadius: "50%" }}
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="_feed_inner_timeline_post_box_txt">
-              <h4 className="_feed_inner_timeline_post_box_title">
+            <div className="flex flex-col text-left">
+              <h4 className="text-xs md:text-sm font-semibold text-[#112032] m-0">
                 {post.author.firstName} {post.author.lastName}
               </h4>
-              <p className="_feed_inner_timeline_post_box_para">
+              <p className="text-[10px] md:text-xs text-muted m-0 mt-0.5">
                 {formatRelativeTime(post.createdAt)} .{" "}
-                <span style={{ textTransform: "capitalize", fontSize: "12px", color: "#666" }}>
+                <span className="capitalize font-medium text-muted">
                   {post.visibility === "public" ? "🌐 Public" : "🔒 Private"}
                 </span>
               </p>
             </div>
           </div>
           
-          <div className="_feed_inner_timeline_post_box_dropdown" ref={dropdownRef}>
-            <div className="_feed_timeline_post_dropdown">
+          <div className="relative" ref={dropdownRef}>
+            <div>
               <button
-                className="_feed_timeline_post_dropdown_link"
+                className="flex items-center justify-center p-1 text-[#C4C4C4] hover:text-primary transition-colors cursor-pointer bg-transparent border-none outline-none"
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{ background: "none", border: "none", outline: "none" }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
-                  <circle cx="2" cy="2" r="2" fill="#C4C4C4" />
-                  <circle cx="2" cy="8" r="2" fill="#C4C4C4" />
-                  <circle cx="2" cy="15" r="2" fill="#C4C4C4" />
+                  <circle cx="2" cy="2" r="2" fill="currentColor" />
+                  <circle cx="2" cy="8" r="2" fill="currentColor" />
+                  <circle cx="2" cy="15" r="2" fill="currentColor" />
                 </svg>
               </button>
             </div>
 
             {dropdownOpen && (
               <div
-                className="_feed_timeline_dropdown _timeline_dropdown"
-                style={{ display: "block", right: 0, top: "25px" }}
+                className="absolute right-0 top-7 w-[180px] bg-white border border-border-color rounded-[6px] shadow-lg py-2 z-30 flex flex-col"
+                style={{ display: "block" }}
               >
-                <ul className="_feed_timeline_dropdown_list" style={{ padding: "8px 0", margin: 0, listStyle: "none" }}>
-                  <li className="_feed_timeline_dropdown_item">
-                    <button
-                      className="_feed_timeline_dropdown_link"
-                      style={{ background: "none", border: "none", width: "100%", textAlign: "left", display: "flex", alignItems: "center", padding: "8px 16px" }}
-                      onClick={() => alert("Post saved (mock action)")}
-                    >
-                      <span className="me-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
-                          <path stroke="#1890FF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z"/>
-                        </svg>
-                      </span>
-                      Save Post
-                    </button>
-                  </li>
-                  {isAuthor && (
-                    <li className="_feed_timeline_dropdown_item">
-                      <button
-                        className="_feed_timeline_dropdown_link text-danger"
-                        style={{ background: "none", border: "none", width: "100%", textAlign: "left", display: "flex", alignItems: "center", padding: "8px 16px" }}
-                        onClick={handleDelete}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <span className="me-2">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
-                            <path stroke="#DC3545" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"/>
-                          </svg>
-                        </span>
-                        {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
-                      </button>
-                    </li>
-                  )}
-                </ul>
+                <button
+                  className="flex items-center gap-2 px-4 py-2.5 text-xs text-[#4A5568] hover:text-primary hover:bg-light-gray transition-all text-left bg-transparent border-none w-full cursor-pointer font-sans"
+                  onClick={() => alert("Post saved (mock action)")}
+                >
+                  <span className="text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z"/>
+                    </svg>
+                  </span>
+                  Save Post
+                </button>
+                {isAuthor && (
+                  <button
+                    className="flex items-center gap-2 px-4 py-2.5 text-xs text-red-500 hover:text-red-600 hover:bg-red-50 transition-all text-left bg-transparent border-none w-full cursor-pointer font-sans"
+                    onClick={handleDelete}
+                    disabled={deleteMutation.isPending}
+                  >
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"/>
+                      </svg>
+                    </span>
+                    {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
 
         {/* Text body */}
-        <p className="_feed_inner_timeline_post_para mt-2" style={{ whiteSpace: "pre-wrap", color: "#112032" }}>
+        <p className="text-xs md:text-sm text-[#112032] leading-relaxed mt-3 mb-0 break-words whitespace-pre-wrap">
           {post.text}
         </p>
 
         {/* Image body (if attached) */}
         {post.imageUrl && (
-          <div className="_feed_inner_timeline_image mt-3">
+          <div className="relative mt-3 overflow-hidden rounded-[6px] max-h-[450px] border border-border-color">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={post.imageUrl} alt="" className="_time_img" style={{ maxHeight: "450px", objectFit: "cover", width: "100%", borderRadius: "6px" }} />
+            <img src={post.imageUrl} alt="Attached" className="w-full h-full object-cover block" />
           </div>
         )}
       </div>
 
       {/* Likers Stack & Counts */}
-      <div className="_feed_inner_timeline_total_reacts _padd_r24 _padd_l24 _mar_b26 d-flex justify-content-between align-items-center mt-3">
+      <div className="flex items-center justify-between mt-4 px-6 border-b border-[#F5F5F5] pb-3 select-none">
         <div
-          className="_feed_inner_timeline_total_reacts_image"
+          className="flex items-center cursor-pointer relative group"
           onClick={() => setLikersOpen(true)}
-          style={{ cursor: "pointer" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img1.png" alt="Image" className="_react_img1" />
+          <img src="/assets/images/react_img1.png" alt="Like avatar" className="w-[18px] h-[18px] rounded-full border border-white z-20 object-cover" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img2.png" alt="Image" className="_react_img" />
-          <p className="_feed_inner_timeline_total_reacts_para">
+          <img src="/assets/images/react_img2.png" alt="Like avatar" className="w-[18px] h-[18px] rounded-full border border-white z-10 -ml-1.5 object-cover" />
+          <p className="text-xs text-[#5f72a5] font-semibold ml-2 m-0 hover:text-primary transition-colors">
             {post.likeCount > 0 ? `${post.likeCount}` : "0"}
           </p>
         </div>
-        <div className="_feed_inner_timeline_total_reacts_txt">
-          <p className="_feed_inner_timeline_total_reacts_para1" style={{ margin: 0 }}>
-            <button
-              onClick={() => setCommentsOpen(!commentsOpen)}
-              style={{ background: "none", border: "none", color: "inherit", padding: 0 }}
-            >
-              <span>{post.commentCount}</span> Comment{post.commentCount !== 1 ? "s" : ""}
-            </button>
-          </p>
+        <div>
+          <button
+            onClick={() => setCommentsOpen(!commentsOpen)}
+            className="text-xs text-[#5f72a5] hover:text-primary transition-colors bg-transparent border-none p-0 cursor-pointer font-sans"
+            type="button"
+          >
+            <span>{post.commentCount}</span> Comment{post.commentCount !== 1 ? "s" : ""}
+          </button>
         </div>
       </div>
 
       {/* Like, Comment, and Share Actions */}
-      <div className="_feed_inner_timeline_reaction">
+      <div className="flex items-center justify-around py-1 border-b border-[#F5F5F5] last:border-b-0">
         <LikeButton targetType="post" postId={post.id} isLikedByMe={post.isLikedByMe} />
         
         <button
-          className={`_feed_inner_timeline_reaction_comment _feed_reaction ${commentsOpen ? "_feed_reaction_active" : ""}`}
+          className={`flex-1 py-2 px-3 flex items-center justify-center gap-2 text-xs md:text-sm font-semibold text-[#5f72a5] hover:text-primary hover:bg-light-gray rounded-[6px] transition-all bg-transparent border-none cursor-pointer select-none font-sans ${commentsOpen ? "text-primary bg-light-blue-bg" : ""}`}
           onClick={() => setCommentsOpen(!commentsOpen)}
-          style={{ background: "none", border: "none" }}
+          type="button"
         >
-          <span className="_feed_inner_timeline_reaction_link">
-            <span>
-              <svg className="_reaction_svg" xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="none" viewBox="0 0 21 21">
-                <path stroke="#000" d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z"/>
-                <path stroke="#000" strokeLinecap="round" strokeLinejoin="round" d="M6.938 9.313h7.125M10.5 14.063h3.563"/>
-              </svg>
-              Comment
-            </span>
-          </span>
+          <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
+            <path stroke="currentColor" strokeWidth="1.5" d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z"/>
+            <path stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M6.938 9.313h7.125M10.5 14.063h3.563"/>
+          </svg>
+          Comment
         </button>
 
         <button
-          className="_feed_inner_timeline_reaction_share _feed_reaction"
-          style={{ background: "none", border: "none" }}
+          className="flex-1 py-2 px-3 flex items-center justify-center gap-2 text-xs md:text-sm font-semibold text-[#5f72a5] hover:text-primary hover:bg-light-gray rounded-[6px] transition-all bg-transparent border-none cursor-pointer select-none font-sans"
+          type="button"
           onClick={() => alert("Post shared (mock action)")}
         >
-          <span className="_feed_inner_timeline_reaction_link">
-            <span>
-              <svg className="_reaction_svg" xmlns="http://www.w3.org/2000/svg" width="24" height="21" fill="none" viewBox="0 0 24 21">
-                <path stroke="#000" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z"/>
-              </svg>
-              Share
-            </span>
-          </span>
+          <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 21">
+            <path stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z"/>
+          </svg>
+          Share
         </button>
       </div>
 
       {/* Nested Comment Area */}
       {commentsOpen && (
-        <div className="_feed_inner_timeline_cooment_area" style={{ display: "block" }}>
+        <div className="px-6 mt-4">
           <CommentList postId={post.id} />
         </div>
       )}
