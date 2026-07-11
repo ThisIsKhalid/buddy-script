@@ -29,29 +29,25 @@ export default function FeedInfiniteScroll() {
     );
 
     const el = loadMoreRef.current;
-    if (el) {
-      observer.observe(el);
-    }
-
+    if (el) observer.observe(el);
     return () => {
-      if (el) {
-        observer.unobserve(el);
-      }
+      if (el) observer.unobserve(el);
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
     return (
-      <div className="text-center my-4 py-4" style={{ fontFamily: "Poppins" }}>
-        <div className="spinner-border text-primary" role="status"></div>
-        <p className="mt-2 text-muted" style={{ fontSize: "14px" }}>Loading feed posts...</p>
+      <div className="flex flex-col items-center justify-center py-12">
+        {/* Spinner */}
+        <div className="w-8 h-8 rounded-full border-4 border-[#F0F2F5] border-t-[#1890FF] animate-spin mb-3" />
+        <p className="text-sm text-[#666666]">Loading feed posts...</p>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="alert alert-danger my-4" role="alert">
+      <div className="bg-red-50 border border-red-300 text-red-700 text-sm rounded-[6px] p-4 my-4">
         Failed to load feed posts. Please refresh the page.
       </div>
     );
@@ -61,13 +57,11 @@ export default function FeedInfiniteScroll() {
 
   if (posts.length === 0) {
     return (
-      <div
-        className="text-center my-5 py-5 bg-white border rounded"
-        style={{ fontFamily: "Poppins", borderRadius: "6px" }}
-      >
-        <p className="text-muted" style={{ fontSize: "15px", margin: 0 }}>
-          No posts available. Write something above to get started!
-        </p>
+      <div className="bg-white rounded-[6px] shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] flex flex-col items-center justify-center py-16 my-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" className="text-[#C4C4C4] mb-4">
+          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 10h8M8 14h5M3 9a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
+        </svg>
+        <p className="text-sm text-[#666666]">No posts available. Write something above to get started!</p>
       </div>
     );
   }
@@ -79,11 +73,9 @@ export default function FeedInfiniteScroll() {
       ))}
 
       {/* Intersection observer target */}
-      <div ref={loadMoreRef} className="text-center py-4" style={{ minHeight: "50px" }}>
+      <div ref={loadMoreRef} className="flex items-center justify-center py-6 min-h-[50px]">
         {isFetchingNextPage && (
-          <div className="spinner-border spinner-border-sm text-primary" role="status">
-            <span className="visually-hidden">Loading more...</span>
-          </div>
+          <div className="w-6 h-6 rounded-full border-4 border-[#F0F2F5] border-t-[#1890FF] animate-spin" />
         )}
       </div>
     </div>

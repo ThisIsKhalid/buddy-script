@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/layout/Navbar";
+import Link from "next/link";
 
 export default function FeedLayout({
   children,
@@ -8,310 +9,279 @@ export default function FeedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="_main_layout">
-      {/* Dynamic Navbar */}
+    <div className="min-h-screen bg-[#F0F2F5] flex flex-col">
+      {/* Navbar */}
       <Navbar />
 
-      {/* Mobile Bottom Navigation */}
-      <div className="_mobile_navigation_bottom_wrapper">
-        <div className="_mobile_navigation_bottom_wrap">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-12 col-lg-12 col-md-12">
-                <ul className="_mobile_navigation_bottom_list">
-                  <li className="_mobile_navigation_bottom_item">
-                    <a href="/feed" className="_mobile_navigation_bottom_link _mobile_navigation_bottom_link_active">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" fill="none" viewBox="0 0 24 27">
-                        <path className="_mobile_svg" fill="#000" fillOpacity=".6" stroke="#666666" strokeWidth="1.5" d="M1 13.042c0-2.094 0-3.141.431-4.061.432-.92 1.242-1.602 2.862-2.965l1.571-1.321C8.792 2.232 10.256 1 12 1c1.744 0 3.208 1.232 6.136 3.695l1.572 1.321c1.62 1.363 2.43 2.044 2.86 2.965.432.92.432 1.967.432 4.06v6.54c0 2.908 0 4.362-.92 5.265-.921.904-2.403.904-5.366.904H7.286c-2.963 0-4.445 0-5.365-.904C1 23.944 1 22.49 1 19.581v-6.54z"/>
-                        <path fill="#fff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.07 18.497h5.857v7.253H9.07v-7.253z"/>
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="_mobile_navigation_bottom_item">
-                    <a href="/feed" className="_mobile_navigation_bottom_link">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="27" height="20" fill="none" viewBox="0 0 27 20">
-                        <path className="_dark_svg" fill="#000" fillOpacity=".6" fillRule="evenodd" d="M13.334 12.405h.138l.31.001c2.364.015 7.768.247 7.768 3.81 0 3.538-5.215 3.769-7.732 3.784h-.932c-2.364-.015-7.77-.247-7.77-3.805 0-3.543 5.405-3.774 7.77-3.789l.31-.001h.138zm0 1.787c-2.91 0-6.38.348-6.38 2.003 0 1.619 3.263 1.997 6.114 2.018l.266.001c2.91 0 6.379-.346 6.379-1.998 0-1.673-3.469-2.024-6.38-2.024zm9.742-2.27c2.967.432 3.59 1.787 3.59 2.849 0 .648-.261 1.83-2.013 2.48a.953.953 0 01-.327.058.919.919 0 01-.858-.575.886.886 0 01.531-1.153c.83-.307.83-.647.83-.81 0-.522-.682-.886-2.027-1.082a.9.9 0 01-.772-1.017c.074-.488.54-.814 1.046-.75zm-18.439.75a.9.9 0 01-.773 1.017c-1.345.196-2.027.56-2.027 1.082 0 .163 0 .501.832.81a.886.886 0 01.531 1.153.92.92 0 01-.858.575.953.953 0 01-.327-.058C.262 16.6 0 15.418 0 14.77c0-1.06.623-2.417 3.592-2.85.506-.061.97.263 1.045.751zM13.334 0c3.086 0 5.596 2.442 5.596 5.442 0 3.001-2.51 5.443-5.596 5.443H13.3a5.616 5.616 0 01-3.943-1.603A5.308 5.308 0 017.74 5.439C7.739 2.442 10.249 0 13.334 0zm0 1.787c-2.072 0-3.758 1.64-3.758 3.655-.003.977.381 1.89 1.085 2.58a3.772 3.772 0 002.642 1.076l.03.894v-.894c2.073 0 3.76-1.639 3.76-3.656 0-2.015-1.687-3.655-3.76-3.655zm7.58-.62c2.153.344 3.717 2.136 3.717 4.26-.004 2.138-1.647 3.972-3.82 4.269a.911.911 0 01-1.036-.761.897.897 0 01.782-1.01c1.273-.173 2.235-1.248 2.237-2.501 0-1.242-.916-2.293-2.179-2.494a.897.897 0 01-.756-1.027.917.917 0 011.055-.736zM6.81 1.903a.897.897 0 01-.757 1.027C4.79 3.13 3.874 4.182 3.874 5.426c.002 1.251.963 2.327 2.236 2.5.503.067.853.519.783 1.008a.912.912 0 01-1.036.762c-2.175-.297-3.816-2.131-3.82-4.267 0-2.126 1.563-3.918 3.717-4.262.515-.079.972.251 1.055.736z" clipRule="evenodd"/>
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="_mobile_navigation_bottom_item">
-                    <a href="/feed" className="_mobile_navigation_bottom_link">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="27" fill="none" viewBox="0 0 25 27">
-                        <path className="_dark_svg" fill="#000" fillOpacity=".6" fillRule="evenodd" d="M10.17 23.46c.671.709 1.534 1.098 2.43 1.098.9 0 1.767-.39 2.44-1.099.36-.377.976-.407 1.374-.067.4.34.432.923.073 1.3-1.049 1.101-2.428 1.708-3.886 1.708h-.003c-1.454-.001-2.831-.608-3.875-1.71a.885.885 0 01.072-1.298 1.01 1.01 0 011.374.068zM12.663 0c5.768 0 9.642 4.251 9.642 8.22 0 2.043.549 2.909 1.131 3.827.576.906 1.229 1.935 1.229 3.88-.453 4.97-5.335 5.375-12.002 5.375-6.067 0-11.55-.405-11.998-5.296-.004-2.024.649-3.053 1.225-3.959l.203-.324c.501-.814.928-1.7.928-3.502C3.022 4.25 6.897 0 12.664 0zm0 1.842C8.13 1.842 4.97 5.204 4.97 8.22c0 2.553-.75 3.733-1.41 4.774-.531.836-.95 1.497-.95 2.932.216 2.316 1.831 3.533 10.055 3.533 8.178 0 9.844-1.271 10.06-3.613-.004-1.355-.423-2.016-.954-2.852-.662-1.041-1.41-2.221-1.41-4.774 0-3.017-3.161-6.38-7.696-6.38z" clipRule="evenodd"/>
-                      </svg>
-                      <span className="_counting">6</span>
-                    </a>
-                  </li>
-                  <li className="_mobile_navigation_bottom_item">
-                    <a href="/feed" className="_mobile_navigation_bottom_link">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path className="_dark_svg" fill="#000" fillOpacity=".6" fillRule="evenodd" d="M12.002 0c3.208 0 6.223 1.239 8.487 3.489 4.681 4.648 4.681 12.211 0 16.86-2.294 2.28-5.384 3.486-8.514 3.486-1.706 0-3.423-.358-5.03-1.097-.474-.188-.917-.366-1.235-.366-.366.003-.859.171-1.335.334-.976.333-2.19.748-3.09-.142-.895-.89-.482-2.093-.149-3.061.164-.477.333-.97.333-1.342 0-.306-.149-.697-.376-1.259C-1 12.417-.032 7.011 3.516 3.49A11.96 11.96 0 0112.002 0zm.001 1.663a10.293 10.293 0 00-7.304 3.003A10.253 10.253 0 002.63 16.244c.261.642.514 1.267.514 1.917 0 .649-.225 1.302-.422 1.878-.163.475-.41 1.191-.252 1.349.156.16.881-.092 1.36-.255.576-.195 1.228-.42 1.874-.424.648 0 1.259.244 1.905.503 3.96 1.818 8.645.99 11.697-2.039 4.026-4 4.026-10.509 0-14.508a10.294 10.294 0 00-7.303-3.002zm4.407 9.607c.617 0 1.117.495 1.117 1.109 0 .613-.5 1.109-1.117 1.109a1.116 1.116 0 01-1.12-1.11c0-.613.494-1.108 1.11-1.108h.01zm-4.476 0c.616 0 1.117.495 1.117 1.109 0 .613-.5 1.109-1.117 1.109a1.116 1.116 0 01-1.121-1.11c0-.613.493-1.108 1.11-1.108h.01zm-4.477 0c.617 0 1.117.495 1.117 1.109 0 .613-.5 1.109-1.117 1.109a1.116 1.116 0 01-1.12-1.11c0-.613.494-1.108 1.11-1.108h.01z" clipRule="evenodd"/>
-                      </svg>
-                      <span className="_counting">2</span>
-                    </a>
-                  </li>
-                  <div className="_header_mobile_toggle">
-                    <span className="_header_mobile_btn_link" style={{ cursor: "pointer" }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" fill="none" viewBox="0 0 18 14">
-                        <path stroke="#666" strokeLinecap="round" strokeWidth="1.5" d="M1 1h16M1 7h16M1 13h16"/>
-                      </svg>
-                    </span>
-                  </div>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* ──── Mobile Bottom Navigation ──── */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t border-[#DFDFDF]">
+        <ul className="flex items-center justify-around px-2 py-2">
+          <li>
+            <a href="/feed" className="flex flex-col items-center gap-0.5 text-[#1890FF]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 27">
+                <path fill="#1890FF" stroke="#1890FF" strokeWidth="1.5" d="M1 13.042c0-2.094 0-3.141.431-4.061.432-.92 1.242-1.602 2.862-2.965l1.571-1.321C8.792 2.232 10.256 1 12 1c1.744 0 3.208 1.232 6.136 3.695l1.572 1.321c1.62 1.363 2.43 2.044 2.86 2.965.432.92.432 1.967.432 4.06v6.54c0 2.908 0 4.362-.92 5.265-.921.904-2.403.904-5.366.904H7.286c-2.963 0-4.445 0-5.365-.904C1 23.944 1 22.49 1 19.581v-6.54z" />
+                <path fill="#fff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.07 18.497h5.857v7.253H9.07v-7.253z" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/feed" className="flex flex-col items-center gap-0.5 text-[rgba(0,0,0,0.6)]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" fill="none" viewBox="0 0 27 20">
+                <path fill="#000" fillOpacity=".6" fillRule="evenodd" d="M13.334 12.405h.138l.31.001c2.364.015 7.768.247 7.768 3.81 0 3.538-5.215 3.769-7.732 3.784h-.932c-2.364-.015-7.77-.247-7.77-3.805 0-3.543 5.405-3.774 7.77-3.789l.31-.001h.138zm0 1.787c-2.91 0-6.38.348-6.38 2.003 0 1.619 3.263 1.997 6.114 2.018l.266.001c2.91 0 6.379-.346 6.379-1.998 0-1.673-3.469-2.024-6.38-2.024zM13.334 0c3.086 0 5.596 2.442 5.596 5.442 0 3.001-2.51 5.443-5.596 5.443H13.3a5.616 5.616 0 01-3.943-1.603A5.308 5.308 0 017.74 5.439C7.739 2.442 10.249 0 13.334 0z" clipRule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/feed" className="relative flex flex-col items-center gap-0.5 text-[rgba(0,0,0,0.6)]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 25 27">
+                <path fill="#000" fillOpacity=".6" fillRule="evenodd" d="M10.17 23.46c.671.709 1.534 1.098 2.43 1.098.9 0 1.767-.39 2.44-1.099.36-.377.976-.407 1.374-.067.4.34.432.923.073 1.3-1.049 1.101-2.428 1.708-3.886 1.708h-.003c-1.454-.001-2.831-.608-3.875-1.71a.885.885 0 01.072-1.298 1.01 1.01 0 011.374.068zM12.663 0c5.768 0 9.642 4.251 9.642 8.22 0 2.043.549 2.909 1.131 3.827.576.906 1.229 1.935 1.229 3.88-.453 4.97-5.335 5.375-12.002 5.375-6.067 0-11.55-.405-11.998-5.296-.004-2.024.649-3.053 1.225-3.959l.203-.324c.501-.814.928-1.7.928-3.502C3.022 4.25 6.897 0 12.664 0z" clipRule="evenodd" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-[#1890FF] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">6</span>
+            </a>
+          </li>
+          <li>
+            <a href="/feed" className="relative flex flex-col items-center gap-0.5 text-[rgba(0,0,0,0.6)]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <path fill="#000" fillOpacity=".6" fillRule="evenodd" d="M12.002 0c3.208 0 6.223 1.239 8.487 3.489 4.681 4.648 4.681 12.211 0 16.86-2.294 2.28-5.384 3.486-8.514 3.486-1.706 0-3.423-.358-5.03-1.097-.474-.188-.917-.366-1.235-.366-.366.003-.859.171-1.335.334-.976.333-2.19.748-3.09-.142-.895-.89-.482-2.093-.149-3.061.164-.477.333-.97.333-1.342 0-.306-.149-.697-.376-1.259C-1 12.417-.032 7.011 3.516 3.49A11.96 11.96 0 0112.002 0z" clipRule="evenodd" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-[#1890FF] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">2</span>
+            </a>
+          </li>
+        </ul>
       </div>
-      {/* Mobile Bottom Navigation End */}
 
-      {/* Main Layout Structure */}
-      <div className="container _custom_container">
-        <div className="_layout_inner_wrap">
-          <div className="row">
-            
-            {/* Left Sidebar */}
-            <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12">
-              <div className="_layout_left_sidebar_wrap">
-                <div className="_layout_left_sidebar_inner">
-                  <div className="_left_inner_area_explore _padd_t24 _padd_b6 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area">
-                    <h4 className="_left_inner_area_explore_title _title5 _mar_b24">Explore</h4>
-                    <ul className="_left_inner_area_explore_list">
-                      <li className="_left_inner_area_explore_item _explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
-                            <path fill="#666" d="M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0zm0 1.395a8.605 8.605 0 100 17.21 8.605 8.605 0 000-17.21zm-1.233 4.65l.104.01c.188.028.443.113.668.203 1.026.398 3.033 1.746 3.8 2.563l.223.239.08.092a1.16 1.16 0 01.025 1.405c-.04.053-.086.105-.19.215l-.269.28c-.812.794-2.57 1.971-3.569 2.391-.277.117-.675.25-.865.253a1.167 1.167 0 01-1.07-.629c-.053-.104-.12-.353-.171-.586l-.051-.262c-.093-.57-.143-1.437-.142-2.347l.001-.288c.01-.858.063-1.64.157-2.147.037-.207.12-.563.167-.678.104-.25.291-.45.523-.575a1.15 1.15 0 01.58-.14zm.14 1.467l-.027.126-.034.198c-.07.483-.112 1.233-.111 2.036l.001.279c.009.737.053 1.414.123 1.841l.048.235.192-.07c.883-.372 2.636-1.56 3.23-2.2l.08-.087-.212-.218c-.711-.682-2.38-1.79-3.167-2.095l-.124-.045z" />
-                          </svg>Learning</a> <span className="_left_inner_area_explore_link_txt">New</span>
-                      </li>
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="none" viewBox="0 0 22 24">
-                            <path fill="#666" d="M14.96 2c3.101 0 5.159 2.417 5.159 5.893v8.214c0 3.476-2.058 5.893-5.16 5.893H6.989c-3.101 0-5.159-2.417-5.159-5.893V7.893C1.83 4.42 3.892 2 6.988 2h7.972zm0 1.395H6.988c-2.37 0-3.883 1.774-3.883 4.498v8.214c0 2.727 1.507 4.498 3.883 4.498h7.972c2.375 0 3.883-1.77 3.883-4.498V7.893c0-2.727-1.508-4.498-3.883-4.498zM7.036 9.63c.323 0 .59.263.633.604l.005.094v6.382c0 .385-.285.697-.638.697-.323 0-.59-.262-.632-.603l-.006-.094v-6.382c0-.385.286-.697.638-.697zm3.97-3.053c.323 0 .59.262.632.603l.006.095v9.435c0 .385-.285.697-.638.697-.323 0-.59-.262-.632-.603l-.006-.094V7.274c0-.386.286-.698.638-.698zm3.905 6.426c.323 0 .59.262.632.603l.006.094v3.01c0 .385-.285.697-.638.697-.323 0-.59-.262-.632-.603l-.006-.094v-3.01c0-.385.286-.697.638-.697z" />
-                          </svg>Insights</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="_layout_left_sidebar_inner">
-                  <div className="_left_inner_area_explore _padd_t24 _padd_b6 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area">
-                    <h4 className="_left_inner_area_explore_title _title5 _mar_b24">Shortcuts</h4>
-                    <ul className="_left_inner_area_explore_list">
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/assets/images/f1.png" alt="Image" className="_left_inner_explore_img" />
-                          Gallery
-                        </a>
-                      </li>
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/assets/images/f2.png" alt="Image" className="_left_inner_explore_img" />
-                          Videos
-                        </a>
-                      </li>
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/assets/images/f3.png" alt="Image" className="_left_inner_explore_img" />
-                          Groups
-                        </a>
-                      </li>
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/assets/images/f4.png" alt="Image" className="_left_inner_explore_img" />
-                          Events
-                        </a>
-                      </li>
-                      <li className="_left_inner_area_explore_item">
-                        <a href="#0" className="_left_inner_area_explore_link">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/assets/images/f5.png" alt="Image" className="_left_inner_explore_img" />
-                          Pages
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+      {/* ──── Main 3-column layout ──── */}
+      <div className="w-full max-w-[1340px] mx-auto px-4 pt-[75px] pb-16 lg:pb-4">
+        <div className="flex gap-4">
 
-                <div className="_layout_left_sidebar_inner">
-                  <div className="_left_inner_event_card _padd_t24 _padd_b24 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area">
-                    <h4 className="_left_inner_event_card_title _title5 _mar_b24">Recent Event</h4>
-                    <a href="#0" className="_left_inner_event_card_link">
-                      <div className="_left_inner_event_card_content">
-                        <div className="_left_inner_card_grid _mar_b16">
-                          <div className="_left_inner_card_date_wrap">
-                            <h4 className="_left_inner_card_date_title">23</h4>
-                            <p className="_left_inner_card_date_para">Dec</p>
-                          </div>
-                          <div className="_left_inner_card_txt">
-                            <h4 className="_left_inner_event_card_title">Graduation Ceremony 2026</h4>
-                          </div>
-                        </div>
-                        <hr className="_underline" />
-                        <div className="_left_inner_event_bottom">
-                          <p className="_left_iner_event_bottom">22 People Going</p> <span className="_left_iner_event_bottom_link">Going</span>
-                        </div>
-                      </div>
+          {/* Left Sidebar */}
+          <aside className="hidden lg:flex flex-col w-[25%] flex-shrink-0 h-[calc(100vh-85px)] overflow-y-auto scrollbar-hide gap-4 pt-4">
+
+            {/* Explore */}
+            <div className="bg-white rounded-[6px] px-6 pt-6 pb-2 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+              <h4 className="text-[#112032] font-semibold text-[15px] mb-6">Explore</h4>
+              <ul className="space-y-1">
+                {[
+                  {
+                    label: "Learning",
+                    badge: "New",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
+                        <path fill="#666" d="M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0zm0 1.395a8.605 8.605 0 100 17.21 8.605 8.605 0 000-17.21zm-1.233 4.65l.104.01c.188.028.443.113.668.203 1.026.398 3.033 1.746 3.8 2.563l.223.239.08.092a1.16 1.16 0 01.025 1.405c-.04.053-.086.105-.19.215l-.269.28c-.812.794-2.57 1.971-3.569 2.391-.277.117-.675.25-.865.253a1.167 1.167 0 01-1.07-.629c-.053-.104-.12-.353-.171-.586l-.051-.262c-.093-.57-.143-1.437-.142-2.347l.001-.288c.01-.858.063-1.64.157-2.147.037-.207.12-.563.167-.678.104-.25.291-.45.523-.575a1.15 1.15 0 01.58-.14z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Insights",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="none" viewBox="0 0 22 24">
+                        <path fill="#666" d="M14.96 2c3.101 0 5.159 2.417 5.159 5.893v8.214c0 3.476-2.058 5.893-5.16 5.893H6.989c-3.101 0-5.159-2.417-5.159-5.893V7.893C1.83 4.42 3.892 2 6.988 2h7.972z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Find friends",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="none" viewBox="0 0 22 24">
+                        <path fill="#666" d="M9.032 14.456l.297.002c4.404.041 6.907 1.03 6.907 3.678 0 2.586-2.383 3.573-6.615 3.654l-.589.005c-4.588 0-7.203-.972-7.203-3.68 0-2.704 2.604-3.659 7.203-3.659z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Bookmarks",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="none" viewBox="0 0 22 24">
+                        <path fill="#666" d="M13.704 2c2.8 0 4.585 1.435 4.585 4.258V20.33c0 .443-.157.867-.436 1.18-.279.313-.658.489-1.063.489a1.456 1.456 0 01-.708-.203l-5.132-3.134-5.112 3.14c-.615.36-1.361.194-1.829-.405l-.09-.126-.085-.155a1.913 1.913 0 01-.176-.786V6.434C3.658 3.5 5.404 2 8.243 2h5.46z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Group",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Gaming",
+                    badge: "New",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="none" viewBox="0 0 22 24">
+                        <path fill="#666" d="M7.625 2c.315-.015.642.306.645.69.003.309.234.558.515.558h.928c1.317 0 2.402 1.169 2.419 2.616v.24h2.604c2.911-.026 5.255 2.337 5.377 5.414.005.12.006.245.004.368v4.31c.062 3.108-2.21 5.704-5.064 5.773z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    label: "Settings",
+                    icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path fill="#666" d="M12.616 2c.71 0 1.388.28 1.882.779.495.498.762 1.17.74 1.799l.009.147c.017.146.065.286.144.416.152.255.402.44.695.514.292.074.602.032.896-.137l.164-.082c1.23-.567 2.705-.117 3.387 1.043l.613 1.043a2.537 2.537 0 01-.884 3.204l-.257.159a1.093 1.093 0 00-.117.847c.078.287.27.53.56.695l.166.105a2.537 2.537 0 01.756 3.396l-.66 1.077-.1.152c-.774 1.092-2.279 1.425-3.427.776l-.136-.069a1.128 1.128 0 00-1.143 1.154l-.008.171C15.12 20.971 13.985 22 12.616 22h-1.235c-1.449 0-2.623-1.15-2.622-2.525z" />
+                      </svg>
+                    ),
+                  },
+                ].map(({ label, badge, icon }) => (
+                  <li key={label} className="flex items-center justify-between py-2">
+                    <a
+                      href="#"
+                      className="flex items-center gap-3 text-sm text-[#666666] hover:text-[#1890FF] transition-colors"
+                    >
+                      <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center">{icon}</span>
+                      {label}
                     </a>
-                    
-                    <a href="#0" className="_left_inner_event_card_link _mar_t20">
-                      <div className="_left_inner_event_card_content">
-                        <div className="_left_inner_card_grid _mar_b16">
-                          <div className="_left_inner_card_date_wrap _date_bg1">
-                            <h4 className="_left_inner_card_date_title _date_title1">14</h4>
-                            <p className="_left_inner_card_date_para1">Jul</p>
-                          </div>
-                          <div className="_left_inner_card_txt">
-                            <h4 className="_left_inner_event_card_title">No more terrorism no more cry</h4>
-                          </div>
-                        </div>
-                        <hr className="_underline" />
-                        <div className="_left_inner_event_bottom">
-                          <p className="_left_iner_event_bottom">17 People Going</p> <span className="_left_iner_event_bottom_link">Going</span>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Middle Content Column */}
-            <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-              <div className="_layout_middle_wrap">
-                <div className="_layout_middle_inner">
-                  {children}
-                </div>
-              </div>
-            </div>
-
-            {/* Right Sidebar */}
-            <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12">
-              <div className="_layout_right_sidebar_wrap">
-                <div className="_layout_right_sidebar_inner">
-                  <div className="_right_inner_area_info _padd_t24 _padd_b24 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area">
-                    <div className="_right_inner_area_info_content _mar_b24">
-                      <h4 className="_right_inner_area_info_content_title _title5">You Might Like</h4>
-                      <span className="_right_inner_area_info_content_txt">
-                        <a className="_right_inner_area_info_content_txt_link" href="#0">See All</a>
+                    {badge && (
+                      <span className="text-[10px] font-semibold text-[#1890FF] bg-[#e8f4ff] px-2 py-0.5 rounded-full">
+                        {badge}
                       </span>
-                    </div>
-                    <hr className="_underline" />
-                    <div className="_right_inner_area_info_ppl">
-                      <div className="_right_inner_area_info_box">
-                        <div className="_right_inner_area_info_box_image">
-                          <a href="#0">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/assets/images/Avatar.png" alt="Image" className="_ppl_img" />
-                          </a>
-                        </div>
-                        <div className="_right_inner_area_info_box_txt">
-                          <a href="#0">
-                            <h4 className="_right_inner_area_info_box_title">Radovan SkillArena</h4>
-                          </a>
-                          <p className="_right_inner_area_info_box_para">Founder & CEO at Trophy</p>
-                        </div>
-                      </div>
-                      <div className="_right_info_btn_grp">
-                        <button type="button" className="_right_info_btn_link">Ignore</button>
-                        <button type="button" className="_right_info_btn_link _right_info_btn_link_active">Follow</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                <div className="_layout_right_sidebar_inner">
-                  <div className="_feed_right_inner_area_card _padd_t24 _padd_b6 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area">
-                    <div className="_feed_top_fixed">
-                      <div className="_feed_right_inner_area_card_content _mar_b24">
-                        <h4 className="_feed_right_inner_area_card_content_title _title5">Your Friends</h4>
-                        <span className="_feed_right_inner_area_card_content_txt">
-                          <a className="_feed_right_inner_area_card_content_txt_link" href="#0">See All</a>
-                        </span>
-                      </div>
-                      <form className="_feed_right_inner_area_card_form" onSubmit={(e) => e.preventDefault()}>
-                        <svg className="_feed_right_inner_area_card_form_svg" xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 17 17">
-                          <circle cx="7" cy="7" r="6" stroke="#666"></circle>
-                          <path stroke="#666" strokeLinecap="round" d="M16 16l-3-3"></path>
-                        </svg>
-                        <input className="form-control me-2 _feed_right_inner_area_card_form_inpt" type="search" placeholder="input search text" aria-label="Search" />
-                      </form>
+            {/* Suggested People */}
+            <div className="bg-white rounded-[6px] px-6 pt-6 pb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+              <div className="flex items-center justify-between mb-6">
+                <h4 className="text-[#112032] font-semibold text-[15px]">Suggested People</h4>
+                <a href="#" className="text-[#1890FF] text-xs font-medium hover:underline">See All</a>
+              </div>
+              {[
+                { name: "Steve Jobs", role: "CEO of Apple", img: "/assets/images/people1.png" },
+                { name: "Ryan Roslansky", role: "CEO of Linkedin", img: "/assets/images/people2.png" },
+                { name: "Dylan Field", role: "CEO of Figma", img: "/assets/images/people3.png" },
+              ].map((person) => (
+                <div key={person.name} className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={person.img} alt={person.name} className="w-full h-full object-cover" />
                     </div>
-                    
-                    <div className="_feed_bottom_fixed">
-                      <div className="_feed_right_inner_area_card_ppl _feed_right_inner_area_card_ppl_inactive ">
-                        <div className="_feed_right_inner_area_card_ppl_box">
-                          <div className="_feed_right_inner_area_card_ppl_image">
-                            <a href="#0">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src="/assets/images/people1.png" alt="" className="_box_ppl_img" />
-                            </a>
-                          </div>
-                          <div className="_feed_right_inner_area_card_ppl_txt">
-                            <a href="#0">
-                              <h4 className="_feed_right_inner_area_card_ppl_title">Steve Jobs</h4>
-                            </a>
-                            <p className="_feed_right_inner_area_card_ppl_para">CEO of Apple</p>
-                          </div>
-                        </div>
-                        <div className="_feed_right_inner_area_card_ppl_side"> <span>5 mins ago</span>
-                        </div>
-                      </div>
-
-                      <div className="_feed_right_inner_area_card_ppl">
-                        <div className="_feed_right_inner_area_card_ppl_box">
-                          <div className="_feed_right_inner_area_card_ppl_image">
-                            <a href="#0">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src="/assets/images/people2.png" alt="" className="_box_ppl_img" />
-                            </a>
-                          </div>
-                          <div className="_feed_right_inner_area_card_ppl_txt">
-                            <a href="#0">
-                              <h4 className="_feed_right_inner_area_card_ppl_title">Ryan Roslansky</h4>
-                            </a>
-                            <p className="_feed_right_inner_area_card_ppl_para">CEO of Linkedin</p>
-                          </div>
-                        </div>
-                        <div className="_feed_right_inner_area_card_ppl_side">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14">
-                            <rect width="12" height="12" x="1" y="1" fill="#0ACF83" stroke="#fff" strokeWidth="2" rx="6" />
-                          </svg>
-                        </div>
-                      </div>
-
-                      <div className="_feed_right_inner_area_card_ppl">
-                        <div className="_feed_right_inner_area_card_ppl_box">
-                          <div className="_feed_right_inner_area_card_ppl_image">
-                            <a href="#0">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src="/assets/images/people3.png" alt="" className="_box_ppl_img" />
-                            </a>
-                          </div>
-                          <div className="_feed_right_inner_area_card_ppl_txt">
-                            <a href="#0">
-                              <h4 className="_feed_right_inner_area_card_ppl_title">Dylan Field</h4>
-                            </a>
-                            <p className="_feed_right_inner_area_card_ppl_para">CEO of Figma</p>
-                          </div>
-                        </div>
-                        <div className="_feed_right_inner_area_card_ppl_side">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14">
-                            <rect width="12" height="12" x="1" y="1" fill="#0ACF83" stroke="#fff" strokeWidth="2" rx="6" />
-                          </svg>
-                        </div>
-                      </div>
+                    <div>
+                      <h4 className="text-[13px] font-semibold text-[#112032] leading-tight">{person.name}</h4>
+                      <p className="text-[11px] text-[#666666]">{person.role}</p>
                     </div>
                   </div>
+                  <a
+                    href="#"
+                    className="text-[12px] text-[#1890FF] font-medium border border-[#1890FF] rounded-[6px] px-3 py-1 hover:bg-[#1890FF] hover:text-white transition-colors"
+                  >
+                    Connect
+                  </a>
                 </div>
+              ))}
+            </div>
 
+            {/* Recent Events */}
+            <div className="bg-white rounded-[6px] px-6 pt-6 pb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-[#112032] font-semibold text-[15px]">Recent Events</h4>
+                <a href="#" className="text-[#1890FF] text-xs font-medium hover:underline">See All</a>
+              </div>
+              {[
+                { day: "23", month: "Dec", title: "Graduation Ceremony 2026", going: 22, bgClass: "bg-[#1890FF] text-white" },
+                { day: "14", month: "Jul", title: "No more terrorism no more cry", going: 17, bgClass: "bg-[#F0F2F5] text-[#112032]" },
+              ].map((event) => (
+                <a key={event.title} href="#" className="block mb-4">
+                  <div className="flex gap-3 mb-3">
+                    <div className={`flex-shrink-0 w-12 h-12 rounded-[6px] flex flex-col items-center justify-center ${event.bgClass}`}>
+                      <span className="text-lg font-bold leading-none">{event.day}</span>
+                      <span className="text-[10px]">{event.month}</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-[13px] font-semibold text-[#112032] leading-snug">{event.title}</h4>
+                    </div>
+                  </div>
+                  <div className="border-t border-[#DFDFDF] pt-2 flex items-center justify-between">
+                    <p className="text-[12px] text-[#666666]">{event.going} People Going</p>
+                    <a href="#" className="text-[12px] text-[#1890FF] font-medium hover:underline">Going</a>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </aside>
+
+          {/* Middle column — feed content */}
+          <main className="flex-1 min-w-0 h-[calc(100vh-85px)] overflow-y-auto scrollbar-hide pt-4">
+            {children}
+          </main>
+
+          {/* Right Sidebar */}
+          <aside className="hidden lg:flex flex-col w-[25%] flex-shrink-0 h-[calc(100vh-85px)] overflow-y-auto scrollbar-hide gap-4 pt-4">
+
+            {/* You Might Like */}
+            <div className="bg-white rounded-[6px] px-6 pt-6 pb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-[#112032] font-semibold text-[15px]">You Might Like</h4>
+                <a href="#" className="text-[#1890FF] text-xs font-medium hover:underline">See All</a>
+              </div>
+              <hr className="border-[#DFDFDF] mb-4" />
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/assets/images/Avatar.png" alt="Avatar" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-[13px] font-semibold text-[#112032] truncate">Radovan SkillArena</h4>
+                  <p className="text-[11px] text-[#666666] truncate">Founder &amp; CEO at Trophy</p>
+                </div>
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button type="button" className="flex-1 py-1.5 text-[12px] text-[#666666] border border-[#DFDFDF] rounded-[6px] hover:bg-[#F0F2F5] transition-colors font-medium">Ignore</button>
+                <button type="button" className="flex-1 py-1.5 text-[12px] text-white bg-[#1890FF] rounded-[6px] hover:bg-[#0e7fe6] transition-colors font-medium">Follow</button>
               </div>
             </div>
 
-          </div>
+            {/* Your Friends */}
+            <div className="bg-white rounded-[6px] px-6 pt-4 pb-2 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-[#112032] font-semibold text-[15px]">Your Friends</h4>
+                <a href="#" className="text-[#1890FF] text-xs font-medium hover:underline">See All</a>
+              </div>
+              {/* Friends search */}
+              <div className="relative mb-4">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 17 17">
+                  <circle cx="7" cy="7" r="6" stroke="#666" />
+                  <path stroke="#666" strokeLinecap="round" d="M16 16l-3-3" />
+                </svg>
+                <input
+                  className="w-full pl-9 pr-3 py-1.5 rounded-full bg-[#F0F2F5] border border-[#DFDFDF] text-xs focus:outline-none focus:border-[#1890FF]"
+                  type="search"
+                  placeholder="Search friends..."
+                />
+              </div>
+              {/* Friend items */}
+              {[
+                { name: "Steve Jobs", role: "CEO of Apple", img: "/assets/images/people1.png", online: false, time: "5 mins ago" },
+                { name: "Ryan Roslansky", role: "CEO of Linkedin", img: "/assets/images/people2.png", online: true },
+                { name: "Dylan Field", role: "CEO of Figma", img: "/assets/images/people3.png", online: true },
+              ].map((friend) => (
+                <div key={friend.name} className="flex items-center justify-between py-3 border-t border-[#F0F2F5] first:border-t-0">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={friend.img} alt={friend.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div>
+                      <h4 className="text-[13px] font-semibold text-[#112032] leading-tight">{friend.name}</h4>
+                      <p className="text-[11px] text-[#666666]">{friend.role}</p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    {friend.online ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 14 14">
+                        <rect width="12" height="12" x="1" y="1" fill="#0ACF83" stroke="#fff" strokeWidth="2" rx="6" />
+                      </svg>
+                    ) : (
+                      <span className="text-[10px] text-[#666666]">{friend.time}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
         </div>
       </div>
     </div>

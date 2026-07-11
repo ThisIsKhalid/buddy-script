@@ -2,41 +2,37 @@ import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <section className="_social_login_wrapper _layout_main_wrapper">
-      {/* Decorative SVGs from design */}
-      <div className="_shape_one">
+    <section className="relative min-h-screen bg-[#F0F2F5] flex items-center overflow-hidden py-24">
+      {/* Decorative background shapes */}
+      <div className="absolute top-0 left-0 z-[-1]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape1.svg" alt="" className="_shape_img" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape.svg" alt="" className="_dark_shape" />
+        <img src="/assets/images/shape1.svg" alt="" className="block" />
       </div>
-      <div className="_shape_two">
+      <div className="absolute bottom-0 right-0 z-[-1]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape2.svg" alt="" className="_shape_img" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape1.svg" alt="" className="_dark_shape _dark_shape_opacity" />
+        <img src="/assets/images/shape2.svg" alt="" className="block" />
       </div>
-      <div className="_shape_three">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[-1]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/shape3.svg" alt="" className="_shape_img" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/dark_shape2.svg" alt="" className="_dark_shape _dark_shape_opacity" />
+        <img src="/assets/images/shape3.svg" alt="" className="block" />
       </div>
 
-      <div className="_social_login_wrap">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-xl-8 col-lg-8 col-md-12 col-sm-12">
-              <div className="_social_login_left">
-                <div className="_social_login_left_image">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/login.png" alt="Image" className="_left_img" />
-                </div>
-              </div>
+      <div className="w-full max-w-[1140px] mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center gap-8">
+          {/* Left illustration */}
+          <div className="w-full lg:w-2/3">
+            <div className="flex justify-center lg:justify-start">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/images/login.png"
+                alt="Login illustration"
+                className="max-w-full"
+              />
             </div>
-            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
-              <LoginForm />
-            </div>
+          </div>
+          {/* Right login card */}
+          <div className="w-full lg:w-1/3">
+            <LoginForm />
           </div>
         </div>
       </div>

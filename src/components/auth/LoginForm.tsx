@@ -50,111 +50,109 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="_social_login_content">
-      <div className="_social_login_left_logo _mar_b28">
+    <div className="bg-white rounded-[6px] p-8 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)]">
+      {/* Logo */}
+      <div className="mb-7">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/logo.svg" alt="Image" className="_left_logo" />
+        <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-10 w-auto" />
       </div>
-      <p className="_social_login_content_para _mar_b8">Welcome back</p>
-      <h4 className="_social_login_content_title _titl4 _mar_b50">Login to your account</h4>
-      
-      <button type="button" className="_social_login_content_btn _mar_b40">
+
+      <p className="text-[#1890FF] text-sm font-medium mb-2">Welcome back</p>
+      <h4 className="text-[#112032] text-[1.4rem] font-semibold mb-12 leading-tight">
+        Login to your account
+      </h4>
+
+      {/* Google sign-in button (decorative) */}
+      <button
+        type="button"
+        className="w-full flex items-center justify-center gap-3 border border-[#DFDFDF] rounded-[6px] py-3 px-4 mb-10 text-sm text-[#112032] font-medium hover:bg-[#f5f5f5] transition-colors"
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/images/google.svg" alt="Image" className="_google_img" />{" "}
+        <img src="/assets/images/google.svg" alt="Google" className="w-5 h-5 flex-shrink-0" />
         <span>Or sign-in with google</span>
       </button>
 
-      <div className="_social_login_content_bottom_txt _mar_b40">
-        <span>Or</span>
+      {/* Or divider */}
+      <div className="relative flex items-center mb-10">
+        <div className="flex-grow border-t border-[#DFDFDF]" />
+        <span className="mx-4 text-sm text-[#666666]">Or</span>
+        <div className="flex-grow border-t border-[#DFDFDF]" />
       </div>
 
+      {/* Error alert */}
       {error && (
-        <div className="alert alert-danger p-2 mb-3" style={{ fontSize: "13px" }}>
+        <div className="bg-red-50 border border-red-300 text-red-700 text-xs rounded-[6px] p-3 mb-4">
           {error}
         </div>
       )}
 
-      <form className="_social_login_form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_login_form_input _mar_b14">
-              <label className="_social_login_label _mar_b8">Email</label>
-              <input
-                type="email"
-                className={`form-control _social_login_input ${errors.email ? "is-invalid" : ""}`}
-                {...register("email")}
-                placeholder="Enter email address"
-              />
-              {errors.email && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.email.message}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-            <div className="_social_login_form_input _mar_b14">
-              <label className="_social_login_label _mar_b8">Password</label>
-              <input
-                type="password"
-                className={`form-control _social_login_input ${errors.password ? "is-invalid" : ""}`}
-                {...register("password")}
-                placeholder="Enter password"
-              />
-              {errors.password && (
-                <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
-                  {errors.password.message}
-                </div>
-              )}
-            </div>
-          </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Email */}
+        <div className="mb-[14px]">
+          <label className="block text-[#112032] text-sm font-medium mb-2">Email</label>
+          <input
+            type="email"
+            className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#112032] placeholder-[#C4C4C4] bg-white focus:border-[#1890FF] focus:ring-0 focus:outline-none transition-colors ${
+              errors.email ? "border-red-400" : "border-[#DFDFDF]"
+            }`}
+            placeholder="Enter email address"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+          )}
         </div>
-        <div className="row">
-          <div className="col-lg-6 col-xl-6 col-md-6 col-sm-12">
-            <div className="form-check _social_login_form_check">
-              <input
-                className="form-check-input _social_login_form_check_input"
-                type="checkbox"
-                id="rememberMe"
-                defaultChecked
-              />
-              <label className="form-check-label _social_login_form_check_label" htmlFor="rememberMe">
-                Remember me
-              </label>
-            </div>
-          </div>
-          <div className="col-lg-6 col-xl-6 col-md-6 col-sm-12">
-            <div className="_social_login_form_left">
-              <p className="_social_login_form_left_para" style={{ cursor: "pointer" }}>
-                Forgot password?
-              </p>
-            </div>
-          </div>
+
+        {/* Password */}
+        <div className="mb-[14px]">
+          <label className="block text-[#112032] text-sm font-medium mb-2">Password</label>
+          <input
+            type="password"
+            className={`w-full border rounded-[6px] px-4 py-3 text-sm text-[#112032] placeholder-[#C4C4C4] bg-white focus:border-[#1890FF] focus:ring-0 focus:outline-none transition-colors ${
+              errors.password ? "border-red-400" : "border-[#DFDFDF]"
+            }`}
+            placeholder="Enter password"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+          )}
         </div>
-        <div className="row">
-          <div className="col-lg-12 col-md-12 col-xl-12 col-sm-12">
-            <div className="_social_login_form_btn _mar_t40 _mar_b60">
-              <button
-                type="submit"
-                className="_social_login_form_btn_link _btn1"
-                disabled={loading}
-                style={{ width: "100%", border: "none" }}
-              >
-                {loading ? "Logging in..." : "Login now"}
-              </button>
-            </div>
-          </div>
+
+        {/* Remember me + Forgot password */}
+        <div className="flex items-center justify-between mb-10 mt-6">
+          <label className="flex items-center gap-2 text-sm text-[#666666] cursor-pointer">
+            <input
+              type="checkbox"
+              defaultChecked
+              className="w-4 h-4 accent-[#1890FF]"
+            />
+            Remember me
+          </label>
+          <p className="text-sm text-[#1890FF] cursor-pointer font-medium">
+            Forgot password?
+          </p>
+        </div>
+
+        {/* Submit */}
+        <div className="mb-15">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#1890FF] hover:bg-[#0e7fe6] text-white font-semibold py-3 rounded-[6px] text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Logging in..." : "Login now"}
+          </button>
         </div>
       </form>
-      <div className="row">
-        <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-          <div className="_social_login_bottom_txt">
-            <p className="_social_login_bottom_txt_para">
-              Don&apos;t have an account? <Link href="/register">Create New Account</Link>
-            </p>
-          </div>
-        </div>
-      </div>
+
+      {/* Register link */}
+      <p className="text-sm text-[#666666] text-center mt-6">
+        Don&apos;t have an account?{" "}
+        <Link href="/register" className="text-[#1890FF] font-medium hover:underline">
+          Create New Account
+        </Link>
+      </p>
     </div>
   );
 }

@@ -17,9 +17,9 @@ export function formatRelativeTime(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
-  
+
   if (isNaN(date.getTime())) return "recently";
-  if (diffMs < 0) return "Just now"; // Handle clock drift
+  if (diffMs < 0) return "Just now";
 
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMins / 60);
@@ -29,12 +29,8 @@ export function formatRelativeTime(dateString: string): string {
   if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
   if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
   if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-  
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default function PostCard({ post }: PostCardProps) {
@@ -71,179 +67,158 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <div className="_feed_inner_timeline_post_area _b_radious6 _padd_b24 _padd_t24 _mar_b16">
-      {/* Top section: Author and options */}
-      <div className="_feed_inner_timeline_content _padd_r24 _padd_l24">
-        <div className="_feed_inner_timeline_post_top">
-          <div className="_feed_inner_timeline_post_box">
-            <div className="_feed_inner_timeline_post_box_image">
+    <div className="bg-white rounded-[6px] mb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] overflow-hidden">
+      {/* ── Post header ── */}
+      <div className="px-6 pt-6 pb-3">
+        <div className="flex items-start justify-between">
+          {/* Author info */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.author.avatarUrl || "/assets/images/post_img.png"}
                 alt=""
-                className="_post_img"
-                style={{ borderRadius: "50%" }}
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="_feed_inner_timeline_post_box_txt">
-              <h4 className="_feed_inner_timeline_post_box_title">
+            <div>
+              <h4 className="text-[14px] font-semibold text-[#112032] leading-tight">
                 {post.author.firstName} {post.author.lastName}
               </h4>
-              <p className="_feed_inner_timeline_post_box_para">
-                {formatRelativeTime(post.createdAt)} .{" "}
-                <span style={{ textTransform: "capitalize", fontSize: "12px", color: "#666" }}>
+              <p className="text-[12px] text-[#666666]">
+                {formatRelativeTime(post.createdAt)} ·{" "}
+                <span className="capitalize">
                   {post.visibility === "public" ? "🌐 Public" : "🔒 Private"}
                 </span>
               </p>
             </div>
           </div>
-          
-          <div className="_feed_inner_timeline_post_box_dropdown" ref={dropdownRef}>
-            <div className="_feed_timeline_post_dropdown">
-              <button
-                className="_feed_timeline_post_dropdown_link"
-                type="button"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{ background: "none", border: "none", outline: "none" }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
-                  <circle cx="2" cy="2" r="2" fill="#C4C4C4" />
-                  <circle cx="2" cy="8" r="2" fill="#C4C4C4" />
-                  <circle cx="2" cy="15" r="2" fill="#C4C4C4" />
-                </svg>
-              </button>
-            </div>
+
+          {/* 3-dot dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F0F2F5] transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="4" height="17" fill="none" viewBox="0 0 4 17">
+                <circle cx="2" cy="2" r="2" fill="#C4C4C4" />
+                <circle cx="2" cy="8" r="2" fill="#C4C4C4" />
+                <circle cx="2" cy="15" r="2" fill="#C4C4C4" />
+              </svg>
+            </button>
 
             {dropdownOpen && (
-              <div
-                className="_feed_timeline_dropdown _timeline_dropdown"
-                style={{ display: "block", right: 0, top: "25px" }}
-              >
-                <ul className="_feed_timeline_dropdown_list" style={{ padding: "8px 0", margin: 0, listStyle: "none" }}>
-                  <li className="_feed_timeline_dropdown_item">
-                    <button
-                      className="_feed_timeline_dropdown_link"
-                      style={{ background: "none", border: "none", width: "100%", textAlign: "left", display: "flex", alignItems: "center", padding: "8px 16px" }}
-                      onClick={() => alert("Post saved (mock action)")}
-                    >
-                      <span className="me-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
-                          <path stroke="#1890FF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z"/>
-                        </svg>
-                      </span>
-                      Save Post
-                    </button>
-                  </li>
-                  {isAuthor && (
-                    <li className="_feed_timeline_dropdown_item">
-                      <button
-                        className="_feed_timeline_dropdown_link text-danger"
-                        style={{ background: "none", border: "none", width: "100%", textAlign: "left", display: "flex", alignItems: "center", padding: "8px 16px" }}
-                        onClick={handleDelete}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <span className="me-2">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 18 18">
-                            <path stroke="#DC3545" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"/>
-                          </svg>
-                        </span>
-                        {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
-                      </button>
-                    </li>
-                  )}
-                </ul>
+              <div className="absolute right-0 top-9 w-44 bg-white border border-[#DFDFDF] rounded-[6px] shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1">
+                <button
+                  type="button"
+                  onClick={() => { alert("Post saved (mock action)"); setDropdownOpen(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#112032] hover:bg-[#F0F2F5] transition-colors text-left"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
+                    <path stroke="#1890FF" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M14.25 15.75L9 12l-5.25 3.75v-12a1.5 1.5 0 011.5-1.5h7.5a1.5 1.5 0 011.5 1.5v12z" />
+                  </svg>
+                  Save Post
+                </button>
+                {isAuthor && (
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={deleteMutation.isPending}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-[#F0F2F5] transition-colors text-left disabled:opacity-50"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 18 18">
+                      <path stroke="#DC3545" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5z" />
+                    </svg>
+                    {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
+      </div>
 
-        {/* Text body */}
-        <p className="_feed_inner_timeline_post_para mt-2" style={{ whiteSpace: "pre-wrap", color: "#112032" }}>
-          {post.text}
-        </p>
-
-        {/* Image body (if attached) */}
+      {/* ── Post body ── */}
+      <div className="px-6 pb-3">
+        <p className="text-sm text-[#112032] whitespace-pre-wrap leading-relaxed">{post.text}</p>
         {post.imageUrl && (
-          <div className="_feed_inner_timeline_image mt-3">
+          <div className="mt-3 rounded-[6px] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={post.imageUrl} alt="" className="_time_img" style={{ maxHeight: "450px", objectFit: "cover", width: "100%", borderRadius: "6px" }} />
+            <img
+              src={post.imageUrl}
+              alt=""
+              className="w-full max-h-[450px] object-cover"
+            />
           </div>
         )}
       </div>
 
-      {/* Likers Stack & Counts */}
-      <div className="_feed_inner_timeline_total_reacts _padd_r24 _padd_l24 _mar_b26 d-flex justify-content-between align-items-center mt-3">
+      {/* ── Like count + comment count row ── */}
+      <div className="relative px-6 py-3 flex items-center justify-between border-t border-b border-[#F0F2F5]">
+        {/* Likers stack */}
         <div
-          className="_feed_inner_timeline_total_reacts_image"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => setLikersOpen(true)}
-          style={{ cursor: "pointer" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img1.png" alt="Image" className="_react_img1" />
+          <img src="/assets/images/react_img1.png" alt="" className="w-5 h-5 rounded-full -mr-1 border border-white" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/images/react_img2.png" alt="Image" className="_react_img" />
-          <p className="_feed_inner_timeline_total_reacts_para">
-            {post.likeCount > 0 ? `${post.likeCount}` : "0"}
-          </p>
+          <img src="/assets/images/react_img2.png" alt="" className="w-5 h-5 rounded-full border border-white" />
+          <span className="text-[13px] text-[#666666] ml-1">
+            {post.likeCount > 0 ? post.likeCount : "0"}
+          </span>
         </div>
-        <div className="_feed_inner_timeline_total_reacts_txt">
-          <p className="_feed_inner_timeline_total_reacts_para1" style={{ margin: 0 }}>
-            <button
-              onClick={() => setCommentsOpen(!commentsOpen)}
-              style={{ background: "none", border: "none", color: "inherit", padding: 0 }}
-            >
-              <span>{post.commentCount}</span> Comment{post.commentCount !== 1 ? "s" : ""}
-            </button>
-          </p>
-        </div>
-      </div>
-
-      {/* Like, Comment, and Share Actions */}
-      <div className="_feed_inner_timeline_reaction">
-        <LikeButton targetType="post" postId={post.id} isLikedByMe={post.isLikedByMe} />
-        
+        {/* Comment count */}
         <button
-          className={`_feed_inner_timeline_reaction_comment _feed_reaction ${commentsOpen ? "_feed_reaction_active" : ""}`}
+          type="button"
           onClick={() => setCommentsOpen(!commentsOpen)}
-          style={{ background: "none", border: "none" }}
+          className="text-[13px] text-[#666666] hover:text-[#1890FF] transition-colors"
         >
-          <span className="_feed_inner_timeline_reaction_link">
-            <span>
-              <svg className="_reaction_svg" xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="none" viewBox="0 0 21 21">
-                <path stroke="#000" d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z"/>
-                <path stroke="#000" strokeLinecap="round" strokeLinejoin="round" d="M6.938 9.313h7.125M10.5 14.063h3.563"/>
-              </svg>
-              Comment
-            </span>
-          </span>
+          {post.commentCount} Comment{post.commentCount !== 1 ? "s" : ""}
         </button>
 
+        {/* Likers modal (absolute positioned) */}
+        {likersOpen && (
+          <LikersListModal postId={post.id} onClose={() => setLikersOpen(false)} />
+        )}
+      </div>
+
+      {/* ── Reaction bar: Like / Comment / Share ── */}
+      <div className="flex items-center divide-x divide-[#F0F2F5]">
+        <div className="flex-1">
+          <LikeButton targetType="post" postId={post.id} isLikedByMe={post.isLikedByMe} />
+        </div>
         <button
-          className="_feed_inner_timeline_reaction_share _feed_reaction"
-          style={{ background: "none", border: "none" }}
-          onClick={() => alert("Post shared (mock action)")}
+          type="button"
+          onClick={() => setCommentsOpen(!commentsOpen)}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
+            commentsOpen ? "text-[#1890FF]" : "text-[#666666] hover:text-[#1890FF]"
+          }`}
         >
-          <span className="_feed_inner_timeline_reaction_link">
-            <span>
-              <svg className="_reaction_svg" xmlns="http://www.w3.org/2000/svg" width="24" height="21" fill="none" viewBox="0 0 24 21">
-                <path stroke="#000" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z"/>
-              </svg>
-              Share
-            </span>
-          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="none" viewBox="0 0 21 21">
+            <path stroke="currentColor" d="M1 10.5c0-.464 0-.696.009-.893A9 9 0 019.607 1.01C9.804 1 10.036 1 10.5 1v0c.464 0 .696 0 .893.009a9 9 0 018.598 8.598c.009.197.009.429.009.893v6.046c0 1.36 0 2.041-.317 2.535a2 2 0 01-.602.602c-.494.317-1.174.317-2.535.317H10.5c-.464 0-.696 0-.893-.009a9 9 0 01-8.598-8.598C1 11.196 1 10.964 1 10.5v0z" />
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="M6.938 9.313h7.125M10.5 14.063h3.563" />
+          </svg>
+          Comment
+        </button>
+        <button
+          type="button"
+          onClick={() => alert("Post shared (mock action)")}
+          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-[#666666] hover:text-[#1890FF] transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" fill="none" viewBox="0 0 24 21">
+            <path stroke="currentColor" strokeLinejoin="round" d="M23 10.5L12.917 1v5.429C3.267 6.429 1 13.258 1 20c2.785-3.52 5.248-5.429 11.917-5.429V20L23 10.5z" />
+          </svg>
+          Share
         </button>
       </div>
 
-      {/* Nested Comment Area */}
+      {/* ── Comments section ── */}
       {commentsOpen && (
-        <div className="_feed_inner_timeline_cooment_area" style={{ display: "block" }}>
+        <div className="px-6 pb-4 pt-2 border-t border-[#F0F2F5]">
           <CommentList postId={post.id} />
         </div>
-      )}
-
-      {/* Likers List modal */}
-      {likersOpen && (
-        <LikersListModal postId={post.id} onClose={() => setLikersOpen(false)} />
       )}
     </div>
   );

@@ -4,125 +4,74 @@ import FeedInfiniteScroll from "@/components/feed/FeedInfiniteScroll";
 export default function FeedPage() {
   return (
     <>
-      {/* Desktop Stories Row (For Design Fidelity) */}
-      <div className="_feed_inner_ppl_card _mar_b16">
-        <div className="_feed_inner_story_arrow">
-          <button type="button" className="_feed_inner_story_arrow_btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" fill="none" viewBox="0 0 9 8">
-              <path fill="#C4C4C4" d="M4.5 8L.603 1.25h7.794L4.5 8z" />
-            </svg>
-          </button>
-        </div>
-        <div className="row">
-          <div className="col-xl-3 col-lg-3 col-md-4 col-sm-4 col">
-            <div className="_feed_inner_profile_story _b_radious6">
-              <div className="_feed_inner_profile_story_image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/images/card_ppl1.png" alt="Image" className="_profile_story_img" />
-                <div className="_feed_inner_story_txt">
-                  <div className="_feed_inner_story_btn">
-                    <button className="_feed_inner_story_btn_link" type="button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10">
-                        <path stroke="#fff" strokeLinecap="round" d="M.5 4.884h9M4.884 9.5v-9" />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="_feed_inner_story_para">Your Story</p>
-                </div>
+      {/* Desktop Stories Row */}
+      <div className="hidden lg:block bg-white rounded-[6px] mb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] relative overflow-hidden">
+        <div className="grid grid-cols-4 gap-0">
+          {/* Your Story */}
+          <div className="relative rounded-l-[6px] overflow-hidden" style={{ height: 180 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/images/card_ppl1.png" alt="Your story" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col items-center justify-end pb-3">
+              <div className="w-8 h-8 rounded-full bg-[#1890FF] flex items-center justify-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10">
+                  <path stroke="#fff" strokeLinecap="round" d="M.5 4.884h9M4.884 9.5v-9" />
+                </svg>
               </div>
+              <p className="text-white text-xs font-medium">Your Story</p>
             </div>
           </div>
-          <div className="col-xl-3 col-lg-3 col-md-4 col-sm-4 col">
-            <div className="_feed_inner_public_story _b_radious6">
-              <div className="_feed_inner_public_story_image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/images/card_ppl2.png" alt="Image" className="_public_story_img" />
-                <div className="_feed_inner_pulic_story_txt">
-                  <p className="_feed_inner_pulic_story_para">Ryan Roslansky</p>
-                </div>
-                <div className="_feed_inner_public_mini">
+          {/* Other stories */}
+          {[
+            { img: "/assets/images/card_ppl2.png", name: "Ryan Roslansky", avatar: "/assets/images/mini_pic.png" },
+            { img: "/assets/images/card_ppl3.png", name: "Steve Jobs", avatar: "/assets/images/mini_pic.png" },
+            { img: "/assets/images/card_ppl4.png", name: "Dylan Field", avatar: "/assets/images/mini_pic.png" },
+          ].map((story) => (
+            <div key={story.name} className="relative overflow-hidden" style={{ height: 180 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={story.img} alt={story.name} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-between p-3">
+                <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#1890FF]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mini_pic.png" alt="Image" className="_public_mini_img" />
+                  <img src={story.avatar} alt="" className="w-full h-full object-cover" />
                 </div>
+                <p className="text-white text-xs font-medium">{story.name}</p>
               </div>
             </div>
-          </div>
-          <div className="col-xl-3 col-lg-3 col-md-4 col-sm-4 _custom_mobile_none">
-            <div className="_feed_inner_public_story _b_radious6">
-              <div className="_feed_inner_public_story_image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/images/card_ppl3.png" alt="Image" className="_public_story_img" />
-                <div className="_feed_inner_pulic_story_txt">
-                  <p className="_feed_inner_pulic_story_para">Steve Jobs</p>
-                </div>
-                <div className="_feed_inner_public_mini">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mini_pic.png" alt="Image" className="_public_mini_img" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-3 col-lg-3 col-md-4 col-sm-4 _custom_none">
-            <div className="_feed_inner_public_story _b_radious6">
-              <div className="_feed_inner_public_story_image">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/images/card_ppl4.png" alt="Image" className="_public_story_img" />
-                <div className="_feed_inner_pulic_story_txt">
-                  <p className="_feed_inner_pulic_story_para">Dylan Field</p>
-                </div>
-                <div className="_feed_inner_public_mini">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mini_pic.png" alt="Image" className="_public_mini_img" />
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Mobile Stories Row (For Design Fidelity) */}
-      <div className="_feed_inner_ppl_card_mobile _mar_b16">
-        <div className="_feed_inner_ppl_card_area">
-          <ul className="_feed_inner_ppl_card_area_list" style={{ padding: 0 }}>
-            <li className="_feed_inner_ppl_card_area_item">
-              <a href="#0" className="_feed_inner_ppl_card_area_link">
-                <div className="_feed_inner_ppl_card_area_story">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mobile_story_img.png" alt="Image" className="_card_story_img" />
-                  <div className="_feed_inner_ppl_btn">
-                    <button className="_feed_inner_ppl_btn_link" type="button">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 12 12">
-                        <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="M6 2.5v7M2.5 6h7"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <p className="_feed_inner_ppl_card_area_link_txt">Your Story</p>
-              </a>
+      {/* Mobile Stories Row */}
+      <div className="lg:hidden bg-white rounded-[6px] mb-4 shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] overflow-x-auto scrollbar-hide">
+        <ul className="flex gap-3 p-4">
+          <li className="flex-shrink-0 flex flex-col items-center gap-1">
+            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#1890FF]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/images/mobile_story_img.png" alt="Your Story" className="w-full h-full object-cover" />
+              <div className="absolute bottom-0 right-0 w-5 h-5 bg-[#1890FF] rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" fill="none" viewBox="0 0 12 12">
+                  <path stroke="#fff" strokeLinecap="round" strokeLinejoin="round" d="M6 2.5v7M2.5 6h7" />
+                </svg>
+              </div>
+            </div>
+            <span className="text-[11px] text-[#112032] font-medium">Your Story</span>
+          </li>
+          {[
+            { img: "/assets/images/mobile_story_img1.png", name: "Ryan..." },
+            { img: "/assets/images/mobile_story_img2.png", name: "Dylan..." },
+          ].map((story) => (
+            <li key={story.name} className="flex-shrink-0 flex flex-col items-center gap-1">
+              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#1890FF]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={story.img} alt={story.name} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-[11px] text-[#112032] font-medium">{story.name}</span>
             </li>
-            <li className="_feed_inner_ppl_card_area_item">
-              <a href="#0" className="_feed_inner_ppl_card_area_link">
-                <div className="_feed_inner_ppl_card_area_story_active">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mobile_story_img1.png" alt="Image" className="_card_story_img1" />
-                </div>
-                <p className="_feed_inner_ppl_card_area_txt">Ryan...</p>
-              </a>
-            </li>
-            <li className="_feed_inner_ppl_card_area_item">
-              <a href="#0" className="_feed_inner_ppl_card_area_link">
-                <div className="_feed_inner_ppl_card_area_story_inactive">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/assets/images/mobile_story_img2.png" alt="Image" className="_card_story_img1" />
-                </div>
-                <p className="_feed_inner_ppl_card_area_txt">Dylan...</p>
-              </a>
-            </li>
-          </ul>
-        </div>
+          ))}
+        </ul>
       </div>
 
-      {/* Interactive Post Composer */}
+      {/* Post Composer */}
       <PostComposer />
 
       {/* Infinite Scroll Feed */}

@@ -12,7 +12,7 @@ interface CommentListProps {
 export default function CommentList({ postId }: CommentListProps) {
   const { user } = useAuth();
   const [text, setText] = useState("");
-  
+
   const {
     data,
     fetchNextPage,
@@ -26,7 +26,6 @@ export default function CommentList({ postId }: CommentListProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || createCommentMutation.isPending) return;
-
     try {
       await createCommentMutation.mutateAsync(text);
       setText("");
@@ -39,80 +38,64 @@ export default function CommentList({ postId }: CommentListProps) {
 
   return (
     <div>
-      {/* Comment Input Box */}
-      {user && (
-        <div className="_feed_inner_comment_box">
-          <form className="_feed_inner_comment_box_form" onSubmit={handleSubmit}>
-            <div className="_feed_inner_comment_box_content d-flex align-items-center w-100">
-              <div className="_feed_inner_comment_box_content_image me-2">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={user.avatarUrl || "/assets/images/comment_img.png"}
-                  alt=""
-                  className="_comment_img"
-                  style={{ borderRadius: "50%", width: "32px", height: "32px" }}
-                />
-              </div>
-              <div className="_feed_inner_comment_box_content_txt flex-grow-1">
-                <textarea
-                  className="form-control _comment_textarea"
-                  placeholder="Write a comment..."
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSubmit(e);
-                    }
-                  }}
-                  style={{ height: "40px", padding: "8px 12px", resize: "none" }}
-                ></textarea>
-              </div>
-            </div>
-            <div className="_feed_inner_comment_box_icon d-flex align-items-center">
-              <button
-                className="_feed_inner_comment_box_icon_btn btn btn-sm btn-primary"
-                type="submit"
-                disabled={createCommentMutation.isPending || !text.trim()}
-                style={{
-                  fontSize: "12px",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
-                  border: "none",
-                }}
-              >
-                {createCommentMutation.isPending ? "..." : "Send"}
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* Pagination trigger */}
+      {/* View previous comments */}
       {hasNextPage && (
-        <div className="_previous_comment text-start ps-4 mb-3">
+        <div className="mb-3">
           <button
+            type="button"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="_previous_comment_link"
-            style={{ background: "none", border: "none", color: "#1890FF", fontSize: "13px", padding: 0 }}
+            className="text-[13px] text-[#1890FF] font-medium hover:underline disabled:opacity-60"
           >
             {isFetchingNextPage ? "Loading comments..." : "View previous comments"}
           </button>
         </div>
       )}
 
-      {/* Comments List */}
+      {/* Comments list */}
       {isLoading ? (
-        <div className="text-center py-2" style={{ fontSize: "12px", color: "#666" }}>
-          Loading comments...
-        </div>
+        <div className="text-center py-2 text-xs text-[#666]">Loading comments...</div>
       ) : (
-        <div className="_timline_comment_main">
+        <div className="space-y-3">
           {comments.map((comment) => (
             <CommentItem key={comment.id} comment={comment} />
           ))}
         </div>
+      )}
+
+      {/* Comment input box */}
+      {user && (
+        <form onSubmit={handleSubmit} className="flex items-start gap-2 mt-4">
+          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={user.avatarUrl || "/assets/images/comment_img.png"}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 flex items-center gap-2">
+            <textarea
+              className="flex-1 border border-[#DFDFDF] rounded-[20px] px-4 py-2 text-sm text-[#112032] placeholder-[#C4C4C4] bg-[#F0F2F5] focus:outline-none focus:border-[#1890FF] resize-none h-9 overflow-hidden transition-colors"
+              placeholder="Write a comment..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
+            />
+            <button
+              type="submit"
+              disabled={createCommentMutation.isPending || !text.trim()}
+              className="bg-[#1890FF] hover:bg-[#0e7fe6] text-white text-xs font-semibold px-4 py-2 rounded-[6px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+            >
+              {createCommentMutation.isPending ? "..." : "Send"}
+            </button>
+          </div>
+        </form>
       )}
     </div>
   );

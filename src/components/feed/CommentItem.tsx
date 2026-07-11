@@ -14,100 +14,89 @@ export default function CommentItem({ comment }: CommentItemProps) {
   const [repliesOpen, setRepliesOpen] = useState(false);
 
   return (
-    <div className="_comment_main d-flex flex-column mb-3" style={{ fontFamily: "Poppins" }}>
-      <div className="d-flex align-items-start">
-        <div className="_comment_image me-2">
+    <div className="flex flex-col gap-1">
+      <div className="flex items-start gap-2">
+        {/* Avatar */}
+        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={comment.author.avatarUrl || "/assets/images/comment_img.png"}
             alt=""
-            style={{ borderRadius: "50%", width: "32px", height: "32px" }}
+            className="w-full h-full object-cover"
           />
         </div>
-        <div className="flex-grow-1">
-          <div className="_comment_area p-2 px-3" style={{ backgroundColor: "#f5f7fb", borderRadius: "12px" }}>
-            <h4
-              className="_comment_title"
-              style={{ fontSize: "13px", fontWeight: 600, margin: "0 0 2px 0", color: "#112032" }}
-            >
+
+        {/* Bubble */}
+        <div className="flex-1">
+          <div className="bg-[#f5f7fb] rounded-[12px] px-3 py-2">
+            <h4 className="text-[13px] font-semibold text-[#112032] mb-0.5">
               {comment.author.firstName} {comment.author.lastName}
             </h4>
-            <p className="_comment_para" style={{ fontSize: "13px", margin: 0, color: "#112032" }}>
-              {comment.text}
-            </p>
+            <p className="text-[13px] text-[#112032]">{comment.text}</p>
 
-            {/* Comment Reaction indicators */}
+            {/* Reaction indicators */}
             {comment.likeCount > 0 && (
-              <div className="_total_reactions mt-1 d-flex align-items-center">
-                <div className="_total_react d-flex align-items-center">
-                  <span className="_reaction_like me-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                    </svg>
-                  </span>
-                </div>
-                <span className="_total" style={{ fontSize: "11px", color: "#5f72a5" }}>
-                  {comment.likeCount}
-                </span>
+              <div className="flex items-center gap-1 mt-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#1890FF"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                </svg>
+                <span className="text-[11px] text-[#5f72a5]">{comment.likeCount}</span>
               </div>
             )}
           </div>
 
-          {/* Comment action footer links */}
-          <div className="_comment_reply mt-1">
-            <div className="_comment_reply_num">
-              <ul className="_comment_reply_list d-flex align-items-center" style={{ listStyle: "none", padding: 0, margin: 0, gap: "10px", fontSize: "12px", color: "#5f72a5" }}>
-                <li>
-                  <LikeButton
-                    targetType="comment"
-                    postId={comment.postId}
-                    commentId={comment.id}
-                    isLikedByMe={comment.isLikedByMe}
-                  />
-                  {" ."}
-                </li>
-                <li>
-                  <button
-                    onClick={() => setRepliesOpen(!repliesOpen)}
-                    style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer", color: "inherit" }}
-                  >
-                    Reply
-                  </button>
-                  {" ."}
-                </li>
-                <li>
-                  <button
-                    onClick={() => alert("Comment shared (mock action)")}
-                    style={{ background: "none", border: "none", padding: 0, font: "inherit", cursor: "pointer", color: "inherit" }}
-                  >
-                    Share
-                  </button>
-                  {" ."}
-                </li>
-                <li>
-                  <span className="_time_link">{formatRelativeTime(comment.createdAt)}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+          {/* Action footer */}
+          <ul className="flex items-center gap-3 mt-1 text-[12px] text-[#5f72a5]">
+            <li>
+              <LikeButton
+                targetType="comment"
+                postId={comment.postId}
+                commentId={comment.id}
+                isLikedByMe={comment.isLikedByMe}
+              />
+              {" ·"}
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setRepliesOpen(!repliesOpen)}
+                className="text-[12px] text-[#5f72a5] hover:text-[#1890FF] transition-colors"
+              >
+                Reply
+              </button>
+              {" ·"}
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => alert("Comment shared (mock action)")}
+                className="text-[12px] text-[#5f72a5] hover:text-[#1890FF] transition-colors"
+              >
+                Share
+              </button>
+              {" ·"}
+            </li>
+            <li>
+              <span className="text-[12px] text-[#5f72a5]">{formatRelativeTime(comment.createdAt)}</span>
+            </li>
+          </ul>
 
-          {/* Nested Replies Section */}
+          {/* Nested replies */}
           {repliesOpen && (
-            <div className="mt-2 ms-4">
+            <div className="mt-2 ml-4">
               <ReplyList postId={comment.postId} commentId={comment.id} />
             </div>
           )}
-
         </div>
       </div>
     </div>

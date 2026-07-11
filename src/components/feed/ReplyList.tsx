@@ -27,7 +27,6 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || createReplyMutation.isPending) return;
-
     try {
       await createReplyMutation.mutateAsync(text);
       setText("");
@@ -39,65 +38,59 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
   const replies = data?.pages.flatMap((page) => page.replies) || [];
 
   return (
-    <div className="mt-2 border-start ps-3">
-      {/* Replies List */}
+    <div className="border-l-2 border-[#DFDFDF] pl-3">
+      {/* Replies list */}
       {isLoading ? (
-        <div className="text-muted" style={{ fontSize: "11px" }}>Loading replies...</div>
+        <div className="text-[11px] text-[#666]">Loading replies...</div>
       ) : (
-        <div className="reply-items-container">
+        <div>
           {replies.map((reply) => (
             <ReplyItem key={reply.id} reply={reply} postId={postId} />
           ))}
         </div>
       )}
 
-      {/* Pagination trigger for Replies */}
+      {/* Load more replies */}
       {hasNextPage && (
         <div className="mb-2">
           <button
+            type="button"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            style={{ background: "none", border: "none", color: "#1890FF", fontSize: "11px", padding: 0, cursor: "pointer" }}
+            className="text-[11px] text-[#1890FF] hover:underline disabled:opacity-60"
           >
             {isFetchingNextPage ? "Loading..." : "View previous replies"}
           </button>
         </div>
       )}
 
-      {/* Reply input box */}
+      {/* Reply input */}
       {user && (
-        <form className="d-flex align-items-center mt-2" onSubmit={handleSubmit}>
-          <div className="me-2">
+        <form onSubmit={handleSubmit} className="flex items-center gap-2 mt-2">
+          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.avatarUrl || "/assets/images/comment_img.png"}
               alt=""
-              style={{ borderRadius: "50%", width: "24px", height: "24px" }}
+              className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex-grow-1">
+          <div className="flex-1 flex items-center gap-2">
             <input
               type="text"
-              className="form-control"
+              className="flex-1 border border-[#DFDFDF] rounded-[12px] px-3 py-1 text-xs text-[#112032] placeholder-[#C4C4C4] bg-[#F0F2F5] focus:outline-none focus:border-[#1890FF] transition-colors h-7"
               placeholder="Write a reply..."
               value={text}
               onChange={(e) => setText(e.target.value)}
-              style={{
-                fontSize: "12px",
-                padding: "4px 10px",
-                borderRadius: "12px",
-                height: "28px"
-              }}
             />
+            <button
+              type="submit"
+              disabled={createReplyMutation.isPending || !text.trim()}
+              className="text-xs text-[#1890FF] font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+            >
+              Reply
+            </button>
           </div>
-          <button
-            type="submit"
-            disabled={createReplyMutation.isPending || !text.trim()}
-            className="btn btn-sm btn-link ms-1 text-primary"
-            style={{ fontSize: "12px", padding: 0 }}
-          >
-            Reply
-          </button>
         </form>
       )}
     </div>
