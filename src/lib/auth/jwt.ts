@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "buddy-script-fallback-secret-key-for-jwt-token-signing"
+  process.env.JWT_SECRET || "your_super_secret_jwt_key_change_in_production"
 );
 
 export async function signJWT(payload: { userId: string }): Promise<string> {

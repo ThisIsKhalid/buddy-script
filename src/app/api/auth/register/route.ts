@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { registerSchema } from "@/lib/validation/auth.schema";
-import { UserRepository } from "@/lib/data/repositories/user.repository";
-import { hashPassword } from "@/lib/auth/password";
-import { signJWT } from "@/lib/auth/jwt";
 import { setSessionCookie } from "@/lib/auth/session";
+import { syncUserToInMemoryDb } from "@/lib/api-client/backend-client";
 
 export async function POST(request: Request) {
   try {
@@ -19,35 +18,54 @@ export async function POST(request: Request) {
 
     const { firstName, lastName, email, password } = result.data;
 
-    // Check if user already exists
-    const existingUser = await UserRepository.findByEmail(email);
-    if (existingUser) {
+    // 1. Call backend register
+    const regRes = await fetch("http://localhost:8000/api/v1/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstName, lastName, email, password }),
+    });
+
+    const regData = await regRes.json();
+
+    if (!regRes.ok) {
       return NextResponse.json(
-        { error: "A user with this email already exists" },
-        { status: 400 }
+        { error: regData.message || "Registration failed" },
+        { status: regRes.status }
       );
     }
 
-    // Hash password
-    const passwordHash = await hashPassword(password);
-
-    // Create user
-    const newUser = await UserRepository.create({
-      firstName,
-      lastName,
-      email,
-      passwordHash,
+    // 2. Call backend login for auto-login
+    const loginRes = await fetch("http://localhost:8000/api/v1/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
-    // Generate JWT token
-    const token = await signJWT({ userId: newUser.id });
+    if (loginRes.ok) {
+      const loginData = await loginRes.json();
+      const { accessToken, refreshToken, user } = loginData.data;
 
-    // Set secure cookie
-    await setSessionCookie(token);
+      // Set cookies
+      await setSessionCookie(accessToken);
+      const cookieStore = await cookies();
+      cookieStore.set({
+        name: "refreshToken",
+        value: refreshToken,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
 
-    // Return user (without password hash)
-    const { passwordHash: _, ...userWithoutHash } = newUser;
-    return NextResponse.json(userWithoutHash, { status: 201 });
+      // Sync authenticated user to in-memory DB
+      syncUserToInMemoryDb(user);
+
+      return NextResponse.json(user, { status: 201 });
+    }
+
+    // Return register success user details if login failed
+    return NextResponse.json(regData.data, { status: 201 });
   } catch (error) {
     console.error("Error in registration route:", error);
     return NextResponse.json(

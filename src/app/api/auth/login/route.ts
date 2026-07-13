@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { loginSchema } from "@/lib/validation/auth.schema";
-import { UserRepository } from "@/lib/data/repositories/user.repository";
-import { comparePasswords } from "@/lib/auth/password";
-import { signJWT } from "@/lib/auth/jwt";
 import { setSessionCookie } from "@/lib/auth/session";
+import { syncUserToInMemoryDb } from "@/lib/api-client/backend-client";
 
 export async function POST(request: Request) {
   try {
@@ -19,33 +18,41 @@ export async function POST(request: Request) {
 
     const { email, password } = result.data;
 
-    // Find user
-    const user = await UserRepository.findByEmail(email);
-    if (!user) {
+    // Call backend login
+    const res = await fetch("http://localhost:8000/api/v1/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
+        { error: data.message || "Invalid email or password" },
+        { status: res.status }
       );
     }
 
-    // Compare passwords
-    const isValid = await comparePasswords(password, user.passwordHash);
-    if (!isValid) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
-    }
+    const { accessToken, refreshToken, user } = data.data;
 
-    // Generate JWT token
-    const token = await signJWT({ userId: user.id });
+    // Set cookies
+    await setSessionCookie(accessToken);
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: "refreshToken",
+      value: refreshToken,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
 
-    // Set secure cookie
-    await setSessionCookie(token);
+    // Sync authenticated user to in-memory DB for rendering feed post author
+    syncUserToInMemoryDb(user);
 
-    // Return user (without password hash)
-    const { passwordHash: _, ...userWithoutHash } = user;
-    return NextResponse.json(userWithoutHash, { status: 200 });
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error("Error in login route:", error);
     return NextResponse.json(

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "./lib/auth/jwt";
-import { db } from "./lib/data/db";
 
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("session")?.value;
@@ -15,13 +14,7 @@ export async function proxy(request: NextRequest) {
   if (token) {
     const payload = await verifyJWT(token);
     if (payload) {
-      // Check if user actually exists in database
-      const userExists = db.users.some((u) => u.id === payload.userId);
-      if (userExists) {
-        userId = payload.userId;
-      } else {
-        console.log(`[PROXY DEBUG] Token has userId "${payload.userId}" but user is not in database!`);
-      }
+      userId = payload.userId;
     }
   }
 
