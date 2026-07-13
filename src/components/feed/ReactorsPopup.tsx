@@ -91,7 +91,7 @@ export default function ReactorsPopup({
             <div key={user.id} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={user.avatarUrl || "/assets/images/Avatar.png"}
+                src={user.avatarUrl || "/assets/images/user.png"}
                 alt=""
                 className="w-5 h-5 rounded-full object-cover flex-shrink-0 border border-border"
               />

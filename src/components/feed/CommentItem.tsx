@@ -22,7 +22,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
         <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={comment.author.avatarUrl || "/assets/images/comment_img.png"}
+            src={comment.author.avatarUrl || "/assets/images/user.png"}
             alt=""
             className="w-full h-full object-cover"
           />

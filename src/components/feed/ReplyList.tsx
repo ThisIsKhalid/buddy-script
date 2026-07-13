@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useReplies, useCreateReply } from "@/hooks/useReplies";
 import { useAuth } from "@/hooks/useAuth";
+import { useCreateReply, useReplies } from "@/hooks/useReplies";
+import { useState } from "react";
 import ReplyItem from "./ReplyItem";
 
 interface ReplyListProps {
@@ -14,13 +14,8 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
   const { user } = useAuth();
   const [text, setText] = useState("");
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useReplies(postId, commentId);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useReplies(postId, commentId);
 
   const createReplyMutation = useCreateReply(postId, commentId);
 
@@ -72,7 +67,7 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
           <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={user.avatarUrl || "/assets/images/comment_img.png"}
+              src={user.avatarUrl || "/assets/images/user.png"}
               alt=""
               className="w-full h-full object-cover"
             />

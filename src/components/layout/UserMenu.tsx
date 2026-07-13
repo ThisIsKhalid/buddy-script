@@ -33,7 +33,7 @@ export default function UserMenu() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={user.avatarUrl || "/assets/images/profile.png"}
+          src={user.avatarUrl || "/assets/images/user.png"}
           alt="Profile"
           className="w-full h-full object-cover"
         />
@@ -70,7 +70,7 @@ export default function UserMenu() {
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={user.avatarUrl || "/assets/images/profile.png"}
+                src={user.avatarUrl || "/assets/images/user.png"}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />

@@ -138,7 +138,7 @@ export default function LikersListModal({
             <div key={user.id} className="flex items-center gap-2.5 py-1">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={user.avatarUrl || "/assets/images/Avatar.png"}
+                src={user.avatarUrl || "/assets/images/user.png"}
                 alt=""
                 className="w-7 h-7 rounded-full object-cover flex-shrink-0 border border-border"
               />

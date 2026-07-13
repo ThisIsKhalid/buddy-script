@@ -1,8 +1,8 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { deletePost, fetchPostLikers } from "@/lib/api-client/posts";
 import { fetchCommentsPage } from "@/lib/api-client/comments";
+import { deletePost, fetchPostLikers } from "@/lib/api-client/posts";
 import { Post } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -117,7 +117,7 @@ export default function PostCard({ post }: PostCardProps) {
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={post?.author?.avatarUrl || "/assets/images/post_img.png"}
+                src={post?.author?.avatarUrl || "/assets/images/user.png"}
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -128,7 +128,9 @@ export default function PostCard({ post }: PostCardProps) {
               </h4>
               <p className="text-[12px] text-text-muted">
                 {formatRelativeTime(post?.createdAt ?? "")} .{" "}
-                {(post?.visibility?.toLowerCase?.() ?? "public") === "public" ? "Public" : "Private"}
+                {(post?.visibility?.toLowerCase?.() ?? "public") === "public"
+                  ? "Public"
+                  : "Private"}
               </p>
             </div>
           </div>
@@ -285,10 +287,11 @@ export default function PostCard({ post }: PostCardProps) {
           onClick={toggleComments}
           onMouseEnter={prefetchComments}
           onFocus={prefetchComments}
-          className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${commentsOpen
+          className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${
+            commentsOpen
               ? " text-[#1890FF]"
               : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
-            }`}
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
