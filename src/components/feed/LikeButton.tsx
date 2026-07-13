@@ -30,7 +30,7 @@ export default function LikeButton({
         type="button"
         onClick={() => mutate()}
         disabled={isPending}
-        className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-all duration-200 disabled:opacity-60 cursor-pointer ${
+        className={`flex-1 flex items-center justify-center gap-2 h-12 rounded-md text-sm font-semibold transition-all duration-200 disabled:opacity-60 cursor-pointer ${
           isLikedByMe
             ? " text-[#1890FF]"
             : "bg-transparent hover:bg-[#E8F2FF]/70 dark:hover:bg-[#112032]/50 text-[#65676B] dark:text-text-dark"

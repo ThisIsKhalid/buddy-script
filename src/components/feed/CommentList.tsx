@@ -72,7 +72,7 @@ export default function CommentList({ postId }: CommentListProps) {
           onSubmit={handleSubmit}
           className="flex items-center gap-3 mt-4 w-full"
         >
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-border">
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.avatarUrl || "/assets/images/user.png"}
@@ -94,9 +94,9 @@ export default function CommentList({ postId }: CommentListProps) {
               }}
             />
             {/* Action icons right inside */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
               {/* Mic Icon */}
-              <svg
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
                 height="14"
@@ -118,9 +118,9 @@ export default function CommentList({ postId }: CommentListProps) {
                   strokeLinejoin="round"
                   d="M19 10v1a7 7 0 01-14 0v-1M12 18v5M8 23h8"
                 />
-              </svg>
+              </svg> */}
               {/* Camera Icon */}
-              <svg
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="15"
                 height="14"
@@ -144,7 +144,15 @@ export default function CommentList({ postId }: CommentListProps) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-              </svg>
+              </svg> */}
+              {/* send button */}
+              <button
+                type="submit"
+                disabled={!text.trim() || createCommentMutation.isPending}
+                className="text-xs text-primary font-semibold disabled:opacity-60 border border-primary rounded-full px-3 py-1 hover:bg-primary/10 transition-colors"
+              >
+                Send
+              </button>
             </div>
           </div>
         </form>

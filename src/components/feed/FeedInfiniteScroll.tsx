@@ -47,7 +47,7 @@ export default function FeedInfiniteScroll() {
 
   if (isError) {
     return (
-      <div className="bg-red-50 border border-red-300 text-red-700 text-sm rounded-[6px] p-4 my-4">
+      <div className="bg-red-50 border border-red-300 text-red-700 text-sm rounded-md p-4 my-4">
         Failed to load feed posts. Please refresh the page.
       </div>
     );
@@ -57,7 +57,7 @@ export default function FeedInfiniteScroll() {
 
   if (posts.length === 0) {
     return (
-      <div className="bg-white rounded-[6px] shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] flex flex-col items-center justify-center py-16 my-4">
+      <div className="bg-white rounded-md shadow-[7.5px_20px_7.5px_20px_rgba(108,126,147,0.15)] flex flex-col items-center justify-center py-16 my-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" className="text-[#C4C4C4] mb-4">
           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 10h8M8 14h5M3 9a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
         </svg>
@@ -73,7 +73,7 @@ export default function FeedInfiniteScroll() {
       ))}
 
       {/* Intersection observer target */}
-      <div ref={loadMoreRef} className="flex items-center justify-center py-6 min-h-[50px]">
+      <div ref={loadMoreRef} className="flex items-center justify-center py-6 min-h-12.5">
         {isFetchingNextPage && (
           <div className="w-6 h-6 rounded-full border-4 border-[#F0F2F5] border-t-[#1890FF] animate-spin" />
         )}

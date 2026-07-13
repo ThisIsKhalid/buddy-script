@@ -19,7 +19,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
     <div className="flex flex-col gap-1 transition-colors duration-300">
       <div className="flex items-start gap-2">
         {/* Avatar */}
-        <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-border">
+        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={comment.author.avatarUrl || "/assets/images/user.png"}
@@ -30,11 +30,11 @@ export default function CommentItem({ comment }: CommentItemProps) {
 
         {/* Bubble and Actions */}
         <div className="flex-1 min-w-0">
-          <div className="relative bg-[#F8FAFD] dark:bg-[#112032]/45 border border-transparent dark:border-border rounded-[6px] px-3.5 py-2.5 transition-all duration-300 w-full max-w-fit pr-10">
+          <div className="relative bg-[#F8FAFD] dark:bg-[#112032]/45 border border-transparent dark:border-border rounded-md px-3.5 py-2.5 transition-all duration-300 w-full max-w-fit pr-10">
             <h4 className="text-[13px] font-semibold text-text-dark mb-0.5 truncate">
               {comment.author.firstName} {comment.author.lastName}
             </h4>
-            <p className="text-[13px] text-text-dark whitespace-pre-wrap break-words">
+            <p className="text-[13px] text-text-dark whitespace-pre-wrap wrap-break-word">
               {comment.text}
             </p>
 
