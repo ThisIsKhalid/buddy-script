@@ -49,22 +49,22 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="bg-card p-8 md:p-12 rounded-[6px] shadow-card transition-colors duration-300">
+    <div className="bg-card p-6 sm:p-8 md:p-10 rounded-[6px] shadow-card transition-colors duration-300">
       {/* Logo */}
-      <div className="mb-7 flex justify-center">
+      <div className="mb-6 flex justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-[30px] w-auto max-w-[161px]" />
       </div>
 
-      <p className="text-text-body text-[16px] text-center mb-2">Get Started Now</p>
-      <h4 className="text-text-dark text-[28px] font-semibold text-center mb-[50px] leading-tight">
+      <p className="text-text-body text-[16px] text-center mb-1">Get Started Now</p>
+      <h4 className="text-text-dark text-[28px] font-semibold text-center mb-8 leading-tight">
         Registration
       </h4>
 
       {/* Google register button (decorative) */}
       <button
         type="button"
-        className="w-full flex items-center justify-center gap-2 border border-border bg-card rounded-[6px] py-3 px-4 mb-10 text-[16px] text-text-dark font-medium hover:bg-bg-page transition-colors cursor-pointer"
+        className="w-full flex items-center justify-center gap-2 border border-border bg-card rounded-[6px] py-3 px-4 mb-6 text-[16px] text-text-dark font-medium hover:bg-bg-page transition-colors cursor-pointer"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/images/google.svg" alt="Google" className="w-5 h-5 flex-shrink-0 mr-2" />
@@ -72,10 +72,9 @@ export default function RegisterForm() {
       </button>
 
       {/* Or divider */}
-      <div className="relative flex items-center justify-center mb-10">
-        <div className="absolute left-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
+      <div className="relative flex items-center justify-center mb-6">
+        <div className="absolute w-full h-[1px] bg-border rounded-[6px]" />
         <span className="bg-card px-4 text-[14px] text-[#C4C4C4] z-10">Or</span>
-        <div className="absolute right-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
       </div>
 
       {/* Error alert */}
@@ -86,40 +85,43 @@ export default function RegisterForm() {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* First Name */}
-        <div className="mb-[14px]">
-          <label className="block text-text-muted text-[16px] font-medium mb-2">First Name</label>
-          <input
-            type="text"
-            className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
-              errors.firstName ? "border-red-400" : "border-border"
-            }`}
-            placeholder="Enter first name"
-            {...register("firstName")}
-          />
-          {errors.firstName && (
-            <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>
-          )}
-        </div>
+        {/* First & Last Name Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          {/* First Name */}
+          <div>
+            <label className="block text-text-muted text-[16px] font-medium mb-2">First Name</label>
+            <input
+              type="text"
+              className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
+                errors.firstName ? "border-red-400" : "border-border"
+              }`}
+              placeholder="Enter first name"
+              {...register("firstName")}
+            />
+            {errors.firstName && (
+              <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>
+            )}
+          </div>
 
-        {/* Last Name */}
-        <div className="mb-[14px]">
-          <label className="block text-text-muted text-[16px] font-medium mb-2">Last Name</label>
-          <input
-            type="text"
-            className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
-              errors.lastName ? "border-red-400" : "border-border"
-            }`}
-            placeholder="Enter last name"
-            {...register("lastName")}
-          />
-          {errors.lastName && (
-            <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
-          )}
+          {/* Last Name */}
+          <div>
+            <label className="block text-text-muted text-[16px] font-medium mb-2">Last Name</label>
+            <input
+              type="text"
+              className={`w-full h-[48px] bg-card border rounded-[6px] px-4 text-sm text-text-dark placeholder-[#C4C4C4] focus:border-primary focus:outline-none transition-colors ${
+                errors.lastName ? "border-red-400" : "border-border"
+              }`}
+              placeholder="Enter last name"
+              {...register("lastName")}
+            />
+            {errors.lastName && (
+              <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Email */}
-        <div className="mb-[14px]">
+        <div className="mb-4">
           <label className="block text-text-muted text-[16px] font-medium mb-2">Email</label>
           <input
             type="email"
@@ -135,7 +137,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Password */}
-        <div className="mb-[14px]">
+        <div className="mb-4">
           <label className="block text-text-muted text-[16px] font-medium mb-2">Password</label>
           <input
             type="password"
@@ -151,7 +153,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Confirm Password */}
-        <div className="mb-[14px]">
+        <div className="mb-4">
           <label className="block text-text-muted text-[16px] font-medium mb-2">Repeat Password</label>
           <input
             type="password"
@@ -167,7 +169,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Terms checkbox */}
-        <div className="flex items-center gap-2 mb-10 mt-4">
+        <div className="flex items-center gap-2 mb-6 mt-4">
           <input
             type="checkbox"
             id="termsCheckbox"
@@ -180,7 +182,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Submit */}
-        <div className="mb-15">
+        <div className="mb-6">
           <button
             type="submit"
             disabled={loading}
@@ -192,7 +194,7 @@ export default function RegisterForm() {
       </form>
 
       {/* Login link */}
-      <p className="text-[14px] text-text-muted text-center mt-6">
+      <p className="text-[14px] text-text-muted text-center mt-4">
         Already have an account?{" "}
         <Link href="/login" className="text-primary font-medium hover:underline">
           Login

@@ -49,22 +49,22 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="bg-card p-8 md:p-12 rounded-[6px] shadow-card transition-colors duration-300">
+    <div className="bg-card p-6 sm:p-8 md:p-10 rounded-[6px] shadow-card transition-colors duration-300">
       {/* Logo */}
-      <div className="mb-7 flex justify-center">
+      <div className="mb-6 flex justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-[30px] w-auto max-w-[161px]" />
       </div>
 
-      <p className="text-text-body text-[16px] text-center mb-2">Welcome back</p>
-      <h4 className="text-text-dark text-[28px] font-semibold text-center mb-[50px] leading-tight">
+      <p className="text-text-body text-[16px] text-center mb-1">Welcome back</p>
+      <h4 className="text-text-dark text-[28px] font-semibold text-center mb-8 leading-tight">
         Login to your account
       </h4>
 
       {/* Google sign-in button (decorative) */}
       <button
         type="button"
-        className="w-full flex items-center justify-center gap-2 border border-border bg-card rounded-[6px] py-3 px-4 mb-10 text-[16px] text-text-dark font-medium hover:bg-bg-page transition-colors cursor-pointer"
+        className="w-full flex items-center justify-center gap-2 border border-border bg-card rounded-[6px] py-3 px-4 mb-6 text-[16px] text-text-dark font-medium hover:bg-bg-page transition-colors cursor-pointer"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/images/google.svg" alt="Google" className="w-5 h-5 flex-shrink-0 mr-2" />
@@ -72,10 +72,9 @@ export default function LoginForm() {
       </button>
 
       {/* Or divider */}
-      <div className="relative flex items-center justify-center mb-10">
-        <div className="absolute left-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
+      <div className="relative flex items-center justify-center mb-6">
+        <div className="absolute w-full h-[1px] bg-border rounded-[6px]" />
         <span className="bg-card px-4 text-[14px] text-[#C4C4C4] z-10">Or</span>
-        <div className="absolute right-0 w-[108px] h-[2px] border-t border-border rounded-[6px]" />
       </div>
 
       {/* Error alert */}
@@ -87,7 +86,7 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Email */}
-        <div className="mb-[14px]">
+        <div className="mb-4">
           <label className="block text-text-muted text-[16px] font-medium mb-2">Email</label>
           <input
             type="email"
@@ -103,7 +102,7 @@ export default function LoginForm() {
         </div>
 
         {/* Password */}
-        <div className="mb-[14px]">
+        <div className="mb-4">
           <label className="block text-text-muted text-[16px] font-medium mb-2">Password</label>
           <input
             type="password"
@@ -119,7 +118,7 @@ export default function LoginForm() {
         </div>
 
         {/* Remember me + Forgot password */}
-        <div className="flex items-center justify-between mb-10 mt-6">
+        <div className="flex items-center justify-between mb-6 mt-4">
           <label className="flex items-center gap-2 text-[14px] text-text-body cursor-pointer">
             <input
               type="checkbox"
@@ -134,7 +133,7 @@ export default function LoginForm() {
         </div>
 
         {/* Submit */}
-        <div className="mb-15">
+        <div className="mb-6">
           <button
             type="submit"
             disabled={loading}
@@ -146,8 +145,8 @@ export default function LoginForm() {
       </form>
 
       {/* Register link */}
-      <p className="text-[14px] text-text-muted text-center mt-6">
-        Dont have an account?{" "}
+      <p className="text-[14px] text-text-muted text-center mt-4">
+        Don't have an account?{" "}
         <Link href="/register" className="text-primary font-medium hover:underline">
           Create New Account
         </Link>

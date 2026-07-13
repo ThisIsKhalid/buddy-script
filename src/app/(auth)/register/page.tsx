@@ -30,27 +30,27 @@ export default function RegisterPage() {
         <img src="/assets/images/dark_shape2.svg" alt="" className="hidden dark:block opacity-5 w-full h-full" />
       </div>
 
-      <div className="w-full max-w-[1140px] mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center gap-8">
+      <div className="w-full max-w-[1200px] mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           {/* Left illustration */}
-          <div className="w-full lg:w-2/3">
+          <div className="w-full lg:w-[58%] hidden lg:block">
             <div className="flex justify-center lg:justify-start">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/assets/images/registration.png"
                 alt="Registration illustration"
-                className="max-w-[633px] w-full block dark:hidden"
+                className="max-w-[720px] w-full block dark:hidden"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/assets/images/registration1.png"
                 alt="Registration illustration dark"
-                className="max-w-[633px] w-full hidden dark:block"
+                className="max-w-[720px] w-full hidden dark:block"
               />
             </div>
           </div>
           {/* Right register card */}
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-[42%] max-w-[480px] mx-auto">
             <RegisterForm />
           </div>
         </div>
