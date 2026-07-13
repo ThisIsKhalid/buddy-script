@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
+import { getPersistedLikeState } from "@/lib/like-state";
 import { Comment } from "@/types";
 import { useState } from "react";
 import LikeButton from "./LikeButton";
@@ -11,9 +13,57 @@ interface CommentItemProps {
   comment: Comment;
 }
 
+type LikeUser = { id?: string | null; userId?: string | null };
+type LikeRecord = string | LikeUser | null | undefined;
+type CommentLikeFallback = {
+  isLikedByMe?: boolean | null;
+  isLiked?: boolean | null;
+  likedByMe?: boolean | null;
+  likes?: LikeRecord[];
+  likedUsers?: LikeRecord[];
+  likedBy?: LikeRecord[];
+};
+
+function resolveIsLikedByMe(
+  item: CommentLikeFallback,
+  currentUserId?: string,
+) : boolean | undefined {
+  if (typeof item.isLikedByMe === "boolean") return item.isLikedByMe;
+  if (typeof item.isLiked === "boolean") return item.isLiked;
+  if (typeof item.likedByMe === "boolean") return item.likedByMe;
+
+  if (!currentUserId) return undefined;
+
+  const candidates = [item.likes, item.likedUsers, item.likedBy];
+  const found = candidates.some((records) =>
+    Array.isArray(records)
+      ? records.some((record) => {
+          if (!record) return false;
+          if (typeof record === "string") return record === currentUserId;
+          return (
+            record.userId === currentUserId || record.id === currentUserId
+          );
+        })
+      : false,
+  );
+
+  return found ? true : undefined;
+}
+
 export default function CommentItem({ comment }: CommentItemProps) {
+  const { user } = useAuth();
   const [repliesOpen, setRepliesOpen] = useState(false);
   const [likersOpen, setLikersOpen] = useState(false);
+  const explicitLikedState = resolveIsLikedByMe(
+    comment as Comment & CommentLikeFallback,
+    user?.id,
+  );
+  const persistedLikedState = getPersistedLikeState(
+    user?.id,
+    "comment",
+    comment.id,
+  );
+  const isLikedByMe = persistedLikedState ?? explicitLikedState ?? false;
 
   return (
     <div className="flex flex-col gap-1 transition-colors duration-300">
@@ -70,7 +120,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
                 targetType="comment"
                 postId={comment.postId}
                 commentId={comment.id}
-                isLikedByMe={comment.isLikedByMe}
+                isLikedByMe={isLikedByMe}
               />
             </li>
             <li>.</li>

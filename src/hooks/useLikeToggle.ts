@@ -3,6 +3,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleLikePost } from "@/lib/api-client/posts";
 import { toggleLikeComment, toggleLikeReply } from "@/lib/api-client/comments";
+import { useAuthStore } from "@/store/auth.store";
+import { setPersistedLikeState } from "@/lib/like-state";
 import type { CommentsCache, PostsCache, RepliesCache } from "@/lib/query-cache-types";
 
 interface UseLikeToggleProps {
@@ -14,6 +16,13 @@ interface UseLikeToggleProps {
 
 export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLikeToggleProps) {
   const queryClient = useQueryClient();
+  const user = useAuthStore((state) => state.user);
+
+  const getTargetId = () => {
+    if (targetType === "post") return postId;
+    if (targetType === "comment") return commentId;
+    return replyId;
+  };
 
   const applyLikeState = (isLiked: boolean, likeCount: number) => {
     if (targetType === "post") {
@@ -90,6 +99,7 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
           .find((item) => item.id === postId);
         if (post) {
           const nextLiked = !post.isLikedByMe;
+          setPersistedLikeState(user?.id, targetType, getTargetId(), nextLiked);
           applyLikeState(nextLiked, Math.max(0, post.likeCount + (nextLiked ? 1 : -1)));
         }
       } else if (targetType === "comment" && commentId) {
@@ -98,6 +108,7 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
           .find((item) => item.id === commentId);
         if (comment) {
           const nextLiked = !comment.isLikedByMe;
+          setPersistedLikeState(user?.id, targetType, getTargetId(), nextLiked);
           applyLikeState(nextLiked, Math.max(0, comment.likeCount + (nextLiked ? 1 : -1)));
         }
       } else if (targetType === "reply" && replyId) {
@@ -106,6 +117,7 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
           .find((item) => item.id === replyId);
         if (reply) {
           const nextLiked = !reply.isLikedByMe;
+          setPersistedLikeState(user?.id, targetType, getTargetId(), nextLiked);
           applyLikeState(nextLiked, Math.max(0, reply.likeCount + (nextLiked ? 1 : -1)));
         }
       }
@@ -115,16 +127,39 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
     onError: (_error, _variables, context) => {
       if (context?.previousPosts) {
         queryClient.setQueryData(["posts"], context.previousPosts);
+        const post = context.previousPosts.pages
+          .flatMap((page) => page.posts)
+          .find((item) => item.id === postId);
+        if (post) {
+          setPersistedLikeState(user?.id, "post", postId, post.isLikedByMe);
+        }
       }
       if (context?.previousComments) {
         queryClient.setQueryData(["comments", postId], context.previousComments);
+        if (commentId) {
+          const comment = context.previousComments.pages
+            .flatMap((page) => page.comments)
+            .find((item) => item.id === commentId);
+          if (comment) {
+            setPersistedLikeState(user?.id, "comment", commentId, comment.isLikedByMe);
+          }
+        }
       }
       if (context?.previousReplies && commentId) {
         queryClient.setQueryData(["replies", commentId], context.previousReplies);
+        if (replyId) {
+          const reply = context.previousReplies.pages
+            .flatMap((page) => page.replies)
+            .find((item) => item.id === replyId);
+          if (reply) {
+            setPersistedLikeState(user?.id, "reply", replyId, reply.isLikedByMe);
+          }
+        }
       }
     },
     onSuccess: (data) => {
       const { isLiked, likeCount } = data as { isLiked: boolean; likeCount: number };
+      setPersistedLikeState(user?.id, targetType, getTargetId(), isLiked);
       applyLikeState(isLiked, likeCount);
     },
   });

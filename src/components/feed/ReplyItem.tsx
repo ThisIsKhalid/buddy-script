@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
+import { getPersistedLikeState } from "@/lib/like-state";
 import { Reply } from "@/types";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,8 +14,56 @@ interface ReplyItemProps {
   postId: string;
 }
 
+type LikeUser = { id?: string | null; userId?: string | null };
+type LikeRecord = string | LikeUser | null | undefined;
+type ReplyLikeFallback = {
+  isLikedByMe?: boolean | null;
+  isLiked?: boolean | null;
+  likedByMe?: boolean | null;
+  likes?: LikeRecord[];
+  likedUsers?: LikeRecord[];
+  likedBy?: LikeRecord[];
+};
+
+function resolveIsLikedByMe(
+  item: ReplyLikeFallback,
+  currentUserId?: string,
+): boolean | undefined {
+  if (typeof item.isLikedByMe === "boolean") return item.isLikedByMe;
+  if (typeof item.isLiked === "boolean") return item.isLiked;
+  if (typeof item.likedByMe === "boolean") return item.likedByMe;
+
+  if (!currentUserId) return undefined;
+
+  const candidates = [item.likes, item.likedUsers, item.likedBy];
+  const found = candidates.some((records) =>
+    Array.isArray(records)
+      ? records.some((record) => {
+          if (!record) return false;
+          if (typeof record === "string") return record === currentUserId;
+          return (
+            record.userId === currentUserId || record.id === currentUserId
+          );
+        })
+      : false,
+  );
+
+  return found ? true : undefined;
+}
+
 export default function ReplyItem({ reply, postId }: ReplyItemProps) {
+  const { user } = useAuth();
   const [likersOpen, setLikersOpen] = useState(false);
+  const explicitLikedState = resolveIsLikedByMe(
+    reply as Reply & ReplyLikeFallback,
+    user?.id,
+  );
+  const persistedLikedState = getPersistedLikeState(
+    user?.id,
+    "reply",
+    reply.id,
+  );
+  const isLikedByMe = persistedLikedState ?? explicitLikedState ?? false;
 
   return (
     <div className="flex items-start gap-2 mb-2 transition-colors duration-300">
@@ -73,7 +123,7 @@ export default function ReplyItem({ reply, postId }: ReplyItemProps) {
               postId={postId}
               commentId={reply?.commentId}
               replyId={reply?.id}
-              isLikedByMe={reply?.isLikedByMe}
+              isLikedByMe={isLikedByMe}
             />
           </li>
           <li>.</li>
