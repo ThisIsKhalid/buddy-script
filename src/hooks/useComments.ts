@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchCommentsPage, createComment } from "@/lib/api-client/comments";
+import type { PostsCache } from "@/lib/query-cache-types";
 
 export function useComments(postId: string) {
   return useInfiniteQuery({
@@ -15,18 +16,18 @@ export function useCreateComment(postId: string) {
 
   return useMutation({
     mutationFn: (text: string) => createComment(postId, text),
-    onSuccess: (newComment) => {
+    onSuccess: () => {
       // Invalidate comments for this post
       queryClient.invalidateQueries({ queryKey: ["comments", postId] });
 
       // Reactively increment commentCount on the post object in feed cache
-      queryClient.setQueryData(["posts"], (oldData: any) => {
+      queryClient.setQueryData<PostsCache>(["posts"], (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
-          pages: oldData.pages.map((page: any) => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
-            posts: page.posts.map((post: any) =>
+            posts: page.posts.map((post) =>
               post.id === postId
                 ? { ...post, commentCount: post.commentCount + 1 }
                 : post

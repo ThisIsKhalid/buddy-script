@@ -8,9 +8,14 @@ export default function PostComposer() {
   const { user } = useAuth();
   const [text, setText] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // File state — we keep the File object and a local preview URL
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const createPostMutation = useCreatePost();
 
   const handlePhotoClick = () => {
@@ -19,35 +24,81 @@ export default function PostComposer() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    setUploadError(null);
+
+    // Max 5 MB client-side guard
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Image must be smaller than 5 MB.");
+      return;
     }
+
+    setSelectedFile(file);
+    // Create a local object URL just for the preview — no base64 needed
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
   };
 
   const handleRemoveImage = () => {
-    setImageUrl(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handlePostSubmit = async () => {
-    if (!text.trim()) return;
+    const hasText = text.trim().length > 0;
+    const hasFile = !!selectedFile;
+
     try {
-      await createPostMutation.mutateAsync({ text, imageUrl, visibility });
+      let imageUrl: string | null = null;
+
+      // If a file is selected, upload it first via multer
+      if (hasFile && selectedFile) {
+        setIsUploading(true);
+        setUploadError(null);
+        try {
+          const formData = new FormData();
+          formData.append("image", selectedFile);
+
+          const uploadRes = await fetch("/api/upload/image", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadRes.ok) {
+            const err = await uploadRes.json();
+            throw new Error(err.error || "Image upload failed");
+          }
+
+          const uploadData = await uploadRes.json();
+          imageUrl = uploadData.imageUrl;
+        } finally {
+          setIsUploading(false);
+        }
+      }
+
+      await createPostMutation.mutateAsync({
+        text: hasText ? text : undefined,
+        imageUrl,
+        visibility,
+      });
+
+      // Reset form
       setText("");
-      setImageUrl(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      handleRemoveImage();
     } catch (err) {
       console.error("Error creating post:", err);
+      setUploadError(err instanceof Error ? err.message : "Failed to create post");
     }
   };
 
   if (!user) return null;
+
+  const isSubmitting = isUploading || createPostMutation.isPending;
+  const canPost = !isSubmitting && (text.trim().length > 0 || !!selectedFile);
 
   return (
     <div className="bg-card rounded-[6px] p-6 mb-4 shadow-card border border-border transition-colors duration-300">
@@ -81,22 +132,35 @@ export default function PostComposer() {
       </div>
 
       {/* Image preview */}
-      {imageUrl && (
-        <div className="relative mt-3 mb-2 ml-13 inline-block max-w-[200px]">
+      {previewUrl && (
+        <div className="relative mt-3 mb-2 ml-[52px] inline-block max-w-xs">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={imageUrl}
+            src={previewUrl}
             alt="Attached preview"
-            className="rounded-[6px] border border-border max-h-[150px] w-auto transition-colors duration-300"
+            className="rounded-[6px] border border-border max-h-[200px] w-auto object-cover transition-colors duration-300"
           />
           <button
             type="button"
             onClick={handleRemoveImage}
-            className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center leading-none hover:bg-red-600 transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="absolute top-1.5 right-1.5 w-6 h-6 bg-red-500 text-white rounded-full text-sm flex items-center justify-center hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50"
+            aria-label="Remove image"
           >
             ×
           </button>
+          {/* Uploading overlay */}
+          {isUploading && (
+            <div className="absolute inset-0 bg-black/40 rounded-[6px] flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full border-4 border-white/30 border-t-white animate-spin" />
+            </div>
+          )}
         </div>
+      )}
+
+      {/* Upload error */}
+      {uploadError && (
+        <p className="mt-2 ml-[52px] text-xs text-red-500">{uploadError}</p>
       )}
 
       {/* Hidden file input */}
@@ -104,17 +168,18 @@ export default function PostComposer() {
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept="image/*"
+        accept="image/jpeg,image/png,image/gif,image/webp"
         className="hidden"
       />
 
       {/* Action footer */}
       <div className="flex items-center justify-between mt-4 px-4 py-3 bg-[#F8FAFD] dark:bg-[#112032]/40 rounded-[6px] border border-border/10">
-        {/* Photo */}
+        {/* Photo button */}
         <button
           type="button"
           onClick={handlePhotoClick}
-          className="flex items-center gap-2 text-sm text-[#4E5D78] dark:text-[#959EAE] hover:text-primary transition-colors font-semibold cursor-pointer"
+          disabled={isSubmitting}
+          className="flex items-center gap-2 text-sm text-[#4E5D78] dark:text-[#959EAE] hover:text-primary transition-colors font-semibold cursor-pointer disabled:opacity-50"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
             <path fill="currentColor" d="M13.916 0c3.109 0 5.18 2.429 5.18 5.914v8.17c0 3.486-2.072 5.916-5.18 5.916H5.999C2.89 20 .827 17.572.827 14.085v-8.17C.827 2.43 2.897 0 6 0h7.917zm0 1.504H5.999c-2.321 0-3.799 1.735-3.799 4.41v8.17c0 2.68 1.472 4.412 3.799 4.412h7.917c2.328 0 3.807-1.734 3.807-4.411v-8.17c0-2.678-1.478-4.411-3.807-4.411zm.65 8.68l.12.125 1.9 2.147a.803.803 0 01-.016 1.063.642.642 0 01-.894.058l-.076-.074-1.9-2.148a.806.806 0 00-1.205-.028l-.074.087-2.04 2.717c-.722.963-2.02 1.066-2.86.26l-.111-.116-.814-.91a.562.562 0 00-.793-.07l-.075.073-1.4 1.617a.645.645 0 01-.97.029.805.805 0 01-.09-.977l.064-.086 1.4-1.617c.736-.852 1.95-.897 2.734-.137l.114.12.81.905a.587.587 0 00.861.033l.07-.078 2.04-2.718c.81-1.08 2.27-1.19 3.205-.275zM6.831 4.64c1.265 0 2.292 1.125 2.292 2.51 0 1.386-1.027 2.511-2.292 2.511S4.54 8.537 4.54 7.152c0-1.386 1.026-2.51 2.291-2.51zm0 1.504c-.507 0-.918.451-.918 1.007 0 .555.411 1.006.918 1.006.507 0 .919-.451.919-1.006 0-.556-.412-1.007-.919-1.007z" />
@@ -122,13 +187,14 @@ export default function PostComposer() {
           Photo
         </button>
 
-        {/* Action controls */}
+        {/* Right side controls */}
         <div className="flex items-center gap-4">
-          {/* Small compact visibility dropdown */}
+          {/* Visibility dropdown */}
           <select
             value={visibility}
             onChange={(e) => setVisibility(e.target.value as "public" | "private")}
-            className="border-0 bg-transparent text-xs text-text-muted hover:text-primary focus:outline-none cursor-pointer font-semibold transition-colors py-1 outline-none"
+            disabled={isSubmitting}
+            className="border-0 bg-transparent text-xs text-text-muted hover:text-primary focus:outline-none cursor-pointer font-semibold transition-colors py-1 outline-none disabled:opacity-50"
           >
             <option value="public">🌐 Public</option>
             <option value="private">🔒 Private</option>
@@ -138,13 +204,27 @@ export default function PostComposer() {
           <button
             type="button"
             onClick={handlePostSubmit}
-            disabled={createPostMutation.isPending || !text.trim()}
+            disabled={!canPost}
             className="flex items-center gap-2 bg-[#1890FF] hover:bg-primary-dark text-white text-xs font-semibold px-5 py-2.5 rounded-[6px] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" fill="none" viewBox="0 0 14 13">
-              <path fill="#fff" fillRule="evenodd" d="M6.37 7.879l2.438 3.955a.335.335 0 00.34.162c.068-.01.23-.05.289-.247l3.049-10.297a.348.348 0 00-.09-.35.341.341 0 00-.34-.088L1.75 4.03a.34.34 0 00-.247.289.343.343 0 00.16.347L5.666 7.17 9.2 3.597a.5.5 0 01.712.703L6.37 7.88z" clipRule="evenodd" />
-            </svg>
-            <span>{createPostMutation.isPending ? "Posting..." : "Post"}</span>
+            {isUploading ? (
+              <>
+                <div className="w-3 h-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <span>Uploading...</span>
+              </>
+            ) : createPostMutation.isPending ? (
+              <>
+                <div className="w-3 h-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <span>Posting...</span>
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="13" fill="none" viewBox="0 0 14 13">
+                  <path fill="#fff" fillRule="evenodd" d="M6.37 7.879l2.438 3.955a.335.335 0 00.34.162c.068-.01.23-.05.289-.247l3.049-10.297a.348.348 0 00-.09-.35.341.341 0 00-.34-.088L1.75 4.03a.34.34 0 00-.247.289.343.343 0 00.16.347L5.666 7.17 9.2 3.597a.5.5 0 01.712.703L6.37 7.88z" clipRule="evenodd" />
+                </svg>
+                <span>Post</span>
+              </>
+            )}
           </button>
         </div>
       </div>

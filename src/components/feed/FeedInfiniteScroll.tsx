@@ -53,7 +53,7 @@ export default function FeedInfiniteScroll() {
     );
   }
 
-  const posts = data?.pages.flatMap((page) => page.posts) || [];
+  const posts = (data?.pages.flatMap((page) => page?.posts ?? []) ?? []).filter(Boolean);
 
   if (posts.length === 0) {
     return (
@@ -69,7 +69,7 @@ export default function FeedInfiniteScroll() {
   return (
     <div>
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post?.id} post={post} />
       ))}
 
       {/* Intersection observer target */}

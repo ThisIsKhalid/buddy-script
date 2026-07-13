@@ -1,4 +1,5 @@
 import { Comment, Reply, User } from "@/types";
+import { apiFetch } from "./client";
 
 export async function fetchCommentsPage(
   postId: string,
@@ -9,33 +10,26 @@ export async function fetchCommentsPage(
   if (cursor) {
     url += `&cursor=${encodeURIComponent(cursor)}`;
   }
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch comments");
-  return res.json();
+  return apiFetch(url);
 }
 
 export async function createComment(
   postId: string,
   text: string
 ): Promise<Comment> {
-  const res = await fetch(`/api/posts/${postId}/comments`, {
+  return apiFetch(`/api/posts/${postId}/comments`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: { text },
   });
-  if (!res.ok) throw new Error("Failed to post comment");
-  return res.json();
 }
 
 export async function toggleLikeComment(
   postId: string,
   commentId: string
 ): Promise<{ isLiked: boolean; likeCount: number }> {
-  const res = await fetch(`/api/posts/${postId}/comments/${commentId}/like`, {
+  return apiFetch(`/api/posts/${postId}/comments/${commentId}/like`, {
     method: "POST",
   });
-  if (!res.ok) throw new Error("Failed to toggle comment like");
-  return res.json();
 }
 
 export async function fetchRepliesPage(
@@ -48,9 +42,7 @@ export async function fetchRepliesPage(
   if (cursor) {
     url += `&cursor=${encodeURIComponent(cursor)}`;
   }
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch replies");
-  return res.json();
+  return apiFetch(url);
 }
 
 export async function createReply(
@@ -58,13 +50,10 @@ export async function createReply(
   commentId: string,
   text: string
 ): Promise<Reply> {
-  const res = await fetch(`/api/posts/${postId}/comments/${commentId}/replies`, {
+  return apiFetch(`/api/posts/${postId}/comments/${commentId}/replies`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: { text },
   });
-  if (!res.ok) throw new Error("Failed to post reply");
-  return res.json();
 }
 
 export async function toggleLikeReply(
@@ -72,11 +61,9 @@ export async function toggleLikeReply(
   commentId: string,
   replyId: string
 ): Promise<{ isLiked: boolean; likeCount: number }> {
-  const res = await fetch(`/api/posts/${postId}/comments/${commentId}/replies/${replyId}/like`, {
+  return apiFetch(`/api/posts/${postId}/comments/${commentId}/replies/${replyId}/like`, {
     method: "POST",
   });
-  if (!res.ok) throw new Error("Failed to toggle reply like");
-  return res.json();
 }
 
 export async function fetchCommentLikers(
@@ -87,9 +74,7 @@ export async function fetchCommentLikers(
 ): Promise<{ likers: User[]; nextCursor: string | null }> {
   let url = `/api/posts/${postId}/comments/${commentId}/likes?limit=${limit}`;
   if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch comment likers");
-  return res.json();
+  return apiFetch(url);
 }
 
 export async function fetchReplyLikers(
@@ -101,7 +86,5 @@ export async function fetchReplyLikers(
 ): Promise<{ likers: User[]; nextCursor: string | null }> {
   let url = `/api/posts/${postId}/comments/${commentId}/replies/${replyId}/likes?limit=${limit}`;
   if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch reply likers");
-  return res.json();
+  return apiFetch(url);
 }

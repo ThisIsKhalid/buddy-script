@@ -7,14 +7,12 @@ import { createPortal } from "react-dom";
 
 interface LikersListModalProps {
   postId: string;
-  reaction: "like" | "dislike";
   onClose: () => void;
   anchorRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 export default function LikersListModal({
   postId,
-  reaction,
   onClose,
   anchorRef,
 }: LikersListModalProps) {
@@ -54,9 +52,8 @@ export default function LikersListModal({
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["postReactors", postId, reaction],
-      queryFn: ({ pageParam }) =>
-        fetchPostLikers(postId, pageParam, 10, reaction),
+      queryKey: ["postLikers", postId],
+      queryFn: ({ pageParam }) => fetchPostLikers(postId, pageParam, 10),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     });
@@ -76,9 +73,7 @@ export default function LikersListModal({
 
   const likers = data?.pages.flatMap((page) => page.likers) || [];
 
-  const isLike = reaction === "like";
-  const title = isLike ? "Liked by" : "Disliked by";
-  const accentColor = isLike ? "#1890FF" : "#dc3545";
+  const accentColor = "#1890FF";
   const iconPath =
     "M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3";
 
@@ -94,7 +89,7 @@ export default function LikersListModal({
           {/* Reaction icon */}
           <div
             className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: isLike ? "#E8F2FF" : "#FFF0F0" }}
+            style={{ background: "#E8F2FF" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +97,6 @@ export default function LikersListModal({
               height="12"
               fill="none"
               viewBox="0 0 24 24"
-              style={isLike ? {} : { transform: "scaleY(-1)" }}
             >
               <path
                 d={iconPath}
@@ -116,7 +110,7 @@ export default function LikersListModal({
             </svg>
           </div>
           <span className="text-xs font-semibold text-text-dark">
-            {title}{" "}
+            Liked by{" "}
             <span style={{ color: accentColor }}>({likers.length})</span>
           </span>
         </div>
@@ -136,7 +130,7 @@ export default function LikersListModal({
         </div>
       ) : likers.length === 0 ? (
         <div className="text-center py-4 text-xs text-text-muted">
-          No {isLike ? "likes" : "dislikes"} yet.
+          No likes yet.
         </div>
       ) : (
         <div className="flex flex-col gap-2">

@@ -1,17 +1,13 @@
 import { cookies } from "next/headers";
-import { verifyJWT } from "./jwt";
+import { decodeTokenUserId } from "./jwt";
 
 const COOKIE_NAME = "session";
 
 export async function getSessionUserId(): Promise<string | null> {
   const cookieStore = await cookies();
-  const allCookies = cookieStore.getAll().map(c => c.name);
   const token = cookieStore.get(COOKIE_NAME)?.value;
-  console.log(`[SESSION DBG] cookies: ${JSON.stringify(allCookies)}, hasSessionToken: ${!!token}`);
   if (!token) return null;
-  const payload = await verifyJWT(token);
-  console.log(`[SESSION DBG] verifyJWT result payload:`, payload);
-  return payload ? payload.userId : null;
+  return decodeTokenUserId(token);
 }
 
 export async function setSessionCookie(token: string): Promise<void> {

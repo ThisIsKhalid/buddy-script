@@ -46,16 +46,16 @@ export default function PostCard({ post }: PostCardProps) {
   const likersButtonRef = useRef<HTMLButtonElement>(null);
   const queryClient = useQueryClient();
 
-  const isAuthor = user?.id === post.authorId;
+  const isAuthor = user?.id === post?.authorId;
 
   const { data: likersData } = useQuery({
-    queryKey: ["postLikersPreview", post.id],
-    queryFn: () => fetchPostLikers(post.id, undefined, 3, "like"),
-    enabled: post.likeCount > 0,
+    queryKey: ["postLikersPreview", post?.id],
+    queryFn: () => fetchPostLikers(post?.id ?? "", undefined, 3),
+    enabled: (post?.likeCount ?? 0) > 0 && !!post?.id,
   });
 
   const previewLikers = likersData?.likers || [];
-  const remainingCount = post.likeCount - previewLikers.length;
+  const remainingCount = (post?.likeCount ?? 0) - previewLikers.length;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -71,7 +71,7 @@ export default function PostCard({ post }: PostCardProps) {
   }, []);
 
   const deleteMutation = useMutation({
-    mutationFn: () => deletePost(post.id),
+    mutationFn: () => deletePost(post?.id ?? ""),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
@@ -93,18 +93,18 @@ export default function PostCard({ post }: PostCardProps) {
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={post.author.avatarUrl || "/assets/images/post_img.png"}
+                src={post?.author?.avatarUrl || "/assets/images/post_img.png"}
                 alt=""
                 className="w-full h-full object-cover"
               />
             </div>
             <div>
               <h4 className="text-[14px] font-semibold text-text-dark leading-tight">
-                {post.author.firstName} {post.author.lastName}
+                {post?.author?.firstName} {post?.author?.lastName}
               </h4>
               <p className="text-[12px] text-text-muted">
-                {formatRelativeTime(post.createdAt)} .{" "}
-                {post.visibility === "public" ? "Public" : "Private"}
+                {formatRelativeTime(post?.createdAt ?? "")} .{" "}
+                {(post?.visibility?.toLowerCase?.() ?? "public") === "public" ? "Public" : "Private"}
               </p>
             </div>
           </div>
@@ -190,9 +190,9 @@ export default function PostCard({ post }: PostCardProps) {
       {/* ── Post body ── */}
       <div className="px-6 pb-3">
         <p className="text-sm text-text-dark whitespace-pre-wrap leading-relaxed">
-          {post.text}
+          {post?.text}
         </p>
-        {post.imageUrl && (
+        {post?.imageUrl && (
           <div className="mt-3 rounded-[6px] overflow-hidden border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -238,9 +238,9 @@ export default function PostCard({ post }: PostCardProps) {
               </div>
             )}
           </div>
-          {post.likeCount > 0 && (
+          {(post?.likeCount ?? 0) > 0 && (
             <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
-              {post.likeCount}
+              {post?.likeCount}
             </span>
           )}
         </button>
@@ -252,16 +252,15 @@ export default function PostCard({ post }: PostCardProps) {
             onClick={() => setCommentsOpen(!commentsOpen)}
             className="hover:text-primary transition-colors cursor-pointer"
           >
-            {post.commentCount} Comment
+            {post?.commentCount ?? 0} Comment
           </button>
-          <span>{Math.floor(post.likeCount * 1.5 + 5)} Share</span>
+          <span>{Math.floor((post?.likeCount ?? 0) * 1.5 + 5)} Share</span>
         </div>
 
         {/* Likers modal */}
         {likersOpen && (
           <LikersListModal
-            postId={post.id}
-            reaction="like"
+            postId={post?.id ?? ""}
             onClose={() => setLikersOpen(false)}
             anchorRef={likersButtonRef}
           />
@@ -272,17 +271,16 @@ export default function PostCard({ post }: PostCardProps) {
       <div className="flex items-center transition-colors duration-300 px-2 py-1 border-b border-border">
         <LikeButton
           targetType="post"
-          postId={post.id}
-          isLikedByMe={post.isLikedByMe}
+          postId={post?.id ?? ""}
+          isLikedByMe={post?.isLikedByMe ?? false}
         />
         <button
           type="button"
           onClick={() => setCommentsOpen(!commentsOpen)}
-          className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${
-            commentsOpen
+          className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${commentsOpen
               ? " text-[#1890FF]"
               : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
-          }`}
+            }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +330,7 @@ export default function PostCard({ post }: PostCardProps) {
       {/* ── Comments section ── */}
       {commentsOpen && (
         <div className="px-6 pb-4 pt-2 border-t border-border transition-colors duration-300">
-          <CommentList postId={post.id} />
+          <CommentList postId={post?.id ?? ""} />
         </div>
       )}
     </div>

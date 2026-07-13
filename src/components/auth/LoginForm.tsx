@@ -41,7 +41,7 @@ export default function LoginForm() {
 
       setUser(result);
       router.push("/feed");
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -146,7 +146,7 @@ export default function LoginForm() {
 
       {/* Register link */}
       <p className="text-[14px] text-text-muted text-center mt-4">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/register" className="text-primary font-medium hover:underline">
           Create New Account
         </Link>

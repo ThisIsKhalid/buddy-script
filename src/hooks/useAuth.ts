@@ -17,7 +17,7 @@ export function useAuth() {
           router.push("/login");
         }
       }
-    } catch (err) {
+    } catch {
       setUser(null);
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/feed")) {
         router.push("/login");

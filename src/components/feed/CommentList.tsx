@@ -34,7 +34,7 @@ export default function CommentList({ postId }: CommentListProps) {
     }
   };
 
-  const comments = data?.pages.flatMap((page) => page.comments) || [];
+  const comments = (data?.pages.flatMap((page) => page?.comments ?? []) ?? []).filter(Boolean);
 
   return (
     <div>

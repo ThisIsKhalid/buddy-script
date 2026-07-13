@@ -1,41 +1,29 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { registerSchema } from "@/lib/validation/auth.schema";
 import { setSessionCookie } from "@/lib/auth/session";
-import { syncUserToInMemoryDb } from "@/lib/api-client/backend-client";
+import { getBackendUrl } from "@/lib/config/backend";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const result = registerSchema.safeParse(body);
+    const { firstName, lastName, email, password } = await request.json();
+    const backendUrl = getBackendUrl();
 
-    if (!result.success) {
-      return NextResponse.json(
-        { errors: result.error.flatten().fieldErrors },
-        { status: 400 }
-      );
-    }
-
-    const { firstName, lastName, email, password } = result.data;
-
-    // 1. Call backend register
-    const regRes = await fetch("http://localhost:8000/api/v1/auth/register", {
+    const regRes = await fetch(`${backendUrl}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstName, lastName, email, password }),
     });
 
     const regData = await regRes.json();
-
     if (!regRes.ok) {
       return NextResponse.json(
         { error: regData.message || "Registration failed" },
-        { status: regRes.status }
+        { status: regRes.status },
       );
     }
 
-    // 2. Call backend login for auto-login
-    const loginRes = await fetch("http://localhost:8000/api/v1/auth/login", {
+    // Auto-login after successful registration
+    const loginRes = await fetch(`${backendUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -45,7 +33,6 @@ export async function POST(request: Request) {
       const loginData = await loginRes.json();
       const { accessToken, refreshToken, user } = loginData.data;
 
-      // Set cookies
       await setSessionCookie(accessToken);
       const cookieStore = await cookies();
       cookieStore.set({
@@ -55,22 +42,18 @@ export async function POST(request: Request) {
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
       });
-
-      // Sync authenticated user to in-memory DB
-      syncUserToInMemoryDb(user);
 
       return NextResponse.json(user, { status: 201 });
     }
 
-    // Return register success user details if login failed
     return NextResponse.json(regData.data, { status: 201 });
   } catch (error) {
     console.error("Error in registration route:", error);
     return NextResponse.json(
       { error: "An unexpected error occurred during registration" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

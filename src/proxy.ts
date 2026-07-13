@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyJWT } from "./lib/auth/jwt";
+import { decodeTokenUserId, verifyJWT } from "./lib/auth/jwt";
 
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("session")?.value;
@@ -13,17 +13,12 @@ export async function proxy(request: NextRequest) {
   let userId: string | null = null;
   if (token) {
     const payload = await verifyJWT(token);
-    if (payload) {
-      userId = payload.userId;
-    }
+    userId = payload?.userId ?? decodeTokenUserId(token);
   }
-
-  console.log(`[PROXY DEBUG] Pathname: "${pathname}", isProtectedRoute: ${isProtectedRoute}, hasToken: ${!!token}, userId: "${userId}"`);
 
   if (userId) {
     // Redirect authenticated users away from login/register to the feed page
     if (isAuthRoute) {
-      console.log(`[PROXY DEBUG] Authenticated user on auth route -> redirect to /feed`);
       return NextResponse.redirect(new URL("/feed", request.url));
     }
     // Redirect root landing to feed
@@ -33,17 +28,14 @@ export async function proxy(request: NextRequest) {
   } else {
     // Redirect unauthenticated users trying to access protected routes to login
     if (isProtectedRoute) {
-      console.log(`[PROXY DEBUG] Unauthenticated user on protected route -> redirect to /login`);
       return NextResponse.redirect(new URL("/login", request.url));
     }
     // Redirect root landing to login
     if (pathname === "/") {
-      console.log(`[PROXY DEBUG] Unauthenticated user on root -> redirect to /login`);
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  console.log(`[PROXY DEBUG] Fallback NextResponse.next()`);
   return NextResponse.next();
 }
 

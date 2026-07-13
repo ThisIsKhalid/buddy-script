@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRepliesPage, createReply } from "@/lib/api-client/comments";
+import type { CommentsCache } from "@/lib/query-cache-types";
 
 export function useReplies(postId: string, commentId: string) {
   return useInfiniteQuery({
@@ -15,18 +16,18 @@ export function useCreateReply(postId: string, commentId: string) {
 
   return useMutation({
     mutationFn: (text: string) => createReply(postId, commentId, text),
-    onSuccess: (newReply) => {
+    onSuccess: () => {
       // Invalidate replies for this comment
       queryClient.invalidateQueries({ queryKey: ["replies", commentId] });
 
       // Reactively increment replyCount on parent comment inside comments cache
-      queryClient.setQueryData(["comments", postId], (oldData: any) => {
+      queryClient.setQueryData<CommentsCache>(["comments", postId], (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
-          pages: oldData.pages.map((page: any) => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
-            comments: page.comments.map((comment: any) =>
+            comments: page.comments.map((comment) =>
               comment.id === commentId
                 ? { ...comment, replyCount: comment.replyCount + 1 }
                 : comment

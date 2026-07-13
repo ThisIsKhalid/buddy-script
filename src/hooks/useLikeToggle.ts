@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleLikePost } from "@/lib/api-client/posts";
 import { toggleLikeComment, toggleLikeReply } from "@/lib/api-client/comments";
+import type { CommentsCache, PostsCache, RepliesCache } from "@/lib/query-cache-types";
 
 interface UseLikeToggleProps {
   targetType: "post" | "comment" | "reply";
@@ -29,13 +30,13 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
       const { isLiked, likeCount } = data as { isLiked: boolean; likeCount: number };
 
       if (targetType === "post") {
-        queryClient.setQueryData(["posts"], (oldData: any) => {
+        queryClient.setQueryData<PostsCache>(["posts"], (oldData) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
-            pages: oldData.pages.map((page: any) => ({
+            pages: oldData.pages.map((page) => ({
               ...page,
-              posts: page.posts.map((post: any) =>
+              posts: page.posts.map((post) =>
                 post.id === postId
                   ? { ...post, isLikedByMe: isLiked, likeCount }
                   : post
@@ -44,13 +45,13 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
           };
         });
       } else if (targetType === "comment" && commentId) {
-        queryClient.setQueryData(["comments", postId], (oldData: any) => {
+        queryClient.setQueryData<CommentsCache>(["comments", postId], (oldData) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
-            pages: oldData.pages.map((page: any) => ({
+            pages: oldData.pages.map((page) => ({
               ...page,
-              comments: page.comments.map((comment: any) =>
+              comments: page.comments.map((comment) =>
                 comment.id === commentId
                   ? { ...comment, isLikedByMe: isLiked, likeCount }
                   : comment
@@ -59,13 +60,13 @@ export function useLikeToggle({ targetType, postId, commentId, replyId }: UseLik
           };
         });
       } else if (targetType === "reply" && commentId && replyId) {
-        queryClient.setQueryData(["replies", commentId], (oldData: any) => {
+        queryClient.setQueryData<RepliesCache>(["replies", commentId], (oldData) => {
           if (!oldData) return oldData;
           return {
             ...oldData,
-            pages: oldData.pages.map((page: any) => ({
+            pages: oldData.pages.map((page) => ({
               ...page,
-              replies: page.replies.map((reply: any) =>
+              replies: page.replies.map((reply) =>
                 reply.id === replyId
                   ? { ...reply, isLikedByMe: isLiked, likeCount }
                   : reply

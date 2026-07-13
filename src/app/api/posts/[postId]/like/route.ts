@@ -1,25 +1,14 @@
-import { NextResponse } from "next/server";
+import { proxyMutate } from "@/lib/api-client/proxyHelper";
 import { getSessionUserId } from "@/lib/auth/session";
-import { LikeRepository } from "@/lib/data/repositories/like.repository";
+import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ postId: string }> }
+  { params }: { params: Promise<{ postId: string }> },
 ) {
-  try {
-    const { postId } = await params;
-    const currentUserId = await getSessionUserId();
-    if (!currentUserId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const result = await LikeRepository.toggleLike(currentUserId, "post", postId);
-    return NextResponse.json(result, { status: 200 });
-  } catch (error) {
-    console.error("Error in POST post like:", error);
-    return NextResponse.json(
-      { error: "An unexpected error occurred toggling post like" },
-      { status: 500 }
-    );
-  }
+  const userId = await getSessionUserId();
+  if (!userId)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { postId } = await params;
+  return proxyMutate(`/posts/${postId}/like`, request);
 }

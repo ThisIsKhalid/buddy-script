@@ -6,11 +6,10 @@ import FeedInfiniteScroll from "@/components/feed/FeedInfiniteScroll";
 
 export default function FeedPage() {
   const [storyImage, setStoryImage] = useState("/assets/images/card_ppl1.png");
-  const [mobileStoryImage, setMobileStoryImage] = useState("/assets/images/mobile_story_img.png");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingImage, setPendingImage] = useState("");
 
-  const [publicStories, setPublicStories] = useState([
+  const [publicStories] = useState([
     { img: "/assets/images/card_ppl2.png", name: "Ryan Roslansky", avatar: "/assets/images/mini_pic.png" },
     { img: "/assets/images/card_ppl3.png", name: "Dylan Field", avatar: "/assets/images/mini_pic.png" },
     { img: "/assets/images/card_ppl4.png", name: "Steve Jobs", avatar: "/assets/images/mini_pic.png" },
@@ -58,8 +57,6 @@ export default function FeedPage() {
   const handleSaveStory = () => {
     if (pendingImage.trim() !== "") {
       setStoryImage(pendingImage);
-      // Synchronize mobile image view as well
-      setMobileStoryImage(pendingImage);
     }
     setIsModalOpen(false);
   };

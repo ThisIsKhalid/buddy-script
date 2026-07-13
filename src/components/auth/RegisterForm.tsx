@@ -41,7 +41,7 @@ export default function RegisterForm() {
 
       setUser(result);
       router.push("/feed");
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);

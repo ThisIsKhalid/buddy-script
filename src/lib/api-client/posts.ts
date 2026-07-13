@@ -1,4 +1,5 @@
 import { Post, User } from "@/types";
+import { apiFetch } from "./client";
 
 export async function fetchPostsPage(
   cursor?: string,
@@ -8,26 +9,18 @@ export async function fetchPostsPage(
   if (cursor) {
     url += `&cursor=${encodeURIComponent(cursor)}`;
   }
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch posts feed");
-  return res.json();
+  return apiFetch(url);
 }
 
 export async function createPost(data: {
-  text: string;
+  text?: string;
   imageUrl: string | null;
   visibility: "public" | "private";
 }): Promise<Post> {
-  const res = await fetch("/api/posts", {
+  return apiFetch("/api/posts", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: data,
   });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || "Failed to create post");
-  }
-  return res.json();
 }
 
 export async function deletePost(postId: string): Promise<void> {
@@ -40,27 +33,19 @@ export async function deletePost(postId: string): Promise<void> {
 export async function toggleLikePost(
   postId: string
 ): Promise<{ isLiked: boolean; likeCount: number }> {
-  const res = await fetch(`/api/posts/${postId}/like`, {
+  return apiFetch(`/api/posts/${postId}/like`, {
     method: "POST",
   });
-  if (!res.ok) throw new Error("Failed to toggle post like");
-  return res.json();
 }
 
 export async function fetchPostLikers(
   postId: string,
   cursor?: string,
-  limit = 10,
-  reaction?: "like" | "dislike"
+  limit = 10
 ): Promise<{ likers: User[]; nextCursor: string | null }> {
   let url = `/api/posts/${postId}/likes?limit=${limit}`;
   if (cursor) {
     url += `&cursor=${encodeURIComponent(cursor)}`;
   }
-  if (reaction) {
-    url += `&reaction=${reaction}`;
-  }
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch post likers");
-  return res.json();
+  return apiFetch(url);
 }
