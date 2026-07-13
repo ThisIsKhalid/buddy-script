@@ -27,10 +27,12 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || createReplyMutation.isPending) return;
+    const submittedText = text;
+    setText("");
     try {
-      await createReplyMutation.mutateAsync(text);
-      setText("");
+      await createReplyMutation.mutateAsync(submittedText);
     } catch (err) {
+      setText(submittedText);
       console.error("Error posting reply:", err);
     }
   };

@@ -26,10 +26,12 @@ export default function CommentList({ postId }: CommentListProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || createCommentMutation.isPending) return;
+    const submittedText = text;
+    setText("");
     try {
-      await createCommentMutation.mutateAsync(text);
-      setText("");
+      await createCommentMutation.mutateAsync(submittedText);
     } catch (err) {
+      setText(submittedText);
       console.error("Error posting comment:", err);
     }
   };

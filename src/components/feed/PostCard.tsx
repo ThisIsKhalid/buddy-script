@@ -2,8 +2,9 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { deletePost, fetchPostLikers } from "@/lib/api-client/posts";
+import { fetchCommentsPage } from "@/lib/api-client/comments";
 import { Post } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import CommentList from "./CommentList";
 import LikeButton from "./LikeButton";
@@ -48,15 +49,6 @@ export default function PostCard({ post }: PostCardProps) {
 
   const isAuthor = user?.id === post?.authorId;
 
-  const { data: likersData } = useQuery({
-    queryKey: ["postLikersPreview", post?.id],
-    queryFn: () => fetchPostLikers(post?.id ?? "", undefined, 3),
-    enabled: (post?.likeCount ?? 0) > 0 && !!post?.id,
-  });
-
-  const previewLikers = likersData?.likers || [];
-  const remainingCount = (post?.likeCount ?? 0) - previewLikers.length;
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -81,6 +73,38 @@ export default function PostCard({ post }: PostCardProps) {
     if (confirm("Are you sure you want to delete this post?")) {
       deleteMutation.mutate();
     }
+  };
+
+  const prefetchComments = () => {
+    if (!post?.id || (post.commentCount ?? 0) === 0) return;
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["comments", post.id],
+      queryFn: ({ pageParam }) =>
+        fetchCommentsPage(post.id, pageParam as string | undefined, 5),
+      initialPageParam: undefined as string | undefined,
+      staleTime: 1000 * 60,
+    });
+  };
+
+  const prefetchLikers = () => {
+    if (!post?.id || (post.likeCount ?? 0) === 0) return;
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ["postLikers", post.id],
+      queryFn: ({ pageParam }) =>
+        fetchPostLikers(post.id, pageParam as string | undefined, 10),
+      initialPageParam: undefined as string | undefined,
+      staleTime: 1000 * 60,
+    });
+  };
+
+  const toggleComments = () => {
+    if (!commentsOpen) prefetchComments();
+    setCommentsOpen(!commentsOpen);
+  };
+
+  const openLikers = () => {
+    prefetchLikers();
+    setLikersOpen(true);
   };
 
   return (
@@ -210,36 +234,16 @@ export default function PostCard({ post }: PostCardProps) {
         <button
           type="button"
           ref={likersButtonRef}
-          onClick={() => setLikersOpen(true)}
+          onClick={openLikers}
+          onMouseEnter={prefetchLikers}
+          onFocus={prefetchLikers}
           className="flex items-center gap-2 cursor-pointer select-none group"
         >
-          <div className="flex items-center">
-            {previewLikers.length > 0 && (
-              <div className="flex -space-x-1.5 items-center">
-                {previewLikers.map((liker, i) => (
-                  <div
-                    key={liker.id}
-                    className="w-[26px] h-[26px] rounded-full border-2 border-card overflow-hidden flex-shrink-0 relative z-[1]"
-                    style={{ zIndex: previewLikers.length - i }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={liker.avatarUrl || "/assets/images/post_img.png"}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-                {remainingCount > 0 && (
-                  <div className="w-[26px] h-[26px] rounded-full border-2 border-card bg-bg-page flex items-center justify-center text-[11px] font-semibold text-text-dark z-0">
-                    +{remainingCount}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
           {(post?.likeCount ?? 0) > 0 && (
-            <span className="text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
+            <span className="inline-flex items-center gap-1.5 text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
+              <span className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#E8F2FF] text-[11px] text-primary">
+                👍
+              </span>
               {post?.likeCount}
             </span>
           )}
@@ -249,7 +253,9 @@ export default function PostCard({ post }: PostCardProps) {
         <div className="flex items-center gap-3 text-[13px] text-text-muted font-medium">
           <button
             type="button"
-            onClick={() => setCommentsOpen(!commentsOpen)}
+            onClick={toggleComments}
+            onMouseEnter={prefetchComments}
+            onFocus={prefetchComments}
             className="hover:text-primary transition-colors cursor-pointer"
           >
             {post?.commentCount ?? 0} Comment
@@ -276,7 +282,9 @@ export default function PostCard({ post }: PostCardProps) {
         />
         <button
           type="button"
-          onClick={() => setCommentsOpen(!commentsOpen)}
+          onClick={toggleComments}
+          onMouseEnter={prefetchComments}
+          onFocus={prefetchComments}
           className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${commentsOpen
               ? " text-[#1890FF]"
               : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
