@@ -23,13 +23,12 @@ export default function ThemeToggle() {
   const isDark = resolvedTheme === "dark";
 
   return (
-    <div className="fixed top-1/2 right-0 z-[100] -translate-y-1/2 translate-x-[20px] md:translate-x-1/2">
+    <div className="fixed top-1/2 right-5 z-[100] -translate-y-1/2 translate-x-[40px] md:translate-x-1/2">
       <button
         type="button"
         onClick={() => setTheme(isDark ? "light" : "dark")}
-        className={`relative flex items-center w-[66px] h-[32px] rounded-[40px] rotate-90 transition-all duration-200 outline-none cursor-pointer ${
-          isDark ? "bg-card border border-border" : "bg-[#1890FF] border border-[#1890FF]"
-        }`}
+        className={`relative flex items-center w-[66px] h-[32px] rounded-[40px] rotate-90 transition-all duration-200 outline-none cursor-pointer ${isDark ? "bg-card border border-border" : "bg-[#1890FF] border border-[#1890FF]"
+          }`}
         aria-label="Toggle Theme"
       >
         <div
@@ -37,17 +36,15 @@ export default function ThemeToggle() {
           style={{ left: isDark ? "calc(100% - 28px)" : "10px" }}
         >
           <div
-            className={`w-[18px] h-[18px] rounded-full transition-colors duration-200 ${
-              isDark ? "bg-[#1890FF]" : "bg-white"
-            }`}
+            className={`w-[18px] h-[18px] rounded-full transition-colors duration-200 ${isDark ? "bg-[#1890FF]" : "bg-white"
+              }`}
           />
         </div>
 
         {/* Moon Icon */}
         <div
-          className={`absolute right-[16px] -rotate-90 transition-all duration-200 ${
-            isDark ? "invisible opacity-0" : "visible opacity-100"
-          }`}
+          className={`absolute right-[16px] -rotate-90 transition-all duration-200 ${isDark ? "invisible opacity-0" : "visible opacity-100"
+            }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="16" fill="none" viewBox="0 0 11 16">
             <path
@@ -59,9 +56,8 @@ export default function ThemeToggle() {
 
         {/* Sun Icon */}
         <div
-          className={`absolute transition-all duration-200 ${
-            isDark ? "visible opacity-100 left-[8px]" : "invisible opacity-0"
-          }`}
+          className={`absolute transition-all duration-200 ${isDark ? "visible opacity-100 left-[8px]" : "invisible opacity-0"
+            }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="4.389" stroke="#fff" transform="rotate(-90 12 12)" />
