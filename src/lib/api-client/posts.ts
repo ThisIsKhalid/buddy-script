@@ -14,12 +14,28 @@ export async function fetchPostsPage(
 
 export async function createPost(data: {
   text?: string;
-  imageUrl: string | null;
+  image?: File | null;
+  imageUrl?: string | null;
   visibility: "public" | "private";
 }): Promise<Post> {
+  if (data.image) {
+    const formData = new FormData();
+    if (data.text) formData.append("text", data.text);
+    formData.append("visibility", data.visibility);
+    formData.append("image", data.image);
+    return apiFetch("/api/posts", {
+      method: "POST",
+      body: formData,
+    });
+  }
+
   return apiFetch("/api/posts", {
     method: "POST",
-    body: data,
+    body: {
+      text: data.text,
+      imageUrl: data.imageUrl ?? null,
+      visibility: data.visibility,
+    },
   });
 }
 

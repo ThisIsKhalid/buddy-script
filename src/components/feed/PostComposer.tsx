@@ -12,7 +12,6 @@ export default function PostComposer() {
   // File state — we keep the File object and a local preview URL
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,36 +52,10 @@ export default function PostComposer() {
     const hasFile = !!selectedFile;
 
     try {
-      let imageUrl: string | null = null;
-
-      // If a file is selected, upload it first via multer
-      if (hasFile && selectedFile) {
-        setIsUploading(true);
-        setUploadError(null);
-        try {
-          const formData = new FormData();
-          formData.append("image", selectedFile);
-
-          const uploadRes = await fetch("/api/upload/image", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!uploadRes.ok) {
-            const err = await uploadRes.json();
-            throw new Error(err.error || "Image upload failed");
-          }
-
-          const uploadData = await uploadRes.json();
-          imageUrl = uploadData.imageUrl;
-        } finally {
-          setIsUploading(false);
-        }
-      }
-
       await createPostMutation.mutateAsync({
         text: hasText ? text : undefined,
-        imageUrl,
+        image: hasFile ? selectedFile : null,
+        imageUrl: null,
         visibility,
       });
 
@@ -99,7 +72,7 @@ export default function PostComposer() {
 
   if (!user) return null;
 
-  const isSubmitting = isUploading || createPostMutation.isPending;
+  const isSubmitting = createPostMutation.isPending;
   const canPost = !isSubmitting && (text.trim().length > 0 || !!selectedFile);
 
   return (
@@ -161,8 +134,8 @@ export default function PostComposer() {
           >
             ×
           </button>
-          {/* Uploading overlay */}
-          {isUploading && (
+          {/* Posting overlay */}
+          {createPostMutation.isPending && (
             <div className="absolute inset-0 bg-black/40 rounded-[6px] flex items-center justify-center">
               <div className="w-6 h-6 rounded-full border-4 border-white/30 border-t-white animate-spin" />
             </div>
@@ -230,12 +203,7 @@ export default function PostComposer() {
             disabled={!canPost}
             className="flex items-center gap-2 bg-[#1890FF] hover:bg-primary-dark text-white text-xs font-semibold px-5 py-2.5 rounded-[6px] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            {isUploading ? (
-              <>
-                <div className="w-3 h-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                <span>Uploading...</span>
-              </>
-            ) : createPostMutation.isPending ? (
+            {createPostMutation.isPending ? (
               <>
                 <div className="w-3 h-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                 <span>Posting...</span>

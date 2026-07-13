@@ -46,13 +46,18 @@ export async function proxyMutate(
   endpoint: string,
   request: Request,
 ) {
-  const body = await request.text();
+  const contentType = request.headers.get("content-type") ?? "";
+  const isMultipart = contentType.includes("multipart/form-data");
+  const body = isMultipart ? await request.formData() : await request.text();
+  const headers = new Headers();
+
+  if (!isMultipart) {
+    headers.set("Content-Type", contentType || "application/json");
+  }
 
   const res = await fetchFromBackend(endpoint, {
     method: request.method,
-    headers: {
-      "Content-Type": request.headers.get("content-type") ?? "application/json",
-    },
+    headers,
     body: body || undefined,
   });
 
