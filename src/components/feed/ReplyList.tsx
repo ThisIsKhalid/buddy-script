@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCreateReply, useReplies } from "@/hooks/useReplies";
 import { useState } from "react";
 import ReplyItem from "./ReplyItem";
+import Image from "next/image";
 
 interface ReplyListProps {
   postId: string;
@@ -64,18 +65,19 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
       {/* Reply input */}
       {user && (
         <form onSubmit={handleSubmit} className="flex items-center gap-2 mt-2">
-          <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-border">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={user.avatarUrl || "/assets/images/user.png"}
+          <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-border">
+            <Image
+              src={user?.avatarUrl || "/assets/images/user.png"}
               alt=""
               className="w-full h-full object-cover"
+              width={24}
+              height={24}
             />
           </div>
           <div className="flex-1 flex items-center gap-2">
             <input
               type="text"
-              className="flex-1 border border-border rounded-[12px] px-3 py-1 text-xs text-text-dark placeholder-[#C4C4C4] bg-bg-page focus:outline-none focus:border-primary transition-colors h-7 duration-300"
+              className="flex-1 border border-border rounded-xl px-3 py-1 text-xs text-text-dark placeholder-[#C4C4C4] bg-bg-page focus:outline-none focus:border-primary transition-colors h-7 duration-300"
               placeholder="Write a reply..."
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -83,7 +85,7 @@ export default function ReplyList({ postId, commentId }: ReplyListProps) {
             <button
               type="submit"
               disabled={createReplyMutation.isPending || !text.trim()}
-              className="text-xs text-primary font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 cursor-pointer"
+              className="text-xs text-primary font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed shrink-0 cursor-pointer"
             >
               Reply
             </button>

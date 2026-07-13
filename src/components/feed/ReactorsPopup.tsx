@@ -5,6 +5,7 @@ import {
   fetchReplyLikers,
 } from "@/lib/api-client/comments";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 interface ReactorsPopupProps {
@@ -57,14 +58,14 @@ export default function ReactorsPopup({
   return (
     <div
       ref={containerRef}
-      className="absolute z-50 bottom-full mb-2 -right-14 w-[200px] max-h-[240px] overflow-y-auto bg-card border border-border rounded-[8px] shadow-[0_4px_20px_rgba(0,0,0,0.18)] p-2.5 transition-colors duration-300"
+      className="absolute z-50 bottom-full mb-2 -right-14 w-50 max-h-60 overflow-y-auto bg-card border border-border rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.18)] p-2.5 transition-colors duration-300"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-border">
         <div className="flex items-center gap-1.5">
           <span className="text-base leading-none">👍</span>
           <span className="text-[11px] font-semibold text-text-dark">
-            Liked by ({likers.length})
+            Liked by ({likers?.length})
           </span>
         </div>
         <button
@@ -81,22 +82,23 @@ export default function ReactorsPopup({
         <div className="text-[11px] text-text-muted text-center py-2">
           Loading...
         </div>
-      ) : likers.length === 0 ? (
+      ) : likers?.length === 0 ? (
         <div className="text-[11px] text-text-muted text-center py-2">
           No likes yet.
         </div>
       ) : (
         <div className="flex flex-col gap-1.5">
-          {likers.map((user) => (
-            <div key={user.id} className="flex items-center gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={user.avatarUrl || "/assets/images/user.png"}
+          {likers?.map((user) => (
+            <div key={user?.id} className="flex items-center gap-2">
+              <Image
+                src={user?.avatarUrl || "/assets/images/user.png"}
                 alt=""
-                className="w-5 h-5 rounded-full object-cover flex-shrink-0 border border-border"
+                className="w-5 h-5 rounded-full object-cover shrink-0 border border-border"
+                width={20}
+                height={20}
               />
               <span className="text-[11px] font-medium text-text-dark truncate">
-                {user.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </span>
             </div>
           ))}

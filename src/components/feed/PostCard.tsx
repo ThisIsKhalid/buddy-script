@@ -5,6 +5,7 @@ import { fetchCommentsPage } from "@/lib/api-client/comments";
 import { deletePost, fetchPostLikers } from "@/lib/api-client/posts";
 import { Post } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CommentList from "./CommentList";
 import LikeButton from "./LikeButton";
@@ -108,18 +109,19 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <div className="bg-card rounded-[6px] mb-4 shadow-card overflow-hidden transition-colors duration-300 border border-border">
+    <div className="bg-card rounded-md mb-4 shadow-card overflow-hidden transition-colors duration-300 border border-border">
       {/* ── Post header ── */}
       <div className="px-6 pt-6 pb-3">
         <div className="flex items-start justify-between">
           {/* Author info */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-border">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-border">
+              <Image
                 src={post?.author?.avatarUrl || "/assets/images/user.png"}
                 alt=""
                 className="w-full h-full object-cover"
+                width={40}
+                height={40}
               />
             </div>
             <div>
@@ -156,7 +158,7 @@ export default function PostCard({ post }: PostCardProps) {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 top-9 w-44 bg-card border border-border rounded-[6px] shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1 transition-colors duration-300">
+              <div className="absolute right-0 top-9 w-44 bg-card border border-border rounded-md shadow-[0_4px_20px_rgba(108,126,147,0.2)] z-50 py-1 transition-colors duration-300">
                 <button
                   type="button"
                   onClick={() => {
@@ -219,12 +221,13 @@ export default function PostCard({ post }: PostCardProps) {
           {post?.text}
         </p>
         {post?.imageUrl && (
-          <div className="mt-3 rounded-[6px] overflow-hidden border border-border">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="relative mt-3 h-112.5 w-full rounded-md overflow-hidden border border-border">
+            <Image
               src={post.imageUrl}
               alt=""
-              className="w-full max-h-[450px] object-cover"
+              fill
+              className="object-contain"
+              sizes="100vw"
             />
           </div>
         )}
@@ -243,7 +246,7 @@ export default function PostCard({ post }: PostCardProps) {
         >
           {(post?.likeCount ?? 0) > 0 && (
             <span className="inline-flex items-center gap-1.5 text-[13px] text-text-muted font-medium group-hover:text-primary transition-colors">
-              <span className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#E8F2FF] text-[11px] text-primary">
+              <span className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[#E8F2FF] text-[11px] text-primary">
                 👍
               </span>
               {post?.likeCount}
@@ -287,7 +290,7 @@ export default function PostCard({ post }: PostCardProps) {
           onClick={toggleComments}
           onMouseEnter={prefetchComments}
           onFocus={prefetchComments}
-          className={`flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold transition-colors cursor-pointer ${
+          className={`flex-1 flex items-center justify-center gap-2 h-12 rounded-md text-sm font-semibold transition-colors cursor-pointer ${
             commentsOpen
               ? " text-[#1890FF]"
               : "text-[#65676B] hover:bg-bg-page dark:text-text-dark"
@@ -318,7 +321,7 @@ export default function PostCard({ post }: PostCardProps) {
         <button
           type="button"
           onClick={() => alert("Post shared (mock action)")}
-          className="flex-1 flex items-center justify-center gap-2 h-[48px] rounded-[6px] text-sm font-semibold text-[#65676B] hover:bg-bg-page dark:text-text-dark transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 h-12 rounded-md text-sm font-semibold text-[#65676B] hover:bg-bg-page dark:text-text-dark transition-colors cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

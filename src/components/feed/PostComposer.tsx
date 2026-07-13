@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { useCreatePost } from "@/hooks/useCreatePost";
+import Image from "next/image";
 import { useRef, useState } from "react";
 
 export default function PostComposer() {
@@ -76,18 +77,19 @@ export default function PostComposer() {
   const canPost = !isSubmitting && (text.trim().length > 0 || !!selectedFile);
 
   return (
-    <div className="bg-card rounded-[6px] p-6 mb-4 shadow-card border border-border transition-colors duration-300">
+    <div className="bg-card rounded-md p-6 mb-4 shadow-card border border-border transition-colors duration-300">
       {/* Avatar + Textarea row */}
       <div className="flex items-start gap-3">
-        <div className="w-[40px] h-[40px] rounded-full overflow-hidden flex-shrink-0 border border-border">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={user.avatarUrl || "/assets/images/user.png"}
+        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-border">
+          <Image
+            src={user?.avatarUrl || "/assets/images/user.png"}
             alt="Your avatar"
             className="w-full h-full object-cover"
+            width={40}
+            height={40}
           />
         </div>
-        <div className="flex-1 relative min-h-[40px] flex items-start pt-2">
+        <div className="flex-1 relative min-h-10 flex items-start pt-2">
           <textarea
             className="w-full bg-transparent border-0 outline-none focus:ring-0 resize-none text-[15px] text-text-dark placeholder-transparent py-0 pr-8"
             placeholder="Write something ..."
@@ -96,7 +98,7 @@ export default function PostComposer() {
             onChange={(e) => setText(e.target.value)}
           />
           {!text && (
-            <div className="absolute left-0 top-[8px] pointer-events-none flex items-center gap-1.5 text-[15px] text-text-muted">
+            <div className="absolute left-0 top-2 pointer-events-none flex items-center gap-1.5 text-[15px] text-text-muted">
               <span>Write something ...</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -118,12 +120,13 @@ export default function PostComposer() {
 
       {/* Image preview */}
       {previewUrl && (
-        <div className="relative mt-3 mb-2 ml-[52px] inline-block max-w-xs">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <div className="relative mt-3 mb-2 ml-13 inline-block max-w-xs">
+          <Image
             src={previewUrl}
             alt="Attached preview"
-            className="rounded-[6px] border border-border max-h-[200px] w-auto object-cover transition-colors duration-300"
+            className="rounded-md border border-border max-h-50 w-auto object-cover transition-colors duration-300"
+            width={200}
+            height={200}
           />
           <button
             type="button"
@@ -136,7 +139,7 @@ export default function PostComposer() {
           </button>
           {/* Posting overlay */}
           {createPostMutation.isPending && (
-            <div className="absolute inset-0 bg-black/40 rounded-[6px] flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/40 rounded-md flex items-center justify-center">
               <div className="w-6 h-6 rounded-full border-4 border-white/30 border-t-white animate-spin" />
             </div>
           )}
@@ -145,7 +148,7 @@ export default function PostComposer() {
 
       {/* Upload error */}
       {uploadError && (
-        <p className="mt-2 ml-[52px] text-xs text-red-500">{uploadError}</p>
+        <p className="mt-2 ml-13 text-xs text-red-500">{uploadError}</p>
       )}
 
       {/* Hidden file input */}
@@ -158,7 +161,7 @@ export default function PostComposer() {
       />
 
       {/* Action footer */}
-      <div className="flex items-center justify-between mt-4 px-4 py-3 bg-[#F8FAFD] dark:bg-[#112032]/40 rounded-[6px] border border-border/10">
+      <div className="flex items-center justify-between mt-4 px-4 py-3 bg-[#F8FAFD] dark:bg-[#112032]/40 rounded-md border border-border/10">
         {/* Photo button */}
         <button
           type="button"
@@ -201,7 +204,7 @@ export default function PostComposer() {
             type="button"
             onClick={handlePostSubmit}
             disabled={!canPost}
-            className="flex items-center gap-2 bg-[#1890FF] hover:bg-primary-dark text-white text-xs font-semibold px-5 py-2.5 rounded-[6px] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="flex items-center gap-2 bg-[#1890FF] hover:bg-primary-dark text-white text-xs font-semibold px-5 py-2.5 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {createPostMutation.isPending ? (
               <>

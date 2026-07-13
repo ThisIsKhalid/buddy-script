@@ -80,7 +80,7 @@ export default function LikersListModal({
   return createPortal(
     <div
       ref={containerRef}
-      className="fixed z-[9999] w-[260px] max-h-[320px] overflow-y-auto bg-card border border-border rounded-[10px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-3 transition-colors duration-300"
+      className="fixed z-9999 w-65 max-h-80 overflow-y-auto bg-card border border-border rounded-[10px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-3 transition-colors duration-300"
       style={{ top: position.top, left: position.left }}
     >
       {/* Header */}
@@ -88,7 +88,7 @@ export default function LikersListModal({
         <div className="flex items-center gap-2">
           {/* Reaction icon */}
           <div
-            className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
             style={{ background: "#E8F2FF" }}
           >
             <svg
@@ -140,7 +140,7 @@ export default function LikersListModal({
               <img
                 src={user.avatarUrl || "/assets/images/user.png"}
                 alt=""
-                className="w-7 h-7 rounded-full object-cover flex-shrink-0 border border-border"
+                className="w-7 h-7 rounded-full object-cover shrink-0 border border-border"
               />
               <span className="text-[12px] font-medium text-text-dark truncate">
                 {user.firstName} {user.lastName}
